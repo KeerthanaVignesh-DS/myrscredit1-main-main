@@ -4,8 +4,6 @@ import Modal from 'react-bootstrap/Modal';
 
 export default function DeleteComponent({ open, setDelete, deleteOnClick,message,title,btnName,btnNameCancel }){
     
-console.log({deleteOnClick},"dedeeded")
-
   const [show, setShow] = useState(open);
 
   useEffect(() => {

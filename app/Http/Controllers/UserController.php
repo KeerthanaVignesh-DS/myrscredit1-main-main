@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 use App\Models\User;
+use App\Models\Submission;
+
 use Inertia\Inertia;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
@@ -16,8 +18,8 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $users = User::query();
-        if ($request->has('is_active') && $request->is_active != null) {
-            $users->where('is_active', $request->is_active);
+        if ($request->has('is_act') && $request->is_act != null) {
+           $users->where('is_active', $request->is_act);
             $users->orderBy('company');
             $users = $users->with('latestSubmission')->get();
         }else if ($request->has('date_from') && $request->has('date_to')) {
@@ -27,6 +29,10 @@ class UserController extends Controller
                 $users = $users->with('latestSubmission')->get();
 
             }
+        }else{
+            $users->whereDate('created_at', Carbon::today());
+            $users->orderBy('company');
+                $users = $users->with('latestSubmission')->get();
         }
         
         // dd($users);
@@ -40,7 +46,14 @@ class UserController extends Controller
 
     public function index1()
     {
-        return Inertia::render('Admin/HomePage');
+        $todayClients = User::whereDate('created_at', Carbon::today())->get();
+        $todaySubmissions = Submission::whereDate('submitted_date', Carbon::today())->get();
+
+
+        return Inertia::render('Admin/HomePage',[
+            'clients' => $todayClients,
+            'submissions' =>$todaySubmissions
+        ]);
     }
     public function updateUser(Request $request )
     {

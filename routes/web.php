@@ -7,6 +7,7 @@ use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Auth;
 
 // Route::get('/', function () {
 //     return Inertia::render('Welcome', [
@@ -57,25 +58,29 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::get('/recommendation-submission',function(){
-        return Inertia::render('Recommendation Submission/RecommendationSubmission');
-    })->name('recommendation-submission');
+    Route::get('/recommendation-submission',[SubmissionController::class,'create'])->name('recommendation-submission');
     Route::post('/recommendation-submission',[SubmissionController::class,'store'])->name('submission.store');
     Route::get('/demand-letter-submission',function(){
         return Inertia::render('Demand-Letter-Submission/DemandLetterSubmission');
     });
 
     Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard');
+        // return Inertia::render('Auth/Login');
+        $user = Auth::user();
+        if( $user->is_admin == 1){
+            return redirect()->route('adminHome');
+
+        }
+        
+
+        return redirect()->route('recommendation-submission');
     })->name('dashboard');
 
 
     Route::get('/my-submissions', [SubmissionController::class, 'index'])->name("submission");
 
 
-    Route::get('/billing-login',function(){
-        return Inertia::render('MyBilling/BillingLogin');
-    });
+    Route::get('/my-billing',[MyBillingController::class, 'myBilling']);
 
 
     Route::get('/my-profile',function(){
@@ -111,13 +116,21 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin-submissions',[SubmissionController::class, 'adminIndex'])->name("adminSubmissions");
     Route::post('/admin-submissions-updatepdf',[SubmissionController::class, 'updatepdf'])->name("updatepdf");
     Route::get('/admin-submissions-download-pdf',[SubmissionController::class, 'download-pdf'])->name("download-pdf");
+    Route::get('/admin-historical-submissions',[SubmissionController::class, 'showHistorical'])->name("showHistorical");
+    Route::post('/upload',[SubmissionController::class, 'upload'])->name("upload");
+    Route::post('/deleteSubmission',[SubmissionController::class, 'deleteSubmission'])->name("submission.delete");
+    Route::get('/download-previous', [SubmissionController::class, 'downloadPrevious'])->name('previous.download');
+    Route::post('/charge-update',[SubmissionController::class, 'chargeUpdate'])->name("charge.update");
 
 
 
 
-    Route::get('/admin-summary',function(){
-        return Inertia::render('Admin/SummaryReport');
-    })->name("adminSummary");
+
+
+
+
+
+    Route::get('/admin-summary',[SubmissionController::class, 'summaryReport'])->name("adminSummary");
 
     // Route::post('/users', [UserController::class, 'index'])
     // ->name('user.index');

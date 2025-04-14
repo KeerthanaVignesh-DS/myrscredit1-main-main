@@ -1,7 +1,3 @@
-/* @tailwind base;
-@tailwind components;
-@tailwind utilities; */
-
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
 :root{
@@ -27,6 +23,7 @@ table th, table td{
 }
 .primary-bg-color{
    background-color: #554b9d;
+
 }
 .primary-text-color{
   color: #554b9d;
@@ -112,11 +109,6 @@ header{
   font-weight: normal;
   border-radius: 50%;
 }
-
-/* .btn-danger{
-  background-color: ;
-} */
-
 
 
 /*** Section Title Start ***/
@@ -602,4 +594,33 @@ footer .email-icon{
 .custom-modal-header .btn-close {
   filter: invert(1); /* Makes the close button white */
   opacity: 1;
+}
+
+@media print {
+  body {
+    margin: 0;
+    padding: 0;
+  }
+  #pdf-content {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+}
+
+.subtotal-row {
+  background-color: #635e08 !important; /* Adjust this to match your screenshot */
+}
+@media print {
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
+
+.bg-lightgray{
+  background-color: #eef0f4!important
+}
+
+.react-datepicker-wrapper{
+  width: 100% !important;
 }

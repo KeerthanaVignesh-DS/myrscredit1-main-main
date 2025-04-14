@@ -11,11 +11,11 @@ import "react-datepicker/dist/react-datepicker.css";
 import "react-datepicker/dist/react-datepicker.css";
 import { toast,ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 import DatePicker from "react-datepicker";
 import * as XLSX from "xlsx";
+import ExcelJS from "exceljs";
+import { saveAs } from "file-saver";
 import DeleteComponent from "@/Components/DeleteComponent";
-
 
 
 export default function ActiveClient (props){
@@ -31,7 +31,6 @@ export default function ActiveClient (props){
   const [id,setId] = useState("");
   const [message,setMessage] = useState("");
   const [makeToast,setMakeToast] = useState(false);
-  console.log(usePage().user)
 
    useEffect(() => {
     if (!makeToast) return; // Prevent unnecessary execution
@@ -43,10 +42,9 @@ export default function ActiveClient (props){
       closeOnClick: true,
       pauseOnHover: true,
     });
-
     // Reset makeToast if it's a state
     setMakeToast(false);
-  }, [makeToast,setMakeToast]);
+   }, [makeToast,setMakeToast]);
 
   const tableHeight = {
     maxHeight: "400px",
@@ -59,34 +57,27 @@ export default function ActiveClient (props){
   };
 
 
-
-  
   const [show, setShow] = useState(false);
   const [editUser, setEditUser] = useState('');
-
-
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
   const handleshow1 = (val) =>{
-    console.log(val);
     setShow(true);
     setEditUser(val);
-    // router.post('/register', {}, {
-    //   onSuccess: (res) => {
-    //     console.log(res)
-    //     setEditUser(val); // Set the content returned by the backend
-    //   },
-    // });
   }
 
   const toSearch = () =>{
+    let is_act = '';
+    if(showAllActive || showAllInactive){
+      is_act = is_active;
+    }
     let date_from = dateFrom ? format(dateFrom, "dd-MM-yyyy") : null;
     let date_to = dateTo ? format(dateTo, "dd-MM-yyyy") : null;
-    router.get('admin-client', { is_active,date_from,date_to }, {
+    router.get('admin-client', { is_act,date_from,date_to }, {
       preserveState: true, // Preserve component state
       preserveScroll: true, // Prevent scroll reset
       onSuccess: (res) => {
-        console.log(res)
       },  
       onError: (err) => {
         if (err.response) {
@@ -103,7 +94,6 @@ export default function ActiveClient (props){
 
   const handleChangeDateFrom = (date, event) => {
       const formattedDate = date ? format(date, "dd-MM-yyyy") : null;
-      console.log(formattedDate);
       setDateFrom(date)
     };
 
@@ -112,63 +102,139 @@ export default function ActiveClient (props){
         setDateTo(date)
       };
 
-      const handleDownload = () => {
-          const transformedData = props.users.map((row) => {
-            
-            return{
-                "Last Submission": row.last_submission,
-                "User": row.company,
-                "Client Name": row.name,
-                "Email Address": row.email,
-                "Address": row.address,
-                "User City": row.city,
-                "User State": row.state,
-                "Contact": row.phone,
-                "Registration Date": row.created_at,
-                "User Name": row.username,
-                "Password": row.is_previous,
-                // "Price Level": row.price_level,
-                "Account Number": row.account_number,
-                // "Comp_InClientList": ""
-            }
-            
+      // const handleDownload = () => {
+      //     const transformedData = props.users.map((row) => {
+      //       return{
+      //           "Last Submission": row.last_submission,
+      //           "User": row.name,
+      //           "Client Name": row.company,
+      //           "Email Address": row.email,
+      //           "Address": row.address1,
+      //           "User City": row.city,
+      //           "User State": row.state,
+      //           "Contact": row.phone,
+      //           "Registration Date": row.created_at,
+      //           "User Name": row.username,
+      //           "Password": row.show_password,
+      //           "Account Number": row.account_number,
+      //       }
+      //     });
+
+      //     // Convert table data to worksheet
+      //     const worksheet = XLSX.utils.json_to_sheet(transformedData);
+
+      //     const range = XLSX.utils.decode_range(worksheet["!ref"]);
           
-          });
-          // Convert table data to worksheet
-          const worksheet = XLSX.utils.json_to_sheet(transformedData);
-          const range = XLSX.utils.decode_range(worksheet["!ref"]);
-          for (let C = range.s.c; C <= range.e.c; ++C) {
-            const cellAddress = XLSX.utils.encode_cell({ r: 0, c: C }); // Header row (r: 0)
-            if (!worksheet[cellAddress]) continue;
-            worksheet[cellAddress].s = {
-              fill: {
-                fgColor: { rgb: "4F81BD" }, // Yellow background
-              },
-              font: {
-                bold: true,
-                color: { rgb: "FFFFFF" }, // Black text
-              },
-              alignment: {
-                horizontal: "center",
-                vertical: "center",
-              }, 
-              border: {
-                top: { style: "thin", color: { rgb: "000000" } },
-                bottom: { style: "thin", color: { rgb: "000000" } },
-                left: { style: "thin", color: { rgb: "000000" } },
-                right: { style: "thin", color: { rgb: "000000" } },
-              },
-            };
-          }
-          // Create a new workbook
-          const workbook = XLSX.utils.book_new();
+      //     for (let C = range.s.c; C <= range.e.c; ++C) {
+      //       const cellAddress = XLSX.utils.encode_cell({ r: 0, c: C }); // Header row (r: 0)
+      //       if (!worksheet[cellAddress]) continue;
+      //       worksheet[cellAddress].s = {
+      //         fill: {
+      //           fgColor: { rgb: "4F81BD" }, // Yellow background
+      //         },
+      //         font: {
+      //           bold: true,
+      //           color: { rgb: "FFFFFF" }, // Black text
+      //         },
+      //         alignment: {
+      //           horizontal: "center",
+      //           vertical: "center",
+      //         }, 
+      //         border: {
+      //           top: { style: "thin", color: { rgb: "000000" } },
+      //           bottom: { style: "thin", color: { rgb: "000000" } },
+      //           left: { style: "thin", color: { rgb: "000000" } },
+      //           right: { style: "thin", color: { rgb: "000000" } },
+      //         },
+      //       };
+      //     }
+      //     // Create a new workbook
+      //     const workbook = XLSX.utils.book_new();
       
-          // Append the worksheet to the workbook
-          XLSX.utils.book_append_sheet(workbook, worksheet, "FormattedData");
+      //     // Append the worksheet to the workbook
+      //     XLSX.utils.book_append_sheet(workbook, worksheet, "FormattedData");
       
-          // Generate a binary Excel file and download
-          XLSX.writeFile(workbook, "ClientList"+todayDate+".xlsx");
-        };
+      //     // Generate a binary Excel file and download
+      //     XLSX.writeFile(workbook, "ClientList"+todayDate+".xlsx");
+      //   };
+
+      const handleDownload = async () => {
+        const todayDate = new Date().toISOString().split("T")[0];
+    
+        // Transform Data
+        const transformedData = props.users.map((row) => [
+            // row.last_submission,
+            row.name,
+            row.company,
+            row.email,
+            row.address1,
+            row.city,
+            row.state,
+            row.phone,
+            new Date(row.created_at).toLocaleString("en-US", { 
+              month: "numeric", 
+              day: "numeric", 
+              year: "numeric", 
+              hour: "numeric", 
+              minute: "numeric", 
+              second: "numeric", 
+              hour12: true 
+          }), // Proper Date Format
+            row.username,
+            row.show_password,
+            row.account_number
+        ]);
+    
+        // Create Workbook and Worksheet
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet("Client List");
+    
+        // Define Headers
+        const headers = [
+            // "Last Submission",
+             "User", "Client Name", "Email Address", "Address",
+            "User City", "User State", "Contact", "Registration Date",
+            "User Name", "Password", "Account Number"
+        ];
+        
+        worksheet.addRow(headers); // Add header row
+    
+        // Add Data Rows
+        transformedData.forEach(row => worksheet.addRow(row));
+    
+        // Apply Header Styling
+        const headerRow = worksheet.getRow(1);
+        headerRow.eachCell((cell) => {
+            cell.font = { bold: true, color: { argb: "FFFFFF" } }; // White text
+            cell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "4F81BD" } }; // Blue background
+            cell.alignment = { horizontal: "center", vertical: "middle" };
+            cell.border = { top: { style: "thin" }, left: { style: "thin" }, bottom: { style: "thin" }, right: { style: "thin" } };
+        });
+    
+        // Apply Borders to Data Cells
+        worksheet.eachRow((row, rowNumber) => {
+            if (rowNumber !== 1) {
+                row.eachCell((cell) => {
+                  // cell.alignment = { horizontal: "center", vertical: "middle" };
+                    cell.border = {
+                        top: { style: "thin" }, left: { style: "thin" },
+                        bottom: { style: "thin" }, right: { style: "thin" }
+                    };
+                });
+            }
+        });
+    
+        // Adjust Column Widths
+        worksheet.columns.forEach(column => {
+            column.width = 20;
+        });
+    
+        // Generate & Download Excel File
+        const buffer = await workbook.xlsx.writeBuffer();
+        const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+        saveAs(blob, `ClientList_${todayDate}.xlsx`);
+    };
+    
       
         const [deleteModal, setDeleteModal] = useState({
           show: false,
@@ -193,7 +259,6 @@ export default function ActiveClient (props){
           router.post('/makeActive', { data: obj }, {
             onSuccess: (response) => {
               // You can store the response here
-              console.log(response)
              toast.success(response.props.message, {
                          position: 'top-right', // Position of the toast
                          autoClose: 3000, // Duration in ms before it disappears
@@ -205,7 +270,6 @@ export default function ActiveClient (props){
               
             },
             onError: (errors) => {
-              console.log('Form submission errors:', errors);
               alert('Submission failed!');
             },
           });
@@ -243,7 +307,7 @@ export default function ActiveClient (props){
         <h2 className="primary-text-color text-center align-middle mb-2">
           Client List
         </h2>
-        <div className="bg-light p-3">
+        <div className="bg-lightgray p-3">
           <div className="row">
 
             <div className="col-lg-2 mb-2">
@@ -328,9 +392,9 @@ export default function ActiveClient (props){
             </div>
           </div>
         </div>
-        <div className="mt-4 table-responsive" style={tableHeight}>
-          <table className="table table-bordered">
-            <thead className="table-light position-sticky top-0 ">
+        <div className="mt-4 table-responsive mb-5" style={tableHeight}>
+          <table className="table table-bordered mb-5">
+            <thead className="table-secondary position-sticky top-1 ">
               <tr>
                 <th className="text-center align-middle">#</th>
                 <th className="text-center align-middle">Client</th>
@@ -368,7 +432,7 @@ export default function ActiveClient (props){
             <tbody>
               
               {props.users && props.users.length >0 ? (props.users.map((user,index)=>(
-                <tr>
+                <tr key={index}>
                 <td className="text-center align-middle">{index+1}</td>
                 <td>{user.company}</td>
                 <td className="text-center align-middle">{user.account_number}</td>

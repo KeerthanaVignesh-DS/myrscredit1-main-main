@@ -58,6 +58,15 @@ class MyBillingController extends Controller
             'Clients' => $clients            
         ]);
     }
+    public function myBilling(Request $request)
+    {
+        $user = $request->user()->id;
+        $billing = MyBilling::where('user_id', $user)->get();
+       
+        return Inertia::render('MyBilling/BillingLogin', [
+            'Billing' => $billing,
+        ]);
+    }
 
     public function uploadBilling(){
         return Inertia::render('Admin/UploadBilling');

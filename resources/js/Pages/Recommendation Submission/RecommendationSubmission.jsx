@@ -5,14 +5,14 @@ import { useState } from "react";
 import { get, useFieldArray, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-import { toast, ToastContainer } from "react-toastify";
+import { toast as toast1, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
 
 
-export default function RecommendationSubmission({edit,value}) {
+export default function RecommendationSubmission({edit,value,handleClose,toast}) {
 
   const user = usePage().props.auth.user;
-  console.log(value)
   const [accCount,setAccCount] = useState([
     {
     user_id         :  user.id,
@@ -137,6 +137,7 @@ export default function RecommendationSubmission({edit,value}) {
     { label: "Quick Response (16 Office Hours)", value:  4},
     { label: "Standard Response (24+/- Office Hours)", value:  5},
   ]);
+  const [fileUploadError,setFileUploadError] = useState([]);
 
 
     const initialValues = {
@@ -170,7 +171,7 @@ export default function RecommendationSubmission({edit,value}) {
     // comments        :  ""
     }
 
-    const schema = Yup.object({
+    const schema = edit!==0 ? (Yup.object({
       fields: Yup.array().of(
         Yup.object({
       account_name      : Yup.string().required("Enter Account Name"),
@@ -196,7 +197,24 @@ export default function RecommendationSubmission({edit,value}) {
       doc_name2       : Yup.string(),
         })
       ),
-    });
+    })):(
+      Yup.object({
+        fields: Yup.array().of(
+          Yup.object({
+        account_name      : Yup.string().required("Enter Account Name"),
+        account_address1  : Yup.string().required("Enter Address1 for Account"),
+        account_city      : Yup.string().required("Enter City for Account"),
+        account_state     : Yup.string().required("Select State/Province for Account"),
+        account_zip       : Yup.string().required("Enter Zip for Account"),
+        account_phone     : Yup.string().required("Enter Phone for Account"),
+        myrsProduct       : Yup.number().min(1,"Select Myrs Product").required("Select Myrs Product"), 
+        expressService    : Yup.number().min(1,"Select Express Service").required("Select Express Service"),
+        orderAmount       : Yup.number().min(1,"Enter Order Amount")
+                            // .max(10,"Enter Order Amount")
+                            .required("Enter Order Amount")
+          })
+        ),
+      }));
     // const schema = Yup.object().shape({
     //   // name      : Yup.string().required("Enter name"),
     //   // title     : Yup.string(),
@@ -338,6 +356,21 @@ export default function RecommendationSubmission({edit,value}) {
 
 
   const addRecommendation = async(data,e)=>{
+
+    const errorObj = {};
+
+      data.fields.forEach((field, index) => {
+        if (field.chk_previous14 && !field.doc_name1) {
+          errorObj[index] = "Document is required";
+        }
+      });
+
+      if (Object.keys(errorObj).length > 0) {
+        setFileUploadError(errorObj);
+        return;
+      }
+
+      setFileUploadError({});   
     
     let id = 0;
     if(edit === 0){
@@ -345,67 +378,39 @@ export default function RecommendationSubmission({edit,value}) {
     }
     console.log(data.fields);
 
-    
-
-    // let obj = {
-    // user_id              :  user.id,
-    // // name            :  data.name,
-    // // title           :  data.title,
-    // // company         :  data.company,
-    // // address1        :  data.address1,
-    // // address2        :  data.address2,
-    // // city            :  data.city, 
-    // // state           :  state,
-    // // zip             :  data.zip,
-    // // country         :  country,
-    // // apemail         :  data.ap_email,
-    // // submissionemail :  data.email,
-    // // phone           :  data.phone,
-    // // fax             :  data.fax,
-    // account_name    :  data.account_name,
-    // account_address1:  data.account_address1,
-    // account_address2:  data.account_address2,
-    // account_city    :  data.account_city,
-    // account_state   :  accountState,
-    // account_zip     :  data.account_zip,
-    // account_country :  accountCountry,
-    // account_phone   :  data.account_phone,
-    // myrsProduct     :  myrsProduct,
-    // expressService  :  expressService,
-    // orderAmount     :  data.orderAmount,
-    // comments        :  data.comments,
-    // chk_previous14  :  false,
-    // lbl_doc_name1   :  '',
-    // file_upload_controls1   : false,
-    // doc_name1       : '',
-    // lbl_doc_name2   :  '',
-    // file_upload_controls2   : false,
-    // doc_name2       : '',
-    // }
-
-    // console.log(obj,"obj");
-    await router.post('/recommendation-submission',{fields:data.fields,id:id},{
+   
+    await router.post(route('submission.store'),{fields:data.fields,id:id},{
             onSuccess: (response) => {
                 // You can store the response here
                 console.log('Submission successful:', response);
-                toast.success('Submitted Successfully', {
-                                    position: 'top-right', // Position of the toast
-                                    autoClose: 3000, // Duration in ms before it disappears
-                                    hideProgressBar: false, // Show progress bar
-                                    closeOnClick: true, // Close on click
-                                    pauseOnHover: true, // Pause on hover
-                                });  
+                if(user.is_admin !== 1 && edit !== 0){
+                toast1.success('Submitted Successfully', {
+                  position: 'top-right', // Position of the toast
+                  autoClose: 3000, // Duration in ms before it disappears
+                  hideProgressBar: false, // Show progress bar
+                  closeOnClick: true, // Close on click
+                  pauseOnHover: true, // Pause on hover
+              });
+            }
                   // resetAll();
-                 
+                  if(user.is_admin === 1 || edit === 0){
+                    handleClose();
+                    toast.success('Submitted Successfully', {
+                      position: 'top-right', // Position of the toast
+                      autoClose: 3000, // Duration in ms before it disappears
+                      hideProgressBar: false, // Show progress bar
+                      closeOnClick: true, // Close on click
+                      pauseOnHover: true, // Pause on hover
+                  });
+                   }
                   setTimeout(() => {
-                    if(user.is_admin === 1){
-                      router.visit('/admin-submissions');
-
-                    }else{
+                    if(user.is_admin !== 1 && edit !== 0){
+                    
                       router.visit('/my-submissions');
 
                     }
                   }, 3000);
+                  
                   
                       },
             onError: (errors) => {
@@ -415,6 +420,82 @@ export default function RecommendationSubmission({edit,value}) {
       });
 
   }
+  // const addRecommendation = async (data, e) => {
+  //   let id = 0;
+  //   if (edit === 0) {
+  //     id = value.id;
+  //   }
+  
+  //   console.log("Submitting fields:", data.fields);
+  
+  //   const formData = new FormData();
+  //   formData.append('id', id);
+  
+  //   // Loop over each field (assuming `data.fields` is an array of objects)
+  //   data.fields.forEach((field, index) => {
+  //     Object.entries(field).forEach(([key, value]) => {
+  //       if (value instanceof File) {
+  //         formData.append(`fields[${index}][${key}]`, value);
+  //       } else {
+  //         formData.append(`fields[${index}][${key}]`, value ?? '');
+  //       }
+  //     });
+  //   });
+  
+  //   try {
+  //     const response = await axios.post(route('submission.store'), formData, {
+  //       headers: {
+  //         'Content-Type': 'multipart/form-data',
+  //       },
+  //     });
+  
+  //     console.log('Submission successful:', response);
+  //     toast.success('Submitted Successfully', {
+  //       position: 'top-right',
+  //       autoClose: 3000,
+  //       hideProgressBar: false,
+  //       closeOnClick: true,
+  //       pauseOnHover: true,
+  //     });
+  
+  //     setTimeout(() => {
+  //       if (user.is_admin === 1) {
+  //         router.visit('/admin-submissions');
+  //       } else {
+  //         router.visit('/my-submissions');
+  //       }
+  //     }, 3000);
+  //   } catch (err) {
+  //     console.error('Form submission error:', err);
+  //     alert('Submission failed!');
+  //   }
+  // };
+  const handleUpload = async (e,i) => {
+    let file = e.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const res = await axios.post('http://127.0.0.1:8000/upload', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      // setUploadedUrl(res.data.url);
+      console.log(res.data);
+      setValue(`fields.${i}.lbl_doc_name1`, file.name);
+    setValue(`fields.${i}.doc_name1`, res.data.path);
+
+      // alert('Upload successful!');
+    } catch (err) {
+      console.error(err);
+      // alert('Upload failed!');
+    }
+  };
+  
 
 
   return (
@@ -724,9 +805,12 @@ export default function RecommendationSubmission({edit,value}) {
                 </div>
               </div>
             </div>
-            {fields && fields.map((field,index) =>(
+            {fields && fields.map((field,index) =>{
+              const isChecked = watch(`fields.${index}.chk_previous14`);
+
+              return(
                  <div className="col-xl-12 mb-3" key={index}>
-                                {console.log('fields',fields.length)}
+                                {/* {console.log('fields',fields.length)} */}
 
                  <div className="bg-light p-4 row">
                   {fields.length > 1 && 
@@ -739,8 +823,8 @@ export default function RecommendationSubmission({edit,value}) {
                       Account Submission Information :
                     </h3>
                     }
-                   <div className="col-6 mb-2">
-                   <div className="col-md-12 mb-2">
+                   <div className="col-6 mb-1">
+                   <div className="col-md-12 mb-1">
                      <label htmlFor="input-accountNumber" className="form-label">
                        Account Name <sup className="text-danger">*</sup>
                      </label>
@@ -751,14 +835,13 @@ export default function RecommendationSubmission({edit,value}) {
                        name="account_name"
                        placeholder=""
                        autoComplete="off"
-
                        {...register(`fields.${index}.account_name`)}
                        readOnly={edit === 0}
                      />
                    </div>
-                   {errors.fields?.[index]?.account_name && <p className="text-danger mx-1">{errors.fields?.[index]?.account_name.message}</p>}
+                   {errors.fields?.[index]?.account_name && <p className="text-danger mx-1 mb-0">{errors.fields?.[index]?.account_name.message}</p>}
    
-                   <div className="col-md-12 mb-2">
+                   <div className="col-md-12 mb-1">
                      <label htmlFor="input-Address1-sub" className="form-label">
                        Address1<sup className="text-danger">*</sup>
                      </label>
@@ -773,9 +856,9 @@ export default function RecommendationSubmission({edit,value}) {
                        readOnly={edit === 0}
                      />
                    </div>
-                   {errors.fields?.[index]?.account_address1 && <p className="text-danger mx-1">{errors.fields?.[index]?.account_address1.message}</p>}
+                   {errors.fields?.[index]?.account_address1 && <p className="text-danger mx-1 mb-0">{errors.fields?.[index]?.account_address1.message}</p>}
    
-                   <div className="col-md-12 mb-2">
+                   <div className="col-md-12 mb-1">
                      <label htmlFor="input-Address2-sub" className="form-label">
                        Address2
                      </label>
@@ -792,7 +875,7 @@ export default function RecommendationSubmission({edit,value}) {
                    </div>
    
                    <div className="row">
-                     <div className="col-lg-6 mb-2">
+                     <div className="col-lg-6 mb-1">
                        <label htmlFor="input-City-sub" className="form-label">
                          City<sup className="text-danger">*</sup>
                        </label>
@@ -806,10 +889,10 @@ export default function RecommendationSubmission({edit,value}) {
                          {...register(`fields.${index}.account_city`)}
                          readOnly={edit === 0}
                        />
-                    {errors.fields?.[index]?.account_city && <p className="text-danger mx-1">{errors.fields?.[index]?.account_city.message}</p>}
+                    {errors.fields?.[index]?.account_city && <p className="text-danger mx-1 mb-0">{errors.fields?.[index]?.account_city.message}</p>}
                    </div>
    
-                     <div className="col-lg-6 mb-2">
+                     <div className="col-lg-6 mb-1">
                        <label htmlFor="inputState-sub" className="form-label">
                          State/Province<sup className="text-danger">*</sup>
                        </label>
@@ -830,7 +913,7 @@ export default function RecommendationSubmission({edit,value}) {
                        </select>
                      </div>
    
-                     <div className="col-lg-6 mb-2">
+                     <div className="col-lg-6 mb-1">
                        <label htmlFor="input-Zip-sub" className="form-label">
                          Zip<sup className="text-danger">*</sup>
                        </label>
@@ -844,10 +927,10 @@ export default function RecommendationSubmission({edit,value}) {
                          {...register(`fields.${index}.account_zip`)}
                          readOnly={edit === 0}
                        />
-                       {errors.fields?.[index]?.account_zip && <p className="text-danger mx-1">{errors.fields?.[index]?.account_zip.message}</p>}
+                       {errors.fields?.[index]?.account_zip && <p className="text-danger mx-1 mb-0">{errors.fields?.[index]?.account_zip.message}</p>}
                      </div>
    
-                     <div className="col-lg-6 mb-2">
+                     <div className="col-lg-6 mb-1">
                        <label htmlFor="inputState-sub" className="form-label">
                          Country<sup className="text-danger">*</sup>
                        </label>
@@ -868,7 +951,7 @@ export default function RecommendationSubmission({edit,value}) {
                          </select>
                      </div>
    
-                     <div className="col-md-12 mb-2">
+                     <div className="col-md-12 mb-1">
                        <label htmlFor="input-Phone-sub" className="form-label">
                          Phone<sup className="text-danger">*</sup>
                        </label>
@@ -882,14 +965,14 @@ export default function RecommendationSubmission({edit,value}) {
                          {...register(`fields.${index}.account_phone`)}
                          readOnly={edit === 0}
                        />                  
-                     {errors.fields?.[index]?.account_phone && <p className="text-danger mx-1">{errors.fields?.[index]?.account_phone.message}</p>}
+                     {errors.fields?.[index]?.account_phone && <p className="text-danger mx-1 mb-0">{errors.fields?.[index]?.account_phone.message}</p>}
                      </div>
                    
                    </div>
                    </div>
-                   <div className="col-6 mb-2">
+                   <div className="col-6 mb-1">
    
-                   <div className="col-md-12 mb-2">
+                   <div className="col-md-12 mb-1">
                        <label htmlFor="Myrs-Product-sub" className="form-label">
                          Myrs Product:<sup className="text-danger">*</sup>
                        </label>
@@ -909,9 +992,9 @@ export default function RecommendationSubmission({edit,value}) {
                            ))}
                          </select>
                      </div>
-                     {errors.fields?.[index]?.myrsProduct && <p className="text-danger mx-1">{errors.fields?.[index]?.myrsProduct.message}</p>}
+                     {errors.fields?.[index]?.myrsProduct && <p className="text-danger mx-1 mb-0">{errors.fields?.[index]?.myrsProduct.message}</p>}
    
-                     <div className="col-md-12 mb-2">
+                     <div className="col-md-12 mb-1">
                        <label htmlFor="Myrs-Product-sub" className="form-label">
                           Express Service<sup className="text-danger">*</sup>
                        </label>
@@ -931,9 +1014,9 @@ export default function RecommendationSubmission({edit,value}) {
                            ))}
                          </select>
                      </div>
-                     {errors.fields?.[index]?.expressService && <p className="text-danger mx-1">{errors.fields?.[index]?.expressService.message}</p>}
+                     {errors.fields?.[index]?.expressService && <p className="text-danger mx-0 mb-0">{errors.fields?.[index]?.expressService.message}</p>}
    
-                     <div className="col-md-12 mb-2">
+                     <div className="col-md-12 mb-1">
                        {/* <p className="mb-2" ><small>Express Service Office Hours: M-F 9:00-5:00 Central Time</small></p> */}
                        <p style={{ color: "blue", fontWeight: "bold" }}>
                          Express Service Office Hours: M-F 9:00-5:00 Central Time
@@ -949,44 +1032,58 @@ export default function RecommendationSubmission({edit,value}) {
                          autoComplete="off"
                          placeholder=""
                          {...register(`fields.${index}.orderAmount`)}
-                         readOnly={edit === 0 && fields[index].status === 1}
+                         readOnly={(edit === 0 && fields[index].status === 1) || (edit === 0 && user.is_admin === 0)}
                        />
                      </div>
-                     {errors.fields?.[index]?.orderAmount && <p className="text-danger mx-1">{errors.fields?.[index]?.orderAmount.message}</p>}
-                     <div className="col-md-12 mb-2">
+                     {errors.fields?.[index]?.orderAmount && <p className="text-danger mx-1 mb-1">{errors.fields?.[index]?.orderAmount.message}</p>}
+                     {edit !== 0 &&
+                     <>
+                        <div className="col-md-12 mb-1">
                      <label>
                       <input
                         type="checkbox"
                         id="chk_previous14"
                          name="chk_previous14"
-                        {...register("chk_previous14")} // Register the checkbox field
+                        {...register(`fields.${index}.chk_previous14`)} // Register the checkbox field
                       />
-                      Previous #14
+                     &nbsp; Previous #14
                     </label>
                      
                      </div>
-                     {console.log(watchedItems[index] )
-                     }
-                     {field.chk_previous14 && 
-                     <div className="col-md-12 mb-2">
+                     
+                     {isChecked && 
+                     <div className="col-md-12 mb-1">
                      <input
                          type="file"
                          className="form-control mb-2"
                          id="docName1"
                          name="docName1"
+                        //  {...register(`fields.${index}.docName1`)}
+                        //  onChange={(e) => 
+                        //   setValue(`fields.${index}.lbl_doc_name1`, e.target.files[0].name)
+                        //   // console.log(e.target.files[0].name)
+                        //   } // Handle file change
+                        onChange={(e)=>handleUpload(e,index)}
+
                          
                        />
-                        <input
+                      {fileUploadError[index] && (
+                        <p className="text-danger mx-1">{fileUploadError[index]}</p>
+                      )}
+                        {/* <input
                          type="file"
                          className="form-control"
                          id="docName2"
                          name="docName2"
                          
-                       />
+                       /> */}
                         
                       
                      </div>
                      }
+                     </>
+                     }
+                     
                      <div className="col-md-12 mb-2">
                         <label htmlFor="order-amount-sub" className="form-label">
                            Comment
@@ -1018,7 +1115,7 @@ export default function RecommendationSubmission({edit,value}) {
                                 name="updateinfo"
                                 onClick={handleSubmit(addRecommendation)}
                               >
-                                Update Request
+                                Update
                               </button>
 
                         </div>
@@ -1027,9 +1124,10 @@ export default function RecommendationSubmission({edit,value}) {
                  </div>
                 
                </div>
-
-            ))}
-            {edit !== 0 &&
+              
+            )
+            })}
+            {edit !== 0 ?(
             <>
             <div className="d-flex justify-content-end align-items-center mt-3">
             <button type="button" onClick={() => append({  
@@ -1071,15 +1169,22 @@ export default function RecommendationSubmission({edit,value}) {
               </div>
               </>
             
-            }
-            
-             
-           
-            
+                ):(
+                  <div className="d-flex justify-content-center  mt-3"> 
+                  <button 
+                      type="submit" 
+                      className="btn btn-primary"
+                      name="saveinfo"
+                      onClick={()=>handleClose()}
+                    >
+                      Close
+                    </button>
+                    </div>
+                )
+              }
 
-            {console.log(errors)}
-            
-
+            {/* {console.log(errors)} */}
+          
           </form>
         </div>
         {/* </InnerMenu>  */}

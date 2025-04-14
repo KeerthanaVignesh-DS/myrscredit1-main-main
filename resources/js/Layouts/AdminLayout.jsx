@@ -1,28 +1,29 @@
 import Footer from "@/Components/Footer";
 import { Inertia } from "@inertiajs/inertia";
-import { Link, usePage } from "@inertiajs/react";
+import { Link, router, usePage } from "@inertiajs/react";
 import { useState } from "react";
 import { MdOutlineMenu } from "react-icons/md";
 import { NavLink } from "react-router-dom";
 import { useLocation } from 'react-router-dom';
 
 export default function AdminLayout ({children}) {
-    // let location = useLocation();
     
     const  [mobileMenu, setMobileMenu] = useState(true);
-        const { url } = usePage(); 
-        const baseUrl = new URL(url, window.location.origin).pathname;
+    const { url } = usePage(); 
+    const baseUrl = new URL(url, window.location.origin).pathname;
         
-        const user = usePage().props.auth.user;
+    const user = usePage().props.auth.user;
 
-        const handelMenu = () => {
-          
+    const handelMenu = () => {   
             setMobileMenu(!mobileMenu);
-        } 
+    } 
 
-        const onLogout =()=>{
-            Inertia.post('logout');
-        }
+    const onLogout =()=>{
+        router.post('logout');
+            
+    }
+
+    
     return(
         <>
         <div className="flex min-h-screen flex-col items-center bg-gray-100 pt-6 sm:justify-center sm:pt-0">
@@ -50,8 +51,12 @@ export default function AdminLayout ({children}) {
                         </div>
                 </nav>
             </header>
-            <h3 className="mb-0 mt-3 text-primary">Welcome: {user.name} </h3>
-    
+            {/* <h3 className="mb-0 mt-3 text-primary">Welcome: {user.name} </h3> */}
+            <h3 className="mb-0 mt-3">
+            <span className="text-primary text-lg">Welcome:</span>  
+            <span className="text-danger text-xl font-bold"> {user?.name || "Guest"}</span>
+            </h3>
+
             <div className="mt-2 w-full overflow-hidden bg-white px-6  shadow-md sm:max-w-md sm:rounded-lg">
                 {children}
             </div>

@@ -1,10 +1,10 @@
 import { FaSearch } from "react-icons/fa";
 import { MdOutlineDeleteForever } from "react-icons/md";
-import { FaRegFilePdf, FaRegArrowAltCircleDown } from "react-icons/fa";
-import { FaFileDownload } from "react-icons/fa";
+import { FaRegFilePdf, FaRegArrowAltCircleDown , FaEdit, FaSyncAlt} from "react-icons/fa";
+import { FaFileDownload,FaFileAlt  } from "react-icons/fa";
 import { SiMicrosoftexcel } from "react-icons/si";
 import AdminLayout from "@/Layouts/AdminLayout";
-import { useState } from "react";
+import { useState,useRef, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { format } from "date-fns";
@@ -16,12 +16,22 @@ import { Button, Modal } from "react-bootstrap";
 import GuestLayout from "@/Layouts/GuestLayout";
 import { PDFDownloadLink, Document, Page, Text,pdf } from "@react-pdf/renderer";
 import { MyDocument } from "./SubmissionPdf";
+import html2pdf from "html2pdf.js";
+import * as XLSX from "xlsx";
+import HistoricalGrid from "./HistoricalGrid";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import DeleteComponent from "@/Components/DeleteComponent";
+import { FiDownload } from 'react-icons/fi';
+import axios from "axios";
 
 
 
 
 
-export default function SubmissionsList  ({Submissions,Clients})  {
+
+
+export default function SubmissionsList  ({Submissions,Clients,Total})  {
   const [client,setClient] =useState();
   const [status,setStatus] = useState('--All--');
   const [dateFilter,setDateFilter] = useState();
@@ -32,17 +42,21 @@ export default function SubmissionsList  ({Submissions,Clients})  {
   const [showReport, setShowReport] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [historicalpdf,setHistoricalpdf] = useState(0);
-
-
+  const pdfRef = useRef();
+  const [pdfShow,setPdfShow] = useState(false);
+  let value = {};
+  const [showChargePopup, setShowChargePopup] = useState(false);
+  const [chargeId,setChargeId] = useState();
+  const [chargeAmt,setChargeAmt] = useState();
+  const [historicalSubmissions,setHistoricalSubmissions] = useState([])
   const [child, setChild] = useState('');
+  const [histValue, setHistValue] = useState('');
+  const [type,setType] = useState('name');
   const [report, setReport] = useState('');
-
-  console.log(Submissions)
 
   const handleChangeDateFrom = (date, event) => {
       const formattedDate = date ? format(date, "dd-MM-yyyy") : null;
-      console.log(formattedDate);
-      setDateFrom(date)
+      setDateFrom(date);
     };
     const handleChangeDateTo = (date, event) => {
       const formattedDate = date ? format(date, "dd-MM-yyyy") : null;
@@ -57,7 +71,6 @@ export default function SubmissionsList  ({Submissions,Clients})  {
   const onSearch = () =>{
       let date_from = dateFrom ? format(dateFrom, "dd-MM-yyyy") : null;
       let date_to = dateTo ? format(dateTo, "dd-MM-yyyy") : null;
-      console.log("dfdf");
       router.get(route('adminSubmissions'), 
         { status,dateFilter,client,date_from,date_to,serviceLevel}, 
         { preserveState: true }
@@ -65,14 +78,18 @@ export default function SubmissionsList  ({Submissions,Clients})  {
     }
 
     const handleshow = (val) =>{
-      console.log(val)
       setShow(true);
       setChild(val);
     }
     const handleReportForm = (val) =>{
-      console.log(val)
-      // setShowReport(true);
-      setShowPopup(true);
+      if(val.completed_date){
+        setShowReport(true);
+      }else{
+        setHistValue(val.name)
+        setShowPopup(true);
+        handleShowHistoricalpdf(val.name,'name');
+
+      }
       setReport(val);
     }
     const handleClose = () => setShow(false);
@@ -87,9 +104,40 @@ export default function SubmissionsList  ({Submissions,Clients})  {
       
 
     }
+    const handleShowHistoricalpdf = async(val,type1) => {
+      let date_from = dateFrom ? format(dateFrom, "dd-MM-yyyy") : null;
+      let date_to = dateTo ? format(dateTo, "dd-MM-yyyy") : null;
+    //   router.get(route('showHistorical'), 
+    //   { type,histValue,status,dateFilter,client,date_from,date_to,serviceLevel}, 
+    //   { preserveState: true }
+    // );
+    let type2 = type1 ? type1 : type;
+    let value = val ? val : histValue; 
+    try {
+      const response = await axios.get(route('showHistorical'), {
+        params: {
+          type : type2,
+          histValue : value,
+          status,
+          dateFilter,
+          client,
+          date_from,
+          date_to,
+          serviceLevel
+        }
+      });
+  
+      setHistoricalSubmissions(response.data.historicalSubmissions);
+      console.log('Got historical submissions:', historicalSubmissions);
+      // Set state or do something with the data
+  
+    } catch (error) {
+      console.error('Error fetching historical data:', error);
+    }
+
+    }
     const handleDownloadAndNavigate = async (data) => {
       // Generate the PDF blob
-      console.log('cli')
       try {
         const blob = await pdf(<MyDocument data={data}/>).toBlob();
   
@@ -111,7 +159,209 @@ export default function SubmissionsList  ({Submissions,Clients})  {
       //   navigate("/next-page");
       // }, 1000); // 1-second delay before navigating
     };
+    const beforeDownload = (data) => {
+      setReport(data)
+      setPdfShow(true)
+      console.log("🚀 Running before download!");
+      // Example: You can do validations, API calls, loading states, etc.
+    };
+    const generatePdf = (data) => {
+      setReport(data);
+      setPdfShow(true);
+      // setTimeout(() => {
+      //   html2pdf().from(pdfRef.current).save(filename);
+      // }, 1000); // Small delay to ensure state updates
+    };
+    useEffect(() => {
+      if (pdfShow && report) {
+          requestAnimationFrame(() => {
+              setTimeout(() => {
+                  if (pdfRef.current) {
+                      html2pdf()
+                      .set({
+                        margin: [0, 0, 0, 0], // [top, left, bottom, right] - Reduce top margin
+                        filename: "report.pdf",
+                        image: { type: "jpeg", quality: 0.98 },
+                        html2canvas: { scale: 2 },
+                        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
+                    })
+                    .from(pdfRef.current).save();
+                  }
+                  setPdfShow(false);
+              }, 500); // Small delay
+          });
+      }
+  }, [pdfShow, report]); 
 
+  const handleDownload = () => {
+      const transformedData = Submissions.map((row) => {
+        let serviceLevel = "";
+        if (row.express_service === "1") {
+          serviceLevel = "Instant Response (4 Office Hours)";
+        } else if (row.express_service === "2") {
+          serviceLevel = "Rapid Response (8 Office Hours)";
+        } else if (row.express_service === "3") {
+          serviceLevel = "Fast Response (12 Office Hours)";
+        } else if (row.express_service === "4") {
+          serviceLevel = "Quick Response (16 Office Hours)";
+        } else if (row.express_service === "5") {
+          serviceLevel = "Standard Response (24+/- Office Hours)";
+        } else {
+          serviceLevel = "";
+        }
+        return{
+            "Contact": row.phone,
+            "Submission Date": row.submitted_date,
+            "Account Name": row.name,
+            "Myrs Product": row.myrs_product === 1 ? "Summary Credit Report" : "Summary Credit Report w/details",
+            "Service Level": serviceLevel,
+            "Order Amount": row.order_amount,
+            "Status": row.status === 0 ? "PENDING" : "COMPLETED",
+            "ChargeAmount": row.charge_amount,
+            "Account ReportCompletedDate": row.completed_date,
+            "MyrsRating": row.myrs_rating,
+            "Account IsPrevious14": row.is_previous,
+            "Account DocumentName": row.document_name1,
+            "Account DocumentName2": row.document_name2,
+        }
+        
+      
+      });
+      // Convert table data to worksheet
+      const worksheet = XLSX.utils.json_to_sheet(transformedData);
+      const range = XLSX.utils.decode_range(worksheet["!ref"]);
+      for (let C = range.s.c; C <= range.e.c; ++C) {
+        const cellAddress = XLSX.utils.encode_cell({ r: 0, c: C }); // Header row (r: 0)
+        if (!worksheet[cellAddress]) continue;
+        worksheet[cellAddress].s = {
+          fill: {
+            fgColor: { rgb: "FFFF00" }, // Yellow background
+          },
+          font: {
+            bold: true,
+            color: { rgb: "000000" }, // Black text
+          },
+          alignment: {
+            horizontal: "center",
+            vertical: "center",
+          },
+        };
+      }
+      // Create a new workbook
+      const workbook = XLSX.utils.book_new();
+  
+      // Append the worksheet to the workbook
+      XLSX.utils.book_append_sheet(workbook, worksheet, "FormattedData");
+  
+      // Generate a binary Excel file and download
+      XLSX.writeFile(workbook, "Mysubmissionlist.xlsx");
+    };
+
+    const handleHistValue = (e) =>{
+      if(e.target.value === '1'){
+        setHistValue(report.name)
+        setType('name');
+
+      }else{
+        setHistValue(report.phone)
+        setType('phone');
+
+      }
+    }
+    const [id,setId] = useState("");
+
+    const [deleteModal, setDeleteModal] = useState({
+      show: false,
+      title: "",
+      message: "",
+      confirmation: ""
+    });
+    const [openDelete, setDeleteItem] = useState(false);
+    const [message,setMessage] = useState("");
+
+    const showDeleteModal = () => {
+      setDeleteItem(true)
+    }
+  
+    function onClose (){
+    setDeleteItem(false)
+   }
+   const deleteSubmission = () => {
+      
+      router.post('/deleteSubmission', { id }, {
+        headers: { Accept: 'application/json' },
+
+        onSuccess: (response) => {
+          // You can store the response here
+         toast.success("Submission deleted successfully", {
+                     position: 'top-right', // Position of the toast
+                     autoClose: 3000, // Duration in ms before it disappears
+                     hideProgressBar: false, // Show progress bar
+                     closeOnClick: true, // Close on click
+                     pauseOnHover: true, // Pause on hover
+                 }); 
+          
+        },
+        onError: (errors) => {
+          alert('Submission failed!');
+        },
+      });
+
+   }
+    const onDelete = (submission) => {
+      setDeleteItem(true);
+      setId(submission.id);
+      setMessage(
+        <>
+          Are you sure you want to delete <b>{submission.name}</b> ?
+        </>
+      );
+      
+    }
+
+    const handleChargeAmount = (data) =>{
+      setShowChargePopup(true);
+      setChargeId(data.id);
+      setChargeAmt(data.charge_amt);
+
+    }
+
+    const handleChargeAmountUpdate = async() =>{
+      let data = {
+        id: chargeId,
+        charge_amt:chargeAmt
+      }
+      await router.post('/charge-update', { data}, {
+        onSuccess: (resp) =>{
+          toast.success("Charge amount updated successfully", {
+            position: 'top-right',
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+        }); 
+        setShowChargePopup(false);
+        },
+        onError: (errors) => {
+          console.log('Form submission errors:', errors);
+          toast.error(errors?.username || errors?.company, {
+            position: 'top-right',
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+        }); 
+        },
+      });
+    }
+
+    const handleDownloadPrevious = (filename) => {
+      window.open(`/download-previous?fname=${filename}`, "_blank");
+    };
+  
+    const handleUseReport = (reportval) =>{
+      
+    }
 
   return (
     <>
@@ -131,7 +381,7 @@ export default function SubmissionsList  ({Submissions,Clients})  {
                       All Client
                     </option>
                     {Clients && Clients.length>0 && Clients.map((item,index)=>(
-                        <option value={item.id}>{item.company}</option>
+                        <option key={index} value={item.id}>{item.company}</option>
                     ))}
               </select>
             </div>
@@ -145,7 +395,7 @@ export default function SubmissionsList  ({Submissions,Clients})  {
                   <option value="1">Completed</option>
                 </select>
             </div>
-            <div className="col-lg-1 mb-2">
+            <div className="col-lg-2 mb-2">
               <label htmlFor="input-name-date-from" className="form-label">
                 Date From <sup className="text-danger">*</sup>
               </label>
@@ -162,10 +412,10 @@ export default function SubmissionsList  ({Submissions,Clients})  {
               />
               
             </div>
-            <div className="col-lg-1 mb-2">
+            <div className="col-lg-2 mb-2">
               <label htmlFor="input-name-date-to " className="form-label">
                 Date To <sup className="text-danger">*</sup>
-              </label>
+              </label>&nbsp; &nbsp;&nbsp;
               {/* <input
                 type="text"
                 className="form-control"
@@ -201,7 +451,7 @@ export default function SubmissionsList  ({Submissions,Clients})  {
                 <option value={6}>Standard</option>
               </select>
             </div>
-            <div className="col-lg-2 mb-2 mt-4 pt-2 d-flex justify-content-start">
+            <div className=" pt-2 d-flex justify-content-end">
               <button type="button" className="btn btn-primary" onClick={()=>onSearch()}>
                 Show
               </button>
@@ -210,7 +460,7 @@ export default function SubmissionsList  ({Submissions,Clients})  {
                 
                 className="btn btn-light pf-2 bg-transparent border-0"
               >
-                <SiMicrosoftexcel className="text-danger fs-4" />
+                <SiMicrosoftexcel className="text-danger fs-4" onClick={handleDownload}/>
               </button>
             </div>
           </div>
@@ -232,7 +482,7 @@ export default function SubmissionsList  ({Submissions,Clients})  {
 
         <div className="mt-4 table-responsive" style={tableHeight}>
           <table className="table table-bordered">
-            <thead className="table-light position-sticky top-0">
+            <thead className="table-light position-sticky top-1">
               <tr>
                 <th className="text-nowrap">#</th>  
                 <th className="text-center align-middle">Client</th>
@@ -256,88 +506,122 @@ export default function SubmissionsList  ({Submissions,Clients})  {
                 <th className="text-center align-middle">Delete</th>
               </tr>
             </thead>
-            <tbody>
+            {/* <tbody>
               
               {Submissions && Submissions.length > 0 ?( Submissions.map((data,index)=>(
                      <tr>
-                     <td className="text-nowrap">{index+1}</td>
-                     <td className="text-nowrap">{data.user.name}</td>
-                     <td className="text-nowrap">{data.name}</td>
+                     <td className="text-center align-middle">{index+1}</td>
+                     <td className="text-start align-middle">{data.user.company}</td>
+                     <td className="text-start align-middle">{data.name}</td>
                      {data.myrs_product === "1" &&
-                             <td className="text-nowrap">Summary Credit Report</td>
+                             <td className="text-center align-middle">Summary Credit Report</td>
                      }
                      {data.myrs_product === "2" &&
-                             <td className="text-nowrap">Summary Credit Report w/details</td>
+                             <td className="text-center align-middle">Summary Credit Report w/details</td>
                      }
                      {data.express_service === "1" &&
-                             <td className="text-nowrap">Instant Response (4 Office Hours)</td>
+                             <td className="text-center align-middle">Instant Response (4 Office Hours)</td>
                      }
                      {data.express_service === "2" &&
-                             <td className="text-nowrap">Rapid Response (8 Office Hours)</td>
+                             <td className="text-center align-middle">Rapid Response (8 Office Hours)</td>
                      }
                      {data.express_service === "3" &&
-                             <td className="text-nowrap">Fast Response (12 Office Hours)</td>
+                             <td className="text-center align-middle">Fast Response (12 Office Hours)</td>
                      }
                      {data.express_service === "4" &&
-                             <td className="text-nowrap">Quick Response (16 Office Hours)</td>
+                             <td className="text-center align-middle">Quick Response (16 Office Hours)</td>
                      }
                      {data.express_service === "5" &&
-                             <td className="text-nowrap">Standard Response (24+/- Office Hours)</td>
+                             <td className="text-center align-middle">Standard Response (24+/- Office Hours)</td>
                      }
-                     <td className="text-nowrap">{data.order_amount}</td>
-                     <td className="text-nowrap">{new Date(data.submitted_date).getMonth()+1}/{new Date(data.submitted_date).getDate()}/{new Date(data.submitted_date).getFullYear()}</td>
+                     <td className="text-center align-middle">{data.order_amount}</td>
+                     <td className="text-center align-middle">{new Date(data.submitted_date).getMonth()+1}/{new Date(data.submitted_date).getDate()}/{new Date(data.submitted_date).getFullYear()}</td>
                      {data.chk_previous14 === 0 &&
-                            <td className="text-nowrap text-center">NO</td>
+                            <td className="text-center align-middle">NO</td>
               
                      }
                      {data.chk_previous14 === 1 &&
-                            <td className="text-nowrap text-center">Yes</td>
+                            <td className="text-center align-middle">Yes</td>
               
                      }
                      {data.status === 0 &&
-                            <td className="text-nowrap">PENDING</td>
+                            <td className="text-center align-middle">PENDING</td>
               
                      }
                      {data.status === 1 &&
-                            <td className="text-nowrap">COMPLETED</td>
+                            <td className="text-center align-middle">COMPLETED</td>
               
                      }
                      {data.completed_date ? (
-                            <td className="text-nowrap">{new Date(data.completed_date).getMonth()+1}/{new Date(data.completed_date).getDate()}/{new Date(data.completed_date).getFullYear()}</td>
+                            <td className="text-center align-middle">{new Date(data.completed_date).getMonth()+1}/{new Date(data.completed_date).getDate()}/{new Date(data.completed_date).getFullYear()}</td>
                      ):(
                       <td className="text-nowrap"></td>
 
                      )
                      }
-                     <td className="text-nowrap">{data.charge_amt}</td>
-                     <td className="text-nowrap">{data.myrs_rating}</td>
+                     <td className="text-center align-middle">{data.charge_amt}</td>
+                     <td className="text-center align-middle">{data.myrs_rating}</td>
                      {data.comments && data.comments.length>0 ? (
-                        <td className="text-nowrap text-center">Yes</td>
+                        <td className="text-center align-middle">Yes</td>
                      ):(
-                        <td className="text-nowrap text-center">No</td>
+                        <td className="text-center align-middle">No</td>
                      )
                      }
                      
                      
-                     <td className="text-nowrap">
+                     <td className="text-center align-middle">
                        <button className="bg-transparent border-0"><FaSearch className="fs-5 text-warning" onClick={()=>handleshow(data)}/></button>
                      </td>
-                     <td className="text-nowrap d-flex justify-content-center">
+                     <td className="text-center align-middle d-flex justify-content-center">
                        <button className="bg-transparent border-0 "><FaFileDownload  className="fs-5 text-info" onClick={()=>handleReportForm(data)}/></button>
                      </td>
                      <td className="text-center">
                      {data.completed_date &&
-                        // <button className="bg-transparent border-0">
-                        //   <FaRegArrowAltCircleDown className="fs-5 text-success" />
-                        // </button>
+                        <button className="bg-transparent border-0" onClick={()=>generatePdf(data)}>
+                          <FaRegArrowAltCircleDown className="fs-5 text-success" />
+                        </button>
                         // <a href="/download-pdf" target="_blank">Download PDF</a>
-                        <button onClick={()=>handleDownloadAndNavigate(data)}>Download PDF & Go</button>
+                        // <button onClick={()=>handleDownloadAndNavigate(data)}>Download PDF & Go</button>
+                        // <ReactToPdf
+                        //   targetRef={pdfRef}
+                        //   filename="download.pdf"
+                        //   x={0}
+                        //   y={0}
+                        //   scale={1}
+                        // >
+                        //   {({ toPdf }) => (
+                        //     <button
+                        //       onClick={() => {
+                        //         beforeDownload(); // ✅ Run your function BEFORE download
+                        //         toPdf().then(() => {
+                        //           console.log("✅ PDF downloaded!");
+                        //           navigate("/nextpage"); // Optional: go to another page after download
+                        //         });
+                        //       }}
+                        //     >
+                        //       Prepare & Download PDF
+                        //     </button>
+                        //   )}
+                        // </ReactToPdf>
+                        // <ReactToPdf targetRef={pdfRef} filename="download.pdf">
+                        //   {({ toPdf }) => (
+                        //     <button onClick={toPdf}>Download PDF</button>
+                        //   )}
+                        // </ReactToPdf>
+                        // <button onClick={()=>generatePdf(data)}>Download PDF</button>
+
 
                       }
                       </td>
                       <td className="text-center">
-                        <button className="bg-transparent border-0">
-                          <MdOutlineDeleteForever className="fs-4 text-danger" />
+                        <button className="bg-transparent border-0" disabled={data.completed_date}>
+                          {data.completed_date ? (
+                            <MdOutlineDeleteForever className="fs-4 " />
+
+                          ):(
+                            <MdOutlineDeleteForever className="fs-4 text-danger" />
+
+                          )}
                         </button>
                       </td>
                    </tr>
@@ -349,18 +633,142 @@ export default function SubmissionsList  ({Submissions,Clients})  {
                 </tr>
                 )
                   }
-            </tbody>
+            </tbody> */}
+            <tbody>
+                {Submissions && Submissions.length > 0 ? (
+                  [...Submissions]
+                    .sort((a, b) => new Date(b.submitted_date) - new Date(a.submitted_date)) // Sorting by submitted date (newest first)
+                    .map((data, index) => (
+                      <tr key={data.id || index}>
+                        <td className="text-center align-middle">{index + 1}</td>
+                        <td className="text-start align-middle">{data.user.company}</td>
+                        <td className="text-start align-middle">{data.name}</td>
+                        
+                        <td className="text-center align-middle">
+                          {data.myrs_product === "1"
+                            ? "Summary Credit Report"
+                            : data.myrs_product === "2"
+                            ? "Summary Credit Report w/details"
+                            : ""}
+                        </td>
+
+                        <td className="text-center align-middle">
+                          {data.express_service === "1"
+                            ? "Instant Response (4 Office Hours)"
+                            : data.express_service === "2"
+                            ? "Rapid Response (8 Office Hours)"
+                            : data.express_service === "3"
+                            ? "Fast Response (12 Office Hours)"
+                            : data.express_service === "4"
+                            ? "Quick Response (16 Office Hours)"
+                            : data.express_service === "5"
+                            ? "Standard Response (24+/- Office Hours)"
+                            : ""}
+                        </td>
+
+                        <td className="text-end align-middle">{data.order_amount}</td>
+                        <td className="text-nowrap text-center">{new Date(data.submitted_date).getMonth()+1}/{new Date(data.submitted_date).getDate()}/{new Date(data.submitted_date).getFullYear()}</td>
+
+
+                         {data.chk_previous14 === 0 &&
+                                      <td className="text-nowrap text-center">NO</td>
+                        
+                               }
+                               {data.chk_previous14 === 1 &&
+                                      <td className="text-wrap d-flex justify-content-center w-full"><span>Yes</span>
+                                      <div className="mx-2">
+                                      <button
+                                        onClick={() => handleDownloadPrevious(data.doc_name1)}
+                                        className="flex items-center gap-2 text-blue-600 hover:underline"
+                                      >
+                                        <FiDownload />
+                                      </button>
+                                      </div>
+                                      </td>
+                                     
+                                      
+                        
+                               }
+
+                        <td className="text-center align-middle">
+                          {data.status === 1 ? "COMPLETED" : "PENDING"}
+                        </td>
+
+                        <td className="text-center align-middle">
+                          {data.completed_date
+                            ? new Date(data.completed_date).toLocaleDateString()
+                            : ""}
+                        </td>
+
+                        <td className="text-center align-middle">{data.charge_amt}
+                        {data.completed_date && (
+                            <button className="bg-transparent border-0" onClick={() => handleChargeAmount(data)}>
+                              <FaSyncAlt size={20} color="green" />
+
+                            </button>
+                          )}
+                        </td>
+                        <td className="text-center align-middle">{data.myrs_rating}</td>
+                        <td className="text-center align-middle">{data.comments?.length > 0 ? "Yes" : "No"}</td>
+
+                        <td className="text-center align-middle">
+                          <button className="bg-transparent border-0">
+                            <FaSearch className="fs-5 text-warning" onClick={() => handleshow(data)} />
+                          </button>
+                        </td>
+
+                        <td className="text-center align-middle d-flex justify-content-center">
+                          <button className="bg-transparent border-0" onClick={() => handleReportForm(data)}>
+                            {data.completed_date ?(
+                              <FaFileDownload className="fs-5 text-info"  />
+
+                            ):(
+                              <FaFileAlt size={20} color="gray" title="View File" />
+
+                            )}
+                          </button>
+                        </td>
+
+                        <td className="text-center">
+                          {data.completed_date && (
+                            <button className="bg-transparent border-0" onClick={() => generatePdf(data)}>
+                              <FaRegArrowAltCircleDown className="fs-5 text-success" />
+                            </button>
+                          )}
+                        </td>
+
+                        <td className="text-center">
+                          <button className="bg-transparent border-0" disabled={!!data.completed_date} onClick={()=>onDelete(data)}>
+                            <MdOutlineDeleteForever
+                              className={`fs-4 ${data.completed_date ? "" : "text-danger"}`}
+                            />
+                          </button>
+                        </td>
+                      </tr>
+                    ))
+                ) : (
+                  <tr>
+                    <td colSpan="17" className="text-nowrap text-center">No Submission Found</td>
+                  </tr>
+                )}
+              </tbody>
+
           </table>
         </div>
         <div className="d-flex justify-content-end mt-4">
-          <h6>Total Report Charges: $5.00</h6>
+          {Total > 0 ? (
+            <h6>Total Report Charges: ${Total?.toFixed(2)}</h6>
+          ):(
+            <h6>Total Report Charges: $0</h6>
+          )}
+          
         </div>
       </div>
       </AdminLayout>
        {show && (
           <SlideOver title="Recommendation Submission Form" show={show} handleClose={handleClose}>
             {child ? (
-              <RecommendationSubmission edit={0} value={child}/>
+              <RecommendationSubmission edit={0} value={child} handleClose={handleClose} toast={toast}/>
             ) : (
               <p>Loading...</p>
             )}
@@ -370,7 +778,7 @@ export default function SubmissionsList  ({Submissions,Clients})  {
         {showReport && (
           <SlideOver title="Myrs Credit Report" show={showReport} handleClose={handleCloseReport}>
             {report ? (
-              <ReportForm  edit={0}  value={report} historicalpdf={historicalpdf}/>
+              <ReportForm  edit={0}  value={report} historicalpdf={historicalpdf} ispdf={0} handleClose={handleCloseReport} toast={toast}/>
             ) : (
               <p>Loading...</p>
             )}
@@ -378,6 +786,7 @@ export default function SubmissionsList  ({Submissions,Clients})  {
         )}
         
         {showPopup && (
+          // <HistoricalGrid showPopup={showPopup} setShowPopup={setShowPopup} report={report} type={type} histValue={histValue} handleShowHistoricalpdf={handleHistoricalpdf} setHistValue={setHistValue}/>
         
         <Modal show={showPopup} onHide={() => setShowPopup(false)} size="xl" style={{ width: '100%' }}>
               <Modal.Header closeButton className="custom-modal-header">
@@ -432,14 +841,14 @@ export default function SubmissionsList  ({Submissions,Clients})  {
             <div className="row mb-3 col-md-12">
               <div className="col-md-6 d-flex align-items-center">
                 
-                <select className="form-select w-50">
-                  <option>Account Name</option>
-                  <option>Account Phone</option>
+                <select className="form-select w-50" onChange={(e)=>handleHistValue(e)}>
+                  <option value={1}>Account Name</option>
+                  <option value={2}>Account Phone</option>
                 </select>
-                <input type="text" className="form-control w-75 ms-2" />
+                <input type="text" value={histValue} className="form-control w-75 ms-2" onChange={(e)=>setHistValue(e.target.value)}/>
               </div>
               <div className=" mb-3 col-md-6 mt-3">
-              <button className="btn btn-outline-primary me-2" onClick={() => handleHistoricalpdf(1)}>Show Historical Pdf</button>
+              <button className="btn btn-outline-primary me-2" onClick={() => handleShowHistoricalpdf()}>Show Historical Pdf</button>
               <button className="btn btn-outline-primary" onClick={() => handleHistoricalpdf(2)}>Continue Without Historical Pdf</button>
             </div>
             </div>
@@ -458,18 +867,57 @@ export default function SubmissionsList  ({Submissions,Clients})  {
                     <th>#</th>  
                     <th>Client</th>
                     <th>Account Name</th>
+                    <th>Account Info</th>
                     <th>Myrs Product</th>
-                    <th>Service Level</th>
+                    <th>Order Amt $</th>
+                    <th>Submission Date</th>
+                    <th>Completed Date</th>
+                    <th>Myrs Rating</th>
+                    <th>Download Report to View</th>
+                    <th>Use Report</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>1</td>
-                    <td>usere</td>
-                    <td>fname</td>
-                    <td>Summary Credit Report</td>
-                    <td>Summary Credit Report w/details</td>
-                  </tr>
+                {historicalSubmissions && historicalSubmissions.length > 0 ? (
+                      historicalSubmissions.map((hist, index) => (
+                        <tr key={hist.id ?? index}>
+                          <td>{index + 1}</td>
+                          <td>{hist.user.company}</td>
+                          <td>{hist.name}</td>
+                          <td>{hist.name}, {hist.address1}</td>
+                          <td>
+                            {{
+                              "1": "Summary Credit Report",
+                              "2": "Summary Credit Report w/details"
+                            }[hist.myrs_product] || ""}
+                          </td>
+                          <td>
+                            {hist.order_amount}
+                          </td>
+                          <td >{new Date(hist.submitted_date).getMonth()+1}/{new Date(hist.submitted_date).getDate()}/{new Date(hist.submitted_date).getFullYear()}</td>
+                          <td >{new Date(hist.completed_date).getMonth()+1}/{new Date(hist.completed_date).getDate()}/{new Date(hist.completed_date).getFullYear()}</td>
+
+                          <td>{hist.myrs_rating}</td>
+                          <td className="d-flex justify-content-center">
+                            <button className="bg-transparent border-0" onClick={() => generatePdf(hist)}>
+                              <FaRegArrowAltCircleDown className="fs-5 text-success" />
+                            </button>
+                          </td>
+                          <td>
+                          <button className="bg-transparent border-0" onClick={() => handleUseReport(hist)}>
+                          <FaFileAlt size={20} color="gray" title="View File" />
+                            </button>
+
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan={11} className="text-center">No data found</td>
+                      </tr>
+                    )}
+
+                  
                 </tbody>
               </table>
             </div>
@@ -479,6 +927,103 @@ export default function SubmissionsList  ({Submissions,Clients})  {
        
 
         )}
+        {pdfShow && 
+          // <MyDocument ref={pdfRef} data={report}/>
+          <>
+              {/* <div
+                  ref={pdfRef}
+                  style={{
+                    position: "absolute",
+                    left: "-9999px",
+                    top: "0",
+                    visibility: "hidden",
+                  }}
+                >                    
+                {report && <ReportForm edit={0} value={report} historicalpdf={report?.historical_pdf} />}
+                </div> */}
+                <div ref={pdfRef} style={{  fontSize: "10px",  // Adjust this value
+                  transform: "scale(0.8)",  marginTop: "0px",  // Ensure no extra space at the top
+                  paddingTop: "0px", } }>
+            
+                <h1 className="text-center text-primary">Myrs Credit Report</h1>
+                  {report && <ReportForm  edit={0}  value={report} historicalpdf={report?.historical_pdf} ispdf={1} handleClose={handleCloseReport}/>}
+
+                  </div>
+          </>
+        }
+        {/* <div ref={pdfRef} style={{ padding: "20px", background: "#f0f0f0"}}>
+        {report && <ReportForm  edit={0}  value={report} historicalpdf={report?.historical_pdf}/>}
+
+      </div> */}
+      {openDelete && (
+                          <DeleteComponent
+                            open={openDelete}
+                            setDelete={setDeleteItem}                
+                            cancelOnClick={onClose}
+                            deleteOnClick={deleteSubmission}
+                            message = {message}
+                            title = {"Delete Submission"}
+                            btnName = 'Yes'
+                            btnNameCancel = 'No'
+      
+                            
+                            
+                          >
+                      <p className="text-sm text-gray-500">{deleteModal.message}</p>
+                          </DeleteComponent>
+                        )}
+        {showChargePopup && (
+          // <HistoricalGrid showPopup={showPopup} setShowPopup={setShowPopup} report={report} type={type} histValue={histValue} handleShowHistoricalpdf={handleHistoricalpdf} setHistValue={setHistValue}/>
+        
+        <Modal show={showChargePopup} onHide={() => setShowChargePopup(false)} size="xl" style={{ width: '100%' }}>
+              <Modal.Header closeButton className="custom-modal-header">
+                <Modal.Title className="w-100 text-center">
+                  <h1 className="display-5 m-0">Myrs Credit Advisors, Inc.</h1>
+                </Modal.Title>
+            </Modal.Header>
+
+        <Modal.Body >
+          <div className="p-2 ">
+            
+          <h2 className=" mb-4">Update Report Charge</h2>
+              <div className="row d-flex justify-content-center mt-4 ">
+                <div className="col-md-12 d-flex justify-content-center w-100">
+                  
+                  <label className="fw-bold text-nowrap  col-md-3">Report Charge: </label>
+                  {/* <input typse="text" className="form-control w-50" /> */}
+                  <input className="form-control w-25" value={chargeAmt} onChange={(e)=>setChargeAmt(e.target.value)} />
+                </div>
+              </div>
+
+              <div className="d-flex justify-content-center align-items-center pt-5">
+                          <button 
+                                type="submit" 
+                                className="btn btn-primary"
+                                name="updateinfo"
+                                onClick={()=>handleChargeAmountUpdate()}
+                              >
+                                Update
+                              </button>
+                              <button 
+                                type="submit" 
+                                className="btn btn-primary ms-4"
+                                name="updateinfo"
+                                onClick={()=>setShowChargePopup(false)}
+                              >
+                                Close
+                              </button>
+
+                        </div>
+
+              
+          </div>
+        </Modal.Body>
+      </Modal>
+       
+
+        )}
+              <ToastContainer />
+
     </>
   );
 };

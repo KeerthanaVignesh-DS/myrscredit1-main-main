@@ -17,7 +17,7 @@ export default function InnerMenu() {
               
                     <div className="d-flex justify-content-end flex-column flex-md-row align-items-center gap-1 mt-3 mt-xl-0 my-2">
                         <Link href="/my-submissions" className={url === "/my-submissions" ? "tab-menu py-2 px-4 rounded-1 text-center active" :"tab-menu py-2 px-4 rounded-1 text-center"}>My Submissions</Link>
-                        <Link href="/billing-login" className={url === "/billing-login" ? "tab-menu py-2 px-4 rounded-1 text-center active" :"tab-menu py-2 px-4 rounded-1 text-center"}>My Billing</Link>
+                        <Link href="/my-billing" className={url === "/my-billing" ? "tab-menu py-2 px-4 rounded-1 text-center active" :"tab-menu py-2 px-4 rounded-1 text-center"}>My Billing</Link>
                         <Link href="/my-profile" className={url === "/my-profile" ? "tab-menu py-2 px-4 rounded-1 text-center active" :"tab-menu py-2 px-4 rounded-1 text-center"}>My Profile</Link>
                         <Link href="/change-password" className={url === "/change-password" ? "tab-menu py-2 px-4 rounded-1 text-center active" :"tab-menu py-2 px-4 rounded-1 text-center"}>Change Password</Link>
                         {/* <button onClick={onLogout} className={url === "/my-submissions" ? "tab-menu py-2 px-4 rounded-1 text-center active" :"tab-menu py-2 px-4 rounded-1 text-center"}>Logout</button> */}

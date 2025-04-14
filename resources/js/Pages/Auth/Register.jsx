@@ -5,27 +5,33 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Inertia } from '@inertiajs/inertia';
 import axios from 'axios';
-// import { toast,ToastContainer } from "react-toastify";
-// import "react-toastify/dist/ReactToastify.css";
+import { toast,ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { router } from "@inertiajs/react";
-
-
 
 
 export default function Registration (props){
   
-  
-  const [country,setCountry] = useState(props.edit === 0 ? props.editUser.country : "USA");
+  const [country, setCountry] = useState(() => {
+    if (props.edit === 0) {
+      return (props.editUser?.country !== 'USA' && props.editUser?.country !== 'CANADA') 
+        ? props.editUser?.country 
+        : props.editUser?.country || "USA";
+    }
+    return "USA";
+  });
   const created = props.edit === 0 ? new Date(props.editUser.created_at).getMonth()+1+'/'+new Date(props.editUser.created_at).getDate()+'/'+new Date(props.editUser.created_at).getUTCFullYear() : ""
   const [countryValues,setCountryValues] = useState([
     { label: "USA", value:  "USA"},
     { label: "CANADA", value: "CANADA"},
     { label: "Other", value: "Other" },
   ]);
+
   const [captchaValue,setCaptchaValue] = useState("");
   const [captchaError,setCaptchaError] = useState();
-  const [otherCountry,setOtherCountry] = useState();
+  const [otherCountry,setOtherCountry] = useState((props.edit === 0 && (props.editUser.country !== 'USA' && props.editUser.country !== 'CANADA')) ? true : false );
   const [state,setState] = useState(props.edit === 0 ? props.editUser.state : "");
+
   const [stateValues,setStateValues] = useState([
     { label : "Select State", value : ""},
     { label : "Alabama AL", value : "AL"},
@@ -104,8 +110,6 @@ export default function Registration (props){
     { label: "What is your favorite holiday?", value: 3 },
     { label: "What is your favorite region of USA?", value: 4},
   ]);
-  console.log("ddddddddddddddddddddddd",props.editUser)
-
 
   const initialValues = {
     id              :  props.edit === 0 ? props.editUser.id : "",
@@ -141,7 +145,6 @@ export default function Registration (props){
     address1  : Yup.string().required("Enter Address 1 for Company"),
     address2  : Yup.string(),
     city      : Yup.string().required("Enter City for Company"),
-    // state     : Yup.number().min(1,"Select State/Province for Company").required("Select State/Province for Company"),
     state     : Yup.string().required("Select State/Province for Company"),
     zip       : Yup.string().required("Enter Zip for Company"),
     apemail   : Yup.string().required("Enter A/P email address").email("Enter valid email address"),
@@ -158,21 +161,16 @@ export default function Registration (props){
     verify_code   : Yup.string().required("Please enter Verification Code")
   })) : (Yup.object().shape({
     name      : Yup.string().required("Enter name"),
-    // title     : Yup.string(),
     company   : Yup.string().required("Enter valid Company Name"),
     address1  : Yup.string().required("Enter Address 1 for Company"),
-    // address2  : Yup.string(),
     city      : Yup.string().required("Enter City for Company"),
-    // state     : Yup.number().min(1,"Select State/Province for Company").required("Select State/Province for Company"),
     state     : Yup.string().required("Select State/Province for Company"),
     zip       : Yup.string().required("Enter Zip for Company"),
     apemail   : Yup.string().required("Enter A/P email address").email("Enter valid email address"),
     submissionemail : Yup.string().required("Enter Submission email address").email("Enter valid email address"),
     phone     : Yup.string().required("Enter Phone number for Company"),
-    // fax       : Yup.string(),
     username  : Yup.string().required("Enter User Name"),
     password  : Yup.string().required("Password is required").max(20,"Maximum 20 characters allowed"),
-    
     security_ques : Yup.number().min(1,"Select Security Question").required("Select Security Question"),
     security_ans  : Yup.string().required("Enter Security Answer").max(30,"Maximum 30 characters allowed"),
 }));
@@ -230,6 +228,7 @@ export default function Registration (props){
     setOtherCountry(false);
     setState(0);
     setCountry("USA");
+    
   }
 
   const copyChange = ( ) =>{
@@ -251,7 +250,6 @@ export default function Registration (props){
       return;
     }
     const edit = props.edit !==0 ? 0 : 1;
-    console.log(data)
       
     let obj = {
       id              :  data.id,
@@ -280,85 +278,33 @@ export default function Registration (props){
       account_number  : data.acc_number
     } 
 
-      console.log(props.errors,"obj")
       setCaptchaError()
       // Inertia.post('/register', data); // Send data to the backend
     if(props.edit !== 0 ){
       router.post('/register', { data: obj }, {
-        // onSuccess: (response) => {
-        //   // You can store the response here
-        //   console.log('Submission successful:', response);
-        //   router.visit('/registration-success')
-        // },
-        // onError: (errors) => {
-        //   console.log('Form submission errors:', errors);
-        //   alert('Submission failed!');
-        // },
+        onError: (errors) => {
+          console.log('Form submission errors:', errors);
+          toast.error(errors?.username || errors?.company, {
+            position: 'top-right',
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+        }); 
+        },
       });
     }else{
       router.post('/updateUser', { data: obj }, {
         onSuccess: (response) => {
           props.setMakeToast(true);
         props.onClose(); 
-        // props.toSearch();
-        
-        
         },
         onError: (errors) => {
-          console.log('Form submission errors:', errors);
           alert('Submission failed!');
         },
       });
     }
      
-
-      
-      // if(Object.keys(props.errors).length === 0){
-      //   router.visit('/registration-success')
-      // }
-      //   toast.success(props.message, {
-      //     position: 'top-right', // Position of the toast
-      //     autoClose: 5000, // Duration in ms before it disappears
-      //     hideProgressBar: false, // Show progress bar
-      //     closeOnClick: true, // Close on click
-      //     pauseOnHover: true, // Pause on hover
-      // });    
-      // 
-    //   try {
-    //     const response = await fetch('/register', {
-    //         method: 'POST',
-    //         headers: {
-    //             'Content-Type': 'application/json',
-    //             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-    //         },
-            
-    //         body: JSON.stringify({
-    //             data: obj,
-    //         }),
-    //     });
-
-    //     const result = await response.json();
-    //     console.log(result)
-    //   //   toast.success(result.message, {
-    //   //     position: 'top-right', // Position of the toast
-    //   //     autoClose: 5000, // Duration in ms before it disappears
-    //   //     hideProgressBar: false, // Show progress bar
-    //   //     closeOnClick: true, // Close on click
-    //   //     pauseOnHover: true, // Pause on hover
-    //   // });    
-    //   Inertia.visit('/registration-success');
-    // } catch (error) {
-    //     console.error(error);
-    // }
-      
-    // axios
-    //     .post('/register', data)
-    //     .then((response) => {
-    //         console.log('Registration successful:', response.data);
-    //     })
-    //     .catch((error) => {
-    //         console.error('Error during registration:', error.response.data);
-    //     });
 }    
 
 
@@ -433,6 +379,8 @@ export default function Registration (props){
                   />
                   </div>
                   {errors.company && <p className="text-danger mx-1">{errors.company.message}</p>}
+                  {props.errors?.company && <p className="text-danger mx-1">Company exist. Try different one</p>}
+
 
                 <div className="col-md-12 mb-2">
                   <label htmlFor="input-Address1" className="form-label">
@@ -507,7 +455,12 @@ export default function Registration (props){
                       <span>
                        <input
                         className=" w-75" 
-                        type="text"/>
+                        type="text"
+                        value={state}
+                        onChange={(e)=>{
+                          setState(e.target.value);
+                          setValue('state',e.target.value);
+                          }}/>
                         <button className="text-danger mx-2" onClick={otherCountryClose}>X</button>
                       </span>
                     </>                       
@@ -556,7 +509,12 @@ export default function Registration (props){
                       <span>
                        <input
                         className=" w-75" 
-                        type="text"/>
+                        type="text"
+                        value={country}
+                        onChange={(e)=>{
+                          setCountry(e.target.value);
+                          setValue('country',e.target.value)
+                        }}/>
                         <button className="text-danger mx-2" onClick={otherCountryClose}>X</button>
                       </span>
                     </>   
@@ -690,6 +648,8 @@ export default function Registration (props){
                   />
                 </div>
                 {errors.username && <p className="text-danger mx-1">{errors.username.message}</p>}
+                {props.errors?.username && <p className="text-danger mx-1">Username exist. Try different one</p>}
+
 
                 <div className="col-md-12 mb-2">
                   <label htmlFor="input-Password" className="form-label">
@@ -839,7 +799,6 @@ export default function Registration (props){
               }
               
             </div>
-            {console.log(errors)}
             <div className="d-flex justify-content-center align-items-center pt-5">
                 {props.edit === 0 ?(
                   <>
@@ -876,7 +835,7 @@ export default function Registration (props){
         </div>
       </div>
       </GuestLayout>
-      {/* <ToastContainer /> */}
+      <ToastContainer />
 
     </>
   );

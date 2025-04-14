@@ -34,13 +34,13 @@ class AuthenticatedSessionController extends Controller
     {
         // dd($request);
         $user = User::where('username', $request->username)->first();
-        // dd($user->is_admin);
+        
         if($user && $request->user == "client" && $user->is_admin == 1){
             return back()->withErrors(['username' => 'Invalid credentials']);
         }elseif($user && $request->user == "admin" && $user->is_admin == 0){
             return back()->withErrors(['username' => 'Invalid credentials']);
         }
-
+        
         if($user && $user->is_active == 0){
             return back()->withErrors(['username' => 'Your account is not active. Please contact Admin']);
         }
@@ -48,14 +48,15 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
+        
 
         if( $user->is_admin == 1){
-            return redirect()->intended(route('adminHome'));
+            return redirect()->route('adminHome');
 
         }
         
 
-        return redirect()->intended(route('recommendation-submission'));
+        return redirect()->route('recommendation-submission');
     }
 
     /**
@@ -69,12 +70,15 @@ class AuthenticatedSessionController extends Controller
         $request->session()->invalidate();
 
         $request->session()->regenerateToken();
-        if($request->user() && $request->user()->is_admin == 0){
-            return redirect()->intended(route('recommendation-submission'));
+        // if($request->user() && $request->user()->is_admin == 0){
+        //     // return redirect()->intended(route('recommendation-submission'));
+        //     return redirect()->route('home');
 
-        }else{
-            return Inertia::render('Admin/Login');
-        }
+        // }else{
+        //     // return Inertia::render('Admin/Login');
+        //     return redirect()->route('home');
+        // }
+        return redirect()->route('login');
 
     }
 }

@@ -86,11 +86,12 @@ class RegisteredUserController extends Controller
             if (User::where('username', $request->data['username'])->exists()) {
                 return back()->withErrors(['username' => 'username is already registered.']);
             }
-            if (User::where('email', $request->data['submissionemail'])->exists()) {
-                return back()->withErrors(['submissionemail' => 'email is already registered.']);
-            }
+            // if (User::where('email', $request->data['submissionemail'])->exists()) {
+            //     return back()->withErrors(['submissionemail' => 'email is already registered.']);
+            // }
 
-    
+            $latestAccountNumber = User::max('account_number');
+            // dd($latestAccountNumber);
             $user = User::create([
                 // 'name' => $request->name,
                 // 'email' => $request->email,
@@ -116,7 +117,8 @@ class RegisteredUserController extends Controller
                 'is_active' =>0,
                 'status' =>0,
                 'is_copy' => $request->data['copy'],
-                'show_password' => $request->data['password']
+                'show_password' => $request->data['password'],
+                'account_number' => $latestAccountNumber+1
             ]);
             return Inertia::render('Auth/RegisterSuccess');
         }else{

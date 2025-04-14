@@ -90,7 +90,7 @@ export default function ForgotPassword(props) {
         onError: (errors) => {
             console.log('Form submission errors:', errors);
             // alert(errors);
-        },
+        }, 
         });
           // try{
           //   post(route('login', obj));

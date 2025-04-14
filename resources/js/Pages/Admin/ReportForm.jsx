@@ -25,27 +25,28 @@ ${props.value.phone}` : "";
 
 
   const initialValues = {
-    id                      :  props.edit === 0 ? props.value.id : "",
-    order_amount            :  props.edit === 0 ? props.value.order_amount : "",
-    completed_date          :  props.edit === 0 ? props.value.completed_date : "",
-    charge_amt              :  props.edit === 0 ? props.value.charge_amt : "",
-    company                 : props.edit === 0 ? props.value.user.company : "",
+    id                      : props.edit === 0 ? props.value.id : "",
+    order_amount            : props.edit === 0 ? props.value.order_amount : "",
+    completed_date          : props.edit === 0 ? new Date(props.value.submitted_date)?.toISOString().split('T')[0] : "",
+    charge_amt              : props.edit === 0 ? props.value.charge_amt : "",
+    company                 : props.edit === 0 ? props.value.user?.company : "",
     name                    : props.edit === 0 ? props.value.name : "",
     myrs_product            : props.edit === 0 ? props.value.myrs_product : "",
     express_service         : props.edit === 0 ? props.value.express_service : "",
     full_address            : full_address,
-    secondary_phone         : '',
-    additional_address      : '',
-    web                     : '',
-    myrs_rating             : '',
-    account_status          : '',
-    no_of_records           : '',
-    no_of_payment_records   : '',
-    recent_inquiries1       : '',
-    recent_inquiries2       : '', 
-    submit_type             : '',
-    amount                  : '', 
-    historical_pdf          :  props.historicalpdf
+    secondary_phone         : props.edit === 0 ? props.value.secondary_phone : "",
+    additional_address      : props.edit === 0 ? props.value.additional_address : "",
+    web                     : props.edit === 0 ? props.value.web : "",
+    myrs_rating             : props.edit === 0 ? props.value.myrs_rating : "",
+    account_status          : props.edit === 0 ? props.value.account_status?.toString() : "",
+    no_of_records           : props.edit === 0 ? props.value.no_of_records : "",
+    no_of_payment_records   : props.edit === 0 ? props.value.no_of_payment_records : "",
+    recent_inquiries1       : props.edit === 0 ? props.value.recent_inquiries1 : "",
+    recent_inquiries2       : props.edit === 0 ? props.value.recent_inquiries2 : "", 
+    submit_type             : props.edit === 0 ? props.value.submit_type : "",
+    amount                  : props.edit === 0 ? props.value.amount : "", 
+    myrs_rating1             : props.edit === 0 ? props.value.myrs_rating : "",
+    historical_pdf          : props.historicalpdf
     }
 
     const schema = Yup.object().shape({
@@ -81,15 +82,21 @@ ${props.value.phone}` : "";
     console.log(data);
     // return;
     router.post('/admin-submissions-updatepdf', data, {
-        // onSuccess: (response) => {
-        //   // You can store the response here
-        //   console.log('Submission successful:', response);
-        //   router.visit('/registration-success')
-        // },
-        // onError: (errors) => {
-        //   console.log('Form submission errors:', errors);
-        //   alert('Submission failed!');
-        // },
+        onSuccess: (response) => {
+          // You can store the response here
+         props.handleClose();
+         props.toast.success('Report has been saved successfully and email has been sent to client', {
+            position: 'top-right', // Position of the toast
+            autoClose: 3000, // Duration in ms before it disappears
+            hideProgressBar: false, // Show progress bar
+            closeOnClick: true, // Close on click
+            pauseOnHover: true, // Pause on hover
+        });
+        },
+        onError: (errors) => {
+          console.log('Form submission errors:', errors);
+          
+        },
       });
 
   }
@@ -169,11 +176,11 @@ ${props.value.phone}` : "";
                         </label>
                         <div className="radio-toolbar">
                         <div className="form-check form-check-inline">
-                            <input type="radio" className="form-check-input" id="Standard" value="1" name="levelOfService" {...register('express_service')}/>
+                            <input type="radio" className="form-check-input" id="Standard" value="5" name="levelOfService" {...register('express_service')}/>
                             <label className="form-check-label fw-bold" style={{ fontSize: '14px' }} htmlFor="Standard">Standard</label>
                         </div>
                         <div className="form-check form-check-inline">
-                            <input type="radio" className="form-check-input" id="Quick" value="2" name="levelOfService" {...register('express_service')}/>
+                            <input type="radio" className="form-check-input" id="Quick" value="4" name="levelOfService" {...register('express_service')}/>
                             <label className="form-check-label fw-bold" style={{ fontSize: '14px' }} htmlFor="Quick">Quick</label>
                         </div>
                         <div className="form-check form-check-inline">
@@ -181,11 +188,11 @@ ${props.value.phone}` : "";
                             <label className="form-check-label fw-bold" style={{ fontSize: '14px' }} htmlFor="Fast">Fast</label>
                         </div>
                         <div className="form-check form-check-inline">
-                            <input type="radio" className="form-check-input" id="Rapid" value="4" name="levelOfService" {...register('express_service')}/>
+                            <input type="radio" className="form-check-input" id="Rapid" value="2" name="levelOfService" {...register('express_service')}/>
                             <label className="form-check-label fw-bold" style={{ fontSize: '14px' }} htmlFor="Rapid">Rapid</label>
                         </div>
                         <div className="form-check form-check-inline">
-                            <input type="radio" className="form-check-input" id="Instant" value="5" name="levelOfService" {...register('express_service')}/>
+                            <input type="radio" className="form-check-input" id="Instant" value="1" name="levelOfService" {...register('express_service')}/>
                             <label className="form-check-label fw-bold" style={{ fontSize: '14px' }} htmlFor="Instant">Instant</label>
                         </div>
                         </div>
@@ -452,7 +459,7 @@ ${props.value.phone}` : "";
                                 name="secPhone"
                                 placeholder=""
                                 autoComplete="off"
-                                {...register('myrs_rating')}
+                                {...register('myrs_rating1')}
                             />    
                         </div>
                     </div>
@@ -552,7 +559,7 @@ ${props.value.phone}` : "";
                 </div>
 
             </div>
-            {props.historicalpdf === 1 && 
+            {props.historicalpdf === 1 &&  
                 <>
                     <div className="col-6 mb-4">
 
@@ -562,7 +569,7 @@ ${props.value.phone}` : "";
                     </h3>
 
                         <div className="col-12 mb-1">
-                        <div className="d-flex justify-contentalign-items-center gap-3">
+                        <div classNahme="d-flex justify-contentalign-items-center gap-3">
                             <label className="form-label mb-0 text-nowrap">
                             Most Common Terms of Sale:
                             </label>
@@ -1329,38 +1336,49 @@ ${props.value.phone}` : "";
                         </tr>
                     </tbody>
                 </table>
-            </div>                 
-            
-            <div className="d-flex justify-content-center align-items-center pt-5">
-                
-                  <>
-                  <button 
-                  type="submit" 
-                  className="btn btn-primary mx-1"
-                  name="updateinfo"
-                  >
-                    Save As Draft
-                  </button>
-                  <button 
-                    type="submit" 
-                    className="btn btn-success mx-1"
-                    name="updateinfo"
-                    onClick={handleSubmit(onSubmit)}
-
-                    >
-                    Save
-                  </button>
-
-                 <button 
-                    type="submit" 
-                    className="btn btn-primary mx-1"
-                    name="updateinfo"
-                    >
-                    Close
-                 </button>
-               </>
-                   
             </div>
+            {console.log(props.value.account_status)            }
+            {props.ispdf === 0 &&
+                
+                <div className="d-flex justify-content-center align-items-center pt-5">
+                                
+                <>
+                {props.value.account_status !==2 &&
+                    <>
+                        {/* <button 
+                            type="submit" 
+                            className="btn btn-primary mx-1"
+                            name="updateinfo"
+                            >
+                            Save As Draft
+                            </button> */}
+                            <button 
+                            type="submit" 
+                            className="btn btn-success mx-1"
+                            name="updateinfo"
+                            onClick={handleSubmit(onSubmit)}
+
+                            >
+                            Save
+                            </button>
+                    </>
+                }
+                
+
+                <button 
+                type="submit" 
+                className="btn btn-primary mx-1"
+                name="updateinfo"
+                onClick={()=>props.handleClose()}
+                >
+                Close
+                </button>
+                </>
+                
+                </div>
+            }                 
+            
+            
 
 
           </div>

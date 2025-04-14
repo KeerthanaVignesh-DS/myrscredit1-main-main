@@ -9,15 +9,6 @@ import { Inertia } from '@inertiajs/inertia';
 
 export default function Login (props) {
 
-    // const [username,setUsername] = useState("");
-    // const [password,setPassword] = useState("");
-
-    // const handleLogin = (e) => {
-    //   e.preventDefault();
-    //   console.log("Username:", username);
-    //   console.log("Password:", password);
-    //   // Add your login logic here
-    // };
 
     const initialValues={
       username  : "",

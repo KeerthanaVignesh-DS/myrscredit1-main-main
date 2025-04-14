@@ -26,6 +26,7 @@ class PasswordController extends Controller
         if(Hash::check($request->current_password,$user->password)){
             $request->user()->update([
                 'password' => Hash::make($request->password),
+                'show_password' => $request->password,
                 'security_question' => $request->security_question,
                 'security_answer'   => $request->security_answer
             ]);

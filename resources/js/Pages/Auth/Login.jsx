@@ -5,21 +5,9 @@ import * as Yup from "yup";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Inertia } from '@inertiajs/inertia';
-// import { Await } from 'react-router-dom';
 
 
 export default function Login (props) {
-console.log(props);
-
-    // const [username,setUsername] = useState("");
-    // const [password,setPassword] = useState("");
-
-    // const handleLogin = (e) => {
-    //   e.preventDefault();
-    //   console.log("Username:", username);
-    //   console.log("Password:", password);
-    //   // Add your login logic here
-    // };
 
     const initialValues={
       username  : "",
@@ -39,18 +27,15 @@ console.log(props);
 
 
     const loginUser = async(data) =>{
-        console.log(data,"7788")
 
         let obj = {
           username : data.username,
           password : data.password,
           user     : 'client'
         }
-        console.log(obj,"obj");
-        // Inertia.post('/login',obj);
-       router.post('/login', obj);
-        
+       router.post('/login', obj);  
     }
+    
 
     return(
         <>

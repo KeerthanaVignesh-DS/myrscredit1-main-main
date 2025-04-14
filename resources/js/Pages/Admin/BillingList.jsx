@@ -160,14 +160,28 @@ export default function BillingList ({Billing,Clients,toast1,message})  {
               <label htmlFor="input-name-Client" className="form-label">
                 Client
               </label>
-              <select id="input-name-Client" className="form-select" onChange={(e)=>setClient(e.target.value)}>
+              {/* <select id="input-name-Client" className="form-select" onChange={(e)=>setClient(e.target.value)}>
                 <option selected="selected" value="--All--">
-                  All Client
+                  All Clients
                 </option>
                 {Clients && Clients.length>0 && Clients.map((item,index)=>(
-                    <option value={item.id}>{item.name}</option>
+                    <option value={item.id}>{item.company}</option>
                 ))}
                 
+              </select> */}
+              <select id="input-name-Client" className="form-select" onChange={(e)=>setClient(e.target.value)}>
+                <option selected="selected" value="--All--">
+                  All Clients
+                </option>
+                {Clients &&
+                  Clients.length > 0 &&
+                  [...Clients]
+                    .sort((a, b) => a.company.localeCompare(b.company)) // Sorting alphabetically
+                    .map((item, index) => (
+                      <option key={item.id} value={item.id}>
+                        {item.company}
+                      </option>
+                    ))}
               </select>
             </div>
             <div className="col-lg-1 mb-2">
@@ -207,8 +221,11 @@ export default function BillingList ({Billing,Clients,toast1,message})  {
               </tr>
             </thead>
             <tbody>
-            {Billing && Billing.length >0 ?( Billing.map((bill,index)=>(
-              <tr>
+            {Billing && Billing.length >0 ? (
+            [...Billing]
+              .sort((a, b) => b.user.company.localeCompare(a.user.company)) // Sorting in Z to A order
+              .map((bill, index) => (
+              <tr key={bill.index}>
                 <td className="text-center">{index+1}</td>
                 <td className="text-center">{bill.invoice_number}</td>
                 <td className="text-center">{bill.user.name}</td>

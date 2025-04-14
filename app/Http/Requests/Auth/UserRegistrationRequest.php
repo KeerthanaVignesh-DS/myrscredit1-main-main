@@ -20,7 +20,7 @@ class UserRegistrationRequest extends FormRequest
             'country' => 'required|string|max:255',
             'username' => 'required|string|max:255|unique:clients',
             'password' => 'required|string|min:8|confirmed',
-            'email' => 'required|email|max:255|unique:clients',
+            'email' => 'required|email|max:255',
             'security_question' => 'required|string',
             'security_answer' => 'required|string',
         ];

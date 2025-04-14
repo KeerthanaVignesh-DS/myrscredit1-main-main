@@ -1,7 +1,7 @@
 import ApplicationLogo from '@/Components/ApplicationLogo';
 import Footer from '@/Components/Footer';
 import Header from '@/Components/Header';
-import { Link, usePage } from '@inertiajs/react';
+import { Link, router, usePage } from '@inertiajs/react';
 import AdminLayout from './AdminLayout';
 import { Children, useState } from 'react';
 import { MdOutlineMenu } from "react-icons/md";
@@ -10,8 +10,9 @@ import InnerMenu from '@/Components/InnerMenu';
 
 
 export default function GuestLayout({ children,edit }) {
+
+    
     const admin = usePage().props.auth.user?.is_admin;
-    console.log(admin)
     const  [mobileMenu, setMobileMenu] = useState(true);
             const { url } = usePage(); 
             const user = usePage().props.auth.user;
@@ -22,7 +23,7 @@ export default function GuestLayout({ children,edit }) {
             } 
     
             const onLogout =()=>{
-                Inertia.post('logout');
+                router.post('logout');
             }
 
     return (

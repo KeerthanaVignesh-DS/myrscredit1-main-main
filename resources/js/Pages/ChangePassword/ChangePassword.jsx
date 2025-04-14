@@ -114,7 +114,7 @@ export default function ChangePassword(props){
             
               <form className="row px-5 justify-content-center mt-3">
                 <div className="col-12 col-lg-6 col-xl-5">
-                  <div className="bg-light p-4">
+                  <div className="bg-lightgray p-4">
                    
                     <div className="col-md-12">
                       <label htmlFor="input-old-password" className="form-label">

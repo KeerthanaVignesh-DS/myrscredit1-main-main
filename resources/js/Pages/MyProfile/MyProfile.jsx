@@ -238,7 +238,7 @@ export default function MyProfile(){
             
               <form className="row px-3 px-md-5 justify-content-center mt-3">
                 <div className="col-12 col-md-12 col-lg-8 col-xl-8">
-                  <div className="bg-light p-4">
+                  <div className="bg-lightgray p-4">
                     <h3 className="primary-text-color mb-3">Company Information:</h3>
                     <div className="row">
                     <div className="col-md-6">
@@ -504,7 +504,7 @@ export default function MyProfile(){
                       </button>
 
                      <button 
-                        onClick={onLogout} 
+                        onClick={resetAll} 
                         className="btn btn-primary text-uppercase"
                         type="button"
                         name="close"

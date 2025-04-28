@@ -24,7 +24,7 @@ class UserController extends Controller
             $users = $users->with('latestSubmission')->get();
         }else if ($request->has('date_from') && $request->has('date_to')) {
             if($request->date_from != null && $request->date_to != null ){
-                $users->whereBetween('created_at', [Carbon::parse($request->date_from),  Carbon::parse($request->date_to)]);
+                $users->whereBetween('created_at', [Carbon::parse($request->date_from)->startOfDay(),  Carbon::parse($request->date_to)->endOfDay()]);
                 $users->orderBy('company');
                 $users = $users->with('latestSubmission')->get();
 

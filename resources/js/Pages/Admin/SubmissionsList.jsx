@@ -24,10 +24,8 @@ import "react-toastify/dist/ReactToastify.css";
 import DeleteComponent from "@/Components/DeleteComponent";
 import { FiDownload } from 'react-icons/fi';
 import axios from "axios";
-
-
-
-
+import ExcelJS from "exceljs";
+import { saveAs } from "file-saver";
 
 
 
@@ -173,19 +171,23 @@ export default function SubmissionsList  ({Submissions,Clients,Total})  {
       // }, 1000); // Small delay to ensure state updates
     };
     useEffect(() => {
-      if (pdfShow && report) {
-          requestAnimationFrame(() => {
-              setTimeout(() => {
-                  if (pdfRef.current) {
-                      html2pdf()
-                      .set({
-                        margin: [0, 0, 0, 0], // [top, left, bottom, right] - Reduce top margin
-                        filename: "report.pdf",
-                        image: { type: "jpeg", quality: 0.98 },
-                        html2canvas: { scale: 2 },
-                        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
-                    })
-                    .from(pdfRef.current).save();
+                  if (pdfShow && report) {
+                      requestAnimationFrame(() => {
+                          setTimeout(() => {
+                              if (pdfRef.current) {
+                                const filename = `${report.user.company}_${report.name}.pdf`;
+
+                                html2pdf()
+              .set({
+                margin: 0,
+                filename: filename,
+                image: { type: "jpeg", quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+                pagebreak: { mode: ['css', 'legacy'] }
+              })
+              .from(pdfRef.current)
+              .save();
                   }
                   setPdfShow(false);
               }, 500); // Small delay
@@ -193,69 +195,112 @@ export default function SubmissionsList  ({Submissions,Clients,Total})  {
       }
   }, [pdfShow, report]); 
 
-  const handleDownload = () => {
+  
+  const handleDownload = async() => {
+  
+    const todayDate = new Date().toISOString().split("T")[0];
+
       const transformedData = Submissions.map((row) => {
         let serviceLevel = "";
-        if (row.express_service === "1") {
-          serviceLevel = "Instant Response (4 Office Hours)";
-        } else if (row.express_service === "2") {
-          serviceLevel = "Rapid Response (8 Office Hours)";
-        } else if (row.express_service === "3") {
-          serviceLevel = "Fast Response (12 Office Hours)";
-        } else if (row.express_service === "4") {
-          serviceLevel = "Quick Response (16 Office Hours)";
-        } else if (row.express_service === "5") {
-          serviceLevel = "Standard Response (24+/- Office Hours)";
-        } else {
-          serviceLevel = "";
+        switch (row.express_service) {
+          case "1":
+            serviceLevel = "Instant Response (4 Office Hours)";
+            break;
+          case "2":
+            serviceLevel = "Rapid Response (8 Office Hours)";
+            break;
+          case "3":
+            serviceLevel = "Fast Response (12 Office Hours)";
+            break;
+          case "4":
+            serviceLevel = "Quick Response (16 Office Hours)";
+            break;
+          case "5":
+            serviceLevel = "Standard Response (24+/- Office Hours)";
+            break;
+          default:
+            serviceLevel = "";
         }
-        return{
-            "Contact": row.phone,
-            "Submission Date": row.submitted_date,
-            "Account Name": row.name,
-            "Myrs Product": row.myrs_product === 1 ? "Summary Credit Report" : "Summary Credit Report w/details",
-            "Service Level": serviceLevel,
-            "Order Amount": row.order_amount,
-            "Status": row.status === 0 ? "PENDING" : "COMPLETED",
-            "ChargeAmount": row.charge_amount,
-            "Account ReportCompletedDate": row.completed_date,
-            "MyrsRating": row.myrs_rating,
-            "Account IsPrevious14": row.is_previous,
-            "Account DocumentName": row.document_name1,
-            "Account DocumentName2": row.document_name2,
-        }
-        
       
+        return [
+           row.user.name,
+           row.user.company,
+           row.user.city,
+           row.user.state,
+           row.submitted_date,
+           row.name,
+           row.phone,
+           row.myrs_product === 1
+             ? "Summary Credit Report"
+             : "Summary Credit Report w/details",
+           serviceLevel,
+           row.order_amount,
+           row.status === 0 ? "PENDING" : "COMPLETED",
+           row.user.email,
+           row.charge_amt,
+           row.completed_date,
+           row.myrs_rating,
+           row.chk_previous14 ===0 ? "No" : "Yes",
+          // row.doc_name1,
+           row.comments,
+        ];
       });
-      // Convert table data to worksheet
-      const worksheet = XLSX.utils.json_to_sheet(transformedData);
-      const range = XLSX.utils.decode_range(worksheet["!ref"]);
-      for (let C = range.s.c; C <= range.e.c; ++C) {
-        const cellAddress = XLSX.utils.encode_cell({ r: 0, c: C }); // Header row (r: 0)
-        if (!worksheet[cellAddress]) continue;
-        worksheet[cellAddress].s = {
-          fill: {
-            fgColor: { rgb: "FFFF00" }, // Yellow background
-          },
-          font: {
-            bold: true,
-            color: { rgb: "000000" }, // Black text
-          },
-          alignment: {
-            horizontal: "center",
-            vertical: "center",
-          },
-        };
-      }
-      // Create a new workbook
-      const workbook = XLSX.utils.book_new();
+      
   
-      // Append the worksheet to the workbook
-      XLSX.utils.book_append_sheet(workbook, worksheet, "FormattedData");
+       // Create Workbook and Worksheet
+          const workbook = new ExcelJS.Workbook();
+          const worksheet = workbook.addWorksheet("My_Submissions");
   
-      // Generate a binary Excel file and download
-      XLSX.writeFile(workbook, "Mysubmissionlist.xlsx");
-    };
+          // Define Headers
+          const headers = [
+          // "Last Submission",
+            "Client Name", "Company Name", "User City", "User State", "Submission Date",
+            "Account Name", "Phone","Myrs Product",
+            "Service Level", "Order Amount", "Status", "Comp_Email", "Charge Amount",
+            "Account_Report_Completed_Date", "Myrs Rating", "Account Is Previous 14", 
+            // "Account_Document_Name",
+             "Comments"
+           ];
+                       
+           worksheet.addRow(headers); // Add header row
+                 
+           // Add Data Rows
+          transformedData.forEach(row => worksheet.addRow(row));
+                   
+          // Apply Header Styling
+          const headerRow = worksheet.getRow(1);
+           headerRow.eachCell((cell) => {
+             cell.font = { bold: true, color: { argb: "FFFFFF" } }; // White text
+             cell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "4F81BD" } }; // Blue background
+             cell.alignment = { horizontal: "center", vertical: "middle" };
+             cell.border = { top: { style: "thin" }, left: { style: "thin" }, bottom: { style: "thin" }, right: { style: "thin" } };
+           });
+                   
+                       // Apply Borders to Data Cells
+             worksheet.eachRow((row, rowNumber) => {
+               if (rowNumber !== 1) {
+                  row.eachCell((cell) => {
+             // cell.alignment = { horizontal: "center", vertical: "middle" };
+                 cell.border = {
+                    top: { style: "thin" }, left: { style: "thin" },
+                    bottom: { style: "thin" }, right: { style: "thin" }
+                    };
+                   });
+               }
+            });
+                   
+             // Adjust Column Widths
+             worksheet.columns.forEach(column => {
+              column.width = 20;
+                 });
+                   
+                       // Generate & Download Excel File
+             const buffer = await workbook.xlsx.writeBuffer();
+             const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+             saveAs(blob, `SubmissionList_${todayDate}.xlsx`);
+             }
+
+
 
     const handleHistValue = (e) =>{
       if(e.target.value === '1'){
@@ -927,30 +972,57 @@ export default function SubmissionsList  ({Submissions,Clients,Total})  {
        
 
         )}
-        {pdfShow && 
-          // <MyDocument ref={pdfRef} data={report}/>
+        {/* {pdfShow && 
           <>
-              {/* <div
-                  ref={pdfRef}
-                  style={{
-                    position: "absolute",
-                    left: "-9999px",
-                    top: "0",
-                    visibility: "hidden",
-                  }}
-                >                    
-                {report && <ReportForm edit={0} value={report} historicalpdf={report?.historical_pdf} />}
-                </div> */}
-                <div ref={pdfRef} style={{  fontSize: "10px",  // Adjust this value
+                <div ref={pdfRef} 
+                style={{  fontSize: "10px",  // Adjust this value
                   transform: "scale(0.8)",  marginTop: "0px",  // Ensure no extra space at the top
                   paddingTop: "0px", } }>
-            
                 <h1 className="text-center text-primary">Myrs Credit Report</h1>
                   {report && <ReportForm  edit={0}  value={report} historicalpdf={report?.historical_pdf} ispdf={1} handleClose={handleCloseReport}/>}
-
                   </div>
           </>
-        }
+        } */}
+        {pdfShow && (
+  <div style={{ display: "none" }}>
+    <div
+      ref={pdfRef}
+      style={{
+        fontSize: "10px",
+        width: "210mm",
+        minHeight: "297mm",
+        backgroundColor: "#fff",
+        padding: "10mm",
+        boxSizing: "border-box",
+      }}
+    >
+      {/* Watermark */}
+      <div className="watermark">Myrs</div>
+
+
+      <h1
+        className="text-center text-primary"
+        style={{ margin: 0, padding: "10px 0", textAlign: "center" }}
+      >
+        Myrs Credit Report
+      </h1>
+
+      {report && (
+        <ReportForm
+          edit={0}
+          value={report}
+          historicalpdf={report?.historical_pdf}
+          ispdf={1}
+          handleClose={handleCloseReport}
+          className="page-break"
+
+        />
+      )}
+    </div>
+  </div>
+)}
+
+
         {/* <div ref={pdfRef} style={{ padding: "20px", background: "#f0f0f0"}}>
         {report && <ReportForm  edit={0}  value={report} historicalpdf={report?.historical_pdf}/>}
 

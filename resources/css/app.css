@@ -624,3 +624,22 @@ footer .email-icon{
 .react-datepicker-wrapper{
   width: 100% !important;
 }
+
+.watermark {
+  position: absolute;
+  top: 20%;
+  left: 10%;
+  font-size: 250px;
+  color: rgba(0, 0, 0, 0.08);
+  transform: rotate(-30deg);
+  z-index: 0;
+  pointer-events: none;
+  user-select: none;
+}
+
+
+.page-break {
+  page-break-after: always;
+}
+
+

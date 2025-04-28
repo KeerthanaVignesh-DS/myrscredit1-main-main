@@ -4,7 +4,7 @@ import { SiMicrosoftexcel } from "react-icons/si";
 import { FiDownload } from 'react-icons/fi';
 import GuestLayout from "@/Layouts/GuestLayout";
 import InnerMenu from "@/Components/InnerMenu";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { router } from "@inertiajs/react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -16,6 +16,8 @@ import "react-toastify/dist/ReactToastify.css";
 import * as XLSX from "xlsx";
 import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
+import ReportForm from "../Admin/ReportForm";
+import html2pdf from "html2pdf.js";
 
 
 export default function MySubmissions({submissions,auth,account_name,total}){
@@ -26,6 +28,11 @@ export default function MySubmissions({submissions,auth,account_name,total}){
   const [dateFrom,setDateFrom] = useState(new Date());
   const [dateTo,setDateTo] = useState(new Date());
   const [month_to_date,setMonthToDate] = useState(0);
+  const [pdfShow,setPdfShow] = useState(false);
+  const [report, setReport] = useState('');
+    const pdfRef = useRef();
+  
+
 
   const onSearch = () =>{
     let date_from = dateFrom ? format(dateFrom, "dd-MM-yyyy") : null;
@@ -34,10 +41,10 @@ export default function MySubmissions({submissions,auth,account_name,total}){
     router.get(route('submission'), { status,dateFilter,name,date_from,date_to}, { preserveState: true });
   }
   const onSearchPending = () =>{
-    router.get(route('submission'), { status:0,month_to_date  }, { preserveState: true });
+    router.get(route('submission'), { status1:0  }, { preserveState: true });
   }
   const onSearchCompleted = () =>{
-    router.get(route('submission'), { status:1,month_to_date  }, { preserveState: true });
+    router.get(route('submission'), { status1:1  }, { preserveState: true });
   }
   const handleChangeDateFrom = (date, event) => {
     const formattedDate = date ? format(date, "dd-MM-yyyy") : null;
@@ -219,7 +226,40 @@ export default function MySubmissions({submissions,auth,account_name,total}){
   const handleDownloadPrevious = (filename) => {
     window.open(`/download-previous?fname=${filename}`, "_blank");
   };
+  // const handleCloseReport = () => setShowReport(false);
 
+
+  const generatePdf = (data) => {
+        setReport(data);
+        setPdfShow(true);
+        // setTimeout(() => {
+        //   html2pdf().from(pdfRef.current).save(filename);
+        // }, 1000); // Small delay to ensure state updates
+      };
+      useEffect(() => {
+                    if (pdfShow && report) {
+                        requestAnimationFrame(() => {
+                            setTimeout(() => {
+                                if (pdfRef.current) {
+                                  const filename = `${auth.user.company}_${report.name}.pdf`;
+  
+                                  html2pdf()
+                .set({
+                  margin: 0,
+                  filename: filename,
+                  image: { type: "jpeg", quality: 0.98 },
+                  html2canvas: { scale: 2 },
+                  jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+                  pagebreak: { mode: ['css', 'legacy'] }
+                })
+                .from(pdfRef.current)
+                .save();
+                    }
+                    setPdfShow(false);
+                }, 500); // Small delay
+          });
+        }
+    }, [pdfShow, report]); 
 
   return (
     <>
@@ -317,18 +357,18 @@ export default function MySubmissions({submissions,auth,account_name,total}){
                 </div>
               </div>
             </div>
-            {/* <div className="py-2">
+            <div className="py-2">
               <h5 className="primary-text-color">OR</h5>
             </div>
             <div className="row">
-              <div className="col-lg-2 mb-2">
+              {/* <div className="col-lg-2 mb-2">
                 <select id="inputState" className="form-select" onChange={(e)=>setMonthToDate(e.target.value)}>
                   
                   <option value={'1'}>Month to date</option>
                   <option  value={'2'}>Last Month</option>
                   <option value={'3'}>Year to date</option>
                 </select>
-              </div>
+              </div> */}
 
               <div className="col-lg-4 mb-2">
                 <div className="d-flex flex-column flex-md-row gap-2">
@@ -341,7 +381,7 @@ export default function MySubmissions({submissions,auth,account_name,total}){
                   </button>
                 </div>
               </div>
-            </div> */}
+            </div>
           </div>
           <div className="mt-4 table-responsive">
           <table className="table table-bordered">
@@ -431,7 +471,7 @@ export default function MySubmissions({submissions,auth,account_name,total}){
        </td>
        {data.completed_date ? (
             <td className="text-nowrap text-center">
-            <button className="bg-transparent border-0"><FaFileDownload  className="fs-5 text-info"/></button>
+            <button className="bg-transparent border-0" onClick={() => generatePdf(data)}><FaFileDownload  className="fs-5 text-info"/></button>
           </td>       
         ):(
         <td className="text-nowrap text-center"></td>
@@ -477,6 +517,45 @@ export default function MySubmissions({submissions,auth,account_name,total}){
                   )}
                 </SlideOver>
               )}
+              {pdfShow && (
+                <div style={{ display: "none" }}>
+                  <div
+                    ref={pdfRef}
+                    style={{
+                      fontSize: "10px",
+                      width: "210mm",
+                      minHeight: "297mm",
+                      backgroundColor: "#fff",
+                      padding: "10mm",
+                      boxSizing: "border-box",
+                    }}
+                  >
+                    {/* Watermark */}
+                    <div className="watermark">Myrs</div>
+              
+              
+                    <h1
+                      className="text-center text-primary"
+                      style={{ margin: 0, padding: "10px 0", textAlign: "center" }}
+                    >
+                      Myrs Credit Report
+                    </h1>
+              
+                    {report && (
+                      <ReportForm
+                        edit={0}
+                        value={report}
+                        historicalpdf={report?.historical_pdf}
+                        ispdf={1}
+                        // handleClose={handleCloseReport}
+                        className="page-break"
+              
+                      />
+                    )}
+                  </div>
+                </div>
+              )}
+              
     </>
   );
 };

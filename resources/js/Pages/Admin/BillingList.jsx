@@ -15,6 +15,7 @@ export default function BillingList ({Billing,Clients,toast1,message})  {
   const [type,setType] = useState("Invoice");
   const [year,setYear] = useState(new Date().getFullYear());
   const [client,setClient] =useState();
+  const [showToast,setShowToast] =useState(toast1)
 
   const monthNames = [
     "January", "February", "March", "April", "May", "June",
@@ -51,7 +52,7 @@ export default function BillingList ({Billing,Clients,toast1,message})  {
   };
 
   useEffect(()=>{
-    if(toast1){
+    if(showToast){
       toast.success(message, {
                                           position: 'top-right', // Position of the toast
                                           autoClose: 3000, // Duration in ms before it disappears
@@ -59,6 +60,7 @@ export default function BillingList ({Billing,Clients,toast1,message})  {
                                           closeOnClick: true, // Close on click
                                           pauseOnHover: true, // Pause on hover
                                       });  
+                                      setShowToast(false);
     }
   })
 

@@ -74,22 +74,27 @@ class SubmissionController extends Controller
 
                 }else{
                     $query->whereBetween('submitted_date', [Carbon::parse($request->date_from)->startOfDay(),  Carbon::parse($request->date_to)->endOfDay()]);
-                    $query->whereNull('completed_date');
+                    // $query->whereNull('completed_date');
 
 
                 }
             
             }else{
-                $query->whereBetween('submitted_date', [ Carbon::parse($request->date_from)->startOfDay(),  Carbon::parse($request->date_to)->endOfDay()]);
-                $query->whereNull('completed_date');
+                $query->whereBetween(\DB::raw('DATE(submitted_date)'), [ Carbon::parse($request->date_from)->startOfDay(),  Carbon::parse($request->date_to)->endOfDay()]);
+                // $query->whereNull('completed_date');
 
 
             }
             
         }else{
             // $query->whereBetween('submitted_date', [carbon::now()->toDateString(), carbon::now()->toDateString()]);
-            $query->whereDate('submitted_date', $today);
-            $query->whereNull('completed_date');
+            if ($request->has('status1') ) {
+                $query->where('status', $request->status1);
+            }else{
+                $query->whereDate(\DB::raw('DATE(submitted_date)'), $today);
+
+            }
+            // $query->whereNull('completed_date');
 
 
 
@@ -97,6 +102,7 @@ class SubmissionController extends Controller
 
             
         }
+       
     
         
 
@@ -258,23 +264,23 @@ class SubmissionController extends Controller
 
 
                 }else{
-                    $query->whereBetween('submitted_date', [Carbon::parse($request->date_from)->startOfDay(),  Carbon::parse($request->date_to)->endOfDay()]);
-                    $query->whereNull('completed_date');
+                    $query->whereBetween(\DB::raw('DATE(submitted_date)'), [Carbon::parse($request->date_from)->startOfDay(),  Carbon::parse($request->date_to)->endOfDay()]);
+                    // $query->whereNull('completed_date');
 
 
                 }
             
             }else{
-                $query->whereBetween('submitted_date', [ Carbon::parse($request->date_from)->startOfDay(),  Carbon::parse($request->date_to)->endOfDay()]);
-                $query->whereNull('completed_date');
+                $query->whereBetween(\DB::raw('DATE(submitted_date)'), [ Carbon::parse($request->date_from)->startOfDay(),  Carbon::parse($request->date_to)->endOfDay()]);
+                // $query->whereNull('completed_date');
 
 
             }
             
         }else{
             // $query->whereBetween('submitted_date', [carbon::now()->toDateString(), carbon::now()->toDateString()]);
-            $query->whereDate('submitted_date', $today);
-            $query->whereNull('completed_date');
+            $query->whereDate(\DB::raw('DATE(submitted_date)'), $today);
+            // $query->whereNull('completed_date');
 
 
 

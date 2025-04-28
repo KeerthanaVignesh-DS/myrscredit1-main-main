@@ -5,13 +5,9 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Inertia } from '@inertiajs/inertia';
 import axios from 'axios';
-// import { toast,ToastContainer } from "react-toastify";
-// import "react-toastify/dist/ReactToastify.css";
 import { router } from "@inertiajs/react";
 import { Textarea } from "@headlessui/react";
 import { FaSortAmountDown } from "react-icons/fa";
-
-
 
 
 export default function ReportForm (props){
@@ -20,8 +16,6 @@ export default function ReportForm (props){
 ${props.value.address1}
 ${props.value.city}, ${props.value.state}, ${props.value.zip}, ${props.value.country}
 ${props.value.phone}` : "";
-
-  
 
 
   const initialValues = {
@@ -49,6 +43,7 @@ ${props.value.phone}` : "";
     historical_pdf          : props.historicalpdf
     }
 
+    
     const schema = Yup.object().shape({
             order_amount        : Yup.number().required("Enter Order Amount"),
             completed_date      : Yup.string().required("Enter completed date"),

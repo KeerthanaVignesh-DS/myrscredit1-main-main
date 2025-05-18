@@ -12,7 +12,7 @@ import { toast,ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 
-export default function ForgotPassword(props) {
+export default function ForgotUsername(props) {
     // const { data, setData, post, processing, errors } = useForm({
     //     email: '',
     // });
@@ -68,7 +68,7 @@ export default function ForgotPassword(props) {
 
 
       const submitForgetPassword = async(data) =>{
-          console.log(data,"data");
+          // console.log(data,"data");
 
           let obj = {
             email : data.email_address,
@@ -78,7 +78,7 @@ export default function ForgotPassword(props) {
         await router.post('/forgot-username',obj,{
         onSuccess: (response) => {
             // You can store the response here
-            console.log('Submission successful:', response);
+            // console.log('Submission successful:', response);
             toast.success(props.status, {
                   position: 'top-right', // Position of the toast
                   autoClose: 5000, // Duration in ms before it disappears
@@ -172,7 +172,7 @@ export default function ForgotPassword(props) {
                   {props.errors?.email && <p className="text-danger mx-1">{props.errors?.email}</p>}
                 </div>
                 
-                {console.log(errors)}
+               
                
 
                 <div className="d-flex justify-content-center align-items-center gap-2 pt-5">

@@ -23,6 +23,7 @@ export default function ForgotPassword(props) {
     //     post(route('password.email'));
     // };
     const [securityQues,setSecurityQues]=useState(0);
+    const [message,setMessage] = useState();
     const [securityQuestionValues,setSecurityQuestionValues] = useState([
         { label: "Select Question", value:  0},
         { label: "What is name of your favorite pet?", value:  1},
@@ -65,10 +66,11 @@ export default function ForgotPassword(props) {
         setSecurityQues(e);
         setValue("security_Ques",e)
       }
-
+     
 
       const submitForgetPassword = async(data) =>{
-          console.log(data,"data");
+          // console.log(data,"data");
+          setMessage('');
 
           let obj = {
             email : data.email_address,
@@ -78,14 +80,16 @@ export default function ForgotPassword(props) {
         await router.post('/forgot-password',obj,{
         onSuccess: (response) => {
             // You can store the response here
-            console.log('Submission successful:', response);
-            toast.success(props.status, {
+            // console.log('Submission successful:', response);
+            setMessage(response.props.message);
+            toast.success(response.props.message, {
                   position: 'top-right', // Position of the toast
                   autoClose: 5000, // Duration in ms before it disappears
                   hideProgressBar: false, // Show progress bar
                   closeOnClick: true, // Close on click
                   pauseOnHover: true, // Pause on hover
-              });    
+              }); 
+              resetAll();   
                   },
         onError: (errors) => {
             console.log('Form submission errors:', errors);
@@ -111,6 +115,7 @@ export default function ForgotPassword(props) {
               <h2 className="primary-text-color text-center mb-2">
                  Forgot Password
               </h2>
+            
             
               <div className="row px-2 px-md-5 justify-content-center mt-5">
                 <div className="col-12 col-md-6 col-xl-5">
@@ -170,9 +175,10 @@ export default function ForgotPassword(props) {
 
                   </div>
                   {props.errors?.email && <p className="text-danger mx-1">{props.errors?.email}</p>}
+                  {message && <p className='text-success'>{message}</p>}
                 </div>
                 
-                {console.log(errors)}
+                {/* {console.log(errors)} */}
                
 
                 <div className="d-flex justify-content-center align-items-center gap-2 pt-5">

@@ -77,7 +77,10 @@ class MyBillingController extends Controller
     public function myBilling(Request $request)
     {
         $user = $request->user()->id;
-        $billing = MyBilling::where('user_id', $user)->get();
+        $billing = MyBilling::where('user_id', $user)
+                    ->orderBy('year', 'desc')
+                    ->orderByRaw("FIELD(month, 'December','November','October','September','August','July','June','May','April','March','February','January')")
+                    ->get();
        
         return Inertia::render('MyBilling/BillingLogin', [
             'Billing' => $billing,
@@ -243,11 +246,13 @@ class MyBillingController extends Controller
     
         $pdfReader = new \setasign\Fpdi\Fpdi();
         $totalPages = $pdfReader->setSourceFile(storage_path("app/private/$pdfPath"));
-    
+        $logMessages = [];
         $textPages = [];
         foreach ($pdf->getPages() as $page) {
             $textPages[] = $page->getText();
         }
+        $logMessages[] = "<span style='color:green;'>File uploaded successfully</span>";
+            $logMessages[] = "<span style='color:green;'>File splitted successfully</span>";
     
         foreach ($textPages as $index => $text) {
             preg_match('/Account #\s*(\d+)/', $text, $matches);
@@ -272,6 +277,13 @@ class MyBillingController extends Controller
                 return back()->withErrors("Invoice date mismatch on page " . ($index + 1) .
                     ". Found: $invoiceDate, Expected: {$request->month}-$expectedYear");
             }
+
+             if ($accountNumber === "Unknown" || !$invoiceDate) {
+                    $logMessages[] = "<span style='color:red;'>Missing details on page " . ($index + 1) . ": " .
+                        (!$accountNumber || $accountNumber === "Unknown" ? 'Account Number ' : '') .
+                        (!$invoiceDate ? 'Invoice Date' : '') . "</span>";
+                    continue;
+                }
             $invoiceDate = "$yearFromPdf-$monthFromPdf-$day";
     
             $pdfWriter = new \setasign\Fpdi\Fpdi();
@@ -297,19 +309,35 @@ class MyBillingController extends Controller
                 'pdf_type' => $request->type
             ]);
     
+            // try {
+            //     Mail::to($user ? $user->ap_email : 'recipient@example.com')
+            //         ->send(new InvoiceMail($invoice));
+            // } catch (\Exception $e) {
+            //     return back()->withErrors('Failed to send email: ' . $e->getMessage());
+            // }
+            
+
+
+
             try {
-                Mail::to($user ? $user->ap_email : 'recipient@example.com')
-                    ->send(new InvoiceMail($invoice));
+                if ($user && $user->email) {
+                    Mail::to($user->email)->send(new InvoiceMail($invoice));
+                    $invoice->save();
+                    $logMessages[] = "<span style='color:green;'>Mail has been sent to {$user->email} for account number {$accountNumber}</span>";
+                } else {
+                    $logMessages[] = "<span style='color:red;'>Client not found for account number {$accountNumber}</span>";
+                }
             } catch (\Exception $e) {
-                return back()->withErrors('Failed to send email: ' . $e->getMessage());
+                $logMessages[] = "<span style='color:red;'>Error sending mail for account number {$accountNumber}: {$e->getMessage()}</span>";
             }
     
             // Save invoice only if mail was successful
             $invoice->save();
         }
     
-        return Inertia::render('Admin/BillingList', [
+        return Inertia::render('Admin/UploadBilling', [
             'message' => 'Upload and sent mail to clients successfully.',
+                'logMessages' => $logMessages,
             'toast1'  => true
         ]);
     }

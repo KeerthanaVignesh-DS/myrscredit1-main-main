@@ -126,7 +126,7 @@ export default function SubmissionsList  ({Submissions,Clients,Total})  {
       });
   
       setHistoricalSubmissions(response.data.historicalSubmissions);
-      console.log('Got historical submissions:', historicalSubmissions);
+      // console.log('Got historical submissions:', historicalSubmissions);
       // Set state or do something with the data
   
     } catch (error) {
@@ -147,7 +147,7 @@ export default function SubmissionsList  ({Submissions,Clients,Total})  {
   
         URL.revokeObjectURL(url);
   
-        console.log("✅ PDF Downloaded!");
+        // console.log("✅ PDF Downloaded!");
       } catch (error) {
         console.error("❌ Failed to generate PDF", error);
       }
@@ -160,7 +160,7 @@ export default function SubmissionsList  ({Submissions,Clients,Total})  {
     const beforeDownload = (data) => {
       setReport(data)
       setPdfShow(true)
-      console.log("🚀 Running before download!");
+      // console.log("🚀 Running before download!");
       // Example: You can do validations, API calls, loading states, etc.
     };
     const generatePdf = (data) => {

@@ -102,62 +102,6 @@ export default function ActiveClient (props){
         setDateTo(date)
       };
 
-      // const handleDownload = () => {
-      //     const transformedData = props.users.map((row) => {
-      //       return{
-      //           "Last Submission": row.last_submission,
-      //           "User": row.name,
-      //           "Client Name": row.company,
-      //           "Email Address": row.email,
-      //           "Address": row.address1,
-      //           "User City": row.city,
-      //           "User State": row.state,
-      //           "Contact": row.phone,
-      //           "Registration Date": row.created_at,
-      //           "User Name": row.username,
-      //           "Password": row.show_password,
-      //           "Account Number": row.account_number,
-      //       }
-      //     });
-
-      //     // Convert table data to worksheet
-      //     const worksheet = XLSX.utils.json_to_sheet(transformedData);
-
-      //     const range = XLSX.utils.decode_range(worksheet["!ref"]);
-          
-      //     for (let C = range.s.c; C <= range.e.c; ++C) {
-      //       const cellAddress = XLSX.utils.encode_cell({ r: 0, c: C }); // Header row (r: 0)
-      //       if (!worksheet[cellAddress]) continue;
-      //       worksheet[cellAddress].s = {
-      //         fill: {
-      //           fgColor: { rgb: "4F81BD" }, // Yellow background
-      //         },
-      //         font: {
-      //           bold: true,
-      //           color: { rgb: "FFFFFF" }, // Black text
-      //         },
-      //         alignment: {
-      //           horizontal: "center",
-      //           vertical: "center",
-      //         }, 
-      //         border: {
-      //           top: { style: "thin", color: { rgb: "000000" } },
-      //           bottom: { style: "thin", color: { rgb: "000000" } },
-      //           left: { style: "thin", color: { rgb: "000000" } },
-      //           right: { style: "thin", color: { rgb: "000000" } },
-      //         },
-      //       };
-      //     }
-      //     // Create a new workbook
-      //     const workbook = XLSX.utils.book_new();
-      
-      //     // Append the worksheet to the workbook
-      //     XLSX.utils.book_append_sheet(workbook, worksheet, "FormattedData");
-      
-      //     // Generate a binary Excel file and download
-      //     XLSX.writeFile(workbook, "ClientList"+todayDate+".xlsx");
-      //   };
-
       const handleDownload = async () => {
         const todayDate = new Date().toISOString().split("T")[0];
     
@@ -410,14 +354,7 @@ export default function ActiveClient (props){
                   Last Submit <br />
                   Date
                 </th>
-                {/* <th className="text-center align-middle">
-                  Price <br />
-                  Level
-                </th>
-                <th className="text-center align-middle">
-                  Update Price <br />
-                  Level
-                </th> */}
+                
                 <th className="text-center align-middle">
                   Client <br />
                   Info
@@ -445,12 +382,7 @@ export default function ActiveClient (props){
                     ? `${new Date(user.latest_submission.submitted_date).getMonth() + 1}/${new Date(user.latest_submission.submitted_date).getDate()}/${new Date(user.latest_submission.submitted_date).getFullYear()}`
                     : ""}
                 </td>
-                {/* <td>{user.price_level}</td> */}
-                {/* <td className="text-center">
-                  <button className="bg-transparent border-0">
-                    <FaRegEdit className="fs-6 text-success" />
-                  </button>
-                </td> */}
+                
                 <td className="text-center">
                   <button className="bg-transparent border-0" onClick={()=>handleshow1(user)}>
                     <FaSearch className="fs-6 text-primary" />

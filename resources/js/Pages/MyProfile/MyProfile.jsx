@@ -204,7 +204,7 @@ export default function MyProfile(){
         router.patch('/profile',obj,{
           onSuccess: (response) => {
               // You can store the response here
-              console.log('Submission successful:', response);
+              // console.log('Submission successful:', response);
               toast.success('updated Successfully', {
                     position: 'top-right', // Position of the toast
                     autoClose: 5000, // Duration in ms before it disappears

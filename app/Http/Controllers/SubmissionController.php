@@ -11,6 +11,8 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
+use Illuminate\Support\Facades\Mail;
+use App\Mail\SubmissionMail;
 
 // use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -141,6 +143,8 @@ class SubmissionController extends Controller
         //     'fields.*.value' => 'required|string|max:255',
         //     'fields.*.option' => 'required|string|max:255',
         // ]);
+        $user = $request->user();
+        // dd($user->email);
         
         function generateFilename($file)
         {
@@ -159,6 +163,8 @@ class SubmissionController extends Controller
             
 
         }else{  
+            $modifiedFields = [];
+
             foreach ($request->fields as $field) {
             
             
@@ -186,10 +192,23 @@ class SubmissionController extends Controller
                     'doc_name2' => $field['doc_name2'],
                     'submitted_date' => Carbon::now()
                 ]);
+                try{
+
+                     Mail::to($user->email)->send(new SubmissionMail($field,$user,false));
+                Mail::to(env("MAIL_ADMIN_ADDRESS"))->send(new SubmissionMail($field,$user,true));
+
+
+                } catch (\Exception $e) {
+                    throw ValidationException::withMessages([
+                        'email' => ['Failed to send the email. Please try again later.'],
+                    ]);
+                }
+                
             }
           
-          
+         
         }
+        
         
         return Inertia::render('Recommendation Submission/RecommendationSubmission', [
            
@@ -236,7 +255,8 @@ class SubmissionController extends Controller
         $query = Submission::query();
         $today = Carbon::today();
         $total = 0;
-
+        // $sub = $query->get();
+        // dd($sub);
 
         if ($request->has('client') && $request->client !== '--All--') {
             $query->where('user_id', $request->client);
@@ -335,6 +355,20 @@ class SubmissionController extends Controller
 
 
         $submission->save();
+        $user = User::find($submission->user_id);
+        // Mail::to($user->email)->send(new SubmissionMail($submission,$user));
+        try {
+            Mail::send('emails.SendPdfLinkToUser', ['data' => $submission], function ($message) use ($user) {
+                $message->to($user->email)
+                        ->subject('Your submission with Myrs was completed');
+            });
+        } catch (\Exception $e) {
+            throw ValidationException::withMessages([
+                'email' => ['Failed to send the email. Please try again later.'],
+            ]);
+        }
+
+    
 
         return back()->with(['message' => 'Submitted successfully!']); 
 

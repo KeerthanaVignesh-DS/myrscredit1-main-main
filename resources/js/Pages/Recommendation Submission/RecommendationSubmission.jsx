@@ -376,13 +376,13 @@ export default function RecommendationSubmission({edit,value,handleClose,toast})
     if(edit === 0){
       id= value.id;
     }
-    console.log(data.fields);
+    // console.log(data.fields);
 
    
     await router.post(route('submission.store'),{fields:data.fields,id:id},{
             onSuccess: (response) => {
                 // You can store the response here
-                console.log('Submission successful:', response);
+                // console.log('Submission successful:', response);
                 if(user.is_admin !== 1 && edit !== 0){
                 toast1.success('Submitted Successfully', {
                   position: 'top-right', // Position of the toast
@@ -485,7 +485,7 @@ export default function RecommendationSubmission({edit,value,handleClose,toast})
       });
 
       // setUploadedUrl(res.data.url);
-      console.log(res.data);
+      // console.log(res.data);
       setValue(`fields.${i}.lbl_doc_name1`, file.name);
     setValue(`fields.${i}.doc_name1`, res.data.path);
 
@@ -911,6 +911,8 @@ export default function RecommendationSubmission({edit,value,handleClose,toast})
                            </option>
                          ))}
                        </select>
+                     {errors.fields?.[index]?.account_state && <p className="text-danger mx-1 mb-0">{errors.fields?.[index]?.account_state.message}</p>}
+
                      </div>
    
                      <div className="col-lg-6 mb-1">

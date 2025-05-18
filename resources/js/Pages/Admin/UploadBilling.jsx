@@ -8,7 +8,7 @@ import { useEffect } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-export default function UploadBilling({message}) {
+export default function UploadBilling({message,logMessages}) {
 
     const user = usePage().props.auth.user;
   const {
@@ -27,12 +27,12 @@ export default function UploadBilling({message}) {
 
   const onSubmit = async(data) => {
     data.user_id=user.id;
-    console.log("Form Data:", data);
+    // console.log("Form Data:", data);
     // Handle form submission here (e.g., upload file, send mail)
     await router.post('/upload-invoice',data,{
                 onSuccess: (response) => {
                     // You can store the response here
-                    console.log('Submission successful:', response);
+                    // console.log('Submission successful:', response);
                     // toast.success(message, {
                     //       position: 'top-right', // Position of the toast
                     //       autoClose: 3000, // Duration in ms before it disappears
@@ -151,6 +151,9 @@ export default function UploadBilling({message}) {
                 </div>
               </div>
             </div>
+            {logMessages && logMessages.length > 0 && logMessages.map((msg, index) => (
+          <li key={index} dangerouslySetInnerHTML={{ __html: msg }} />
+        ))}
           </div>
         </form>
       </div>

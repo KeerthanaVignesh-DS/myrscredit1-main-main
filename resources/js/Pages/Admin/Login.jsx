@@ -28,14 +28,14 @@ export default function Login (props) {
 
 
     const loginUser = async(data) =>{
-        console.log(data)
+        // console.log(data)
 
         let obj = {
           username : data.username,
           password : data.password,
           user     : 'admin'
         }
-        console.log(obj,"obj");
+        // console.log(obj,"obj");
         router.post('/login',obj);
         
     }

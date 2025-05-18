@@ -201,7 +201,7 @@ export default function DemandLetterSubmission() {
   
 
     const addDemandLetterSubmission = async(data)=>{
-      console.log(data,"data");
+      // console.log(data,"data");
   
       let obj = {
       id              :  user.id,
@@ -229,7 +229,7 @@ export default function DemandLetterSubmission() {
       balanceDue      :  data.balanceDue,
       }
   
-      console.log(obj,"obj")
+      // console.log(obj,"obj")
   
     }
 
@@ -679,7 +679,7 @@ export default function DemandLetterSubmission() {
               </div>
             </div>
 
-            {console.log(errors)}
+            {/* {console.log(errors)} */}
 
             <div className="d-flex justify-content-center align-items-center pt-5">
                  <button 

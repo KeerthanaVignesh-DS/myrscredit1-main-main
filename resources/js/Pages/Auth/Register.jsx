@@ -283,7 +283,7 @@ export default function Registration (props){
     if(props.edit !== 0 ){
       router.post('/register', { data: obj }, {
         onError: (errors) => {
-          console.log('Form submission errors:', errors);
+          // console.log('Form submission errors:', errors);
           toast.error(errors?.username || errors?.company, {
             position: 'top-right',
             autoClose: 3000,

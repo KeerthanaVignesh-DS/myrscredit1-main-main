@@ -7,6 +7,8 @@ use App\Models\Submission;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ApprovalMailToClientMail;
 
 
 
@@ -48,11 +50,15 @@ class UserController extends Controller
     {
         $todayClients = User::whereDate('created_at', Carbon::today())->get();
         $todaySubmissions = Submission::whereDate('submitted_date', Carbon::today())->get();
+        $pendingClients = User::whereDate('created_at', Carbon::yesterday())
+                            ->where('is_active', 0)
+                            ->get();
 
-
+        // dd($pendingClients);
         return Inertia::render('Admin/HomePage',[
             'clients' => $todayClients,
-            'submissions' =>$todaySubmissions
+            'submissions' =>$todaySubmissions,
+            'pending' => $pendingClients
         ]);
     }
     public function updateUser(Request $request )
@@ -90,11 +96,22 @@ class UserController extends Controller
         return back();
     }
     public function makeActive(Request $request ){
-        $user = User::where('id',$request->data['id'])->update([
+        User::where('id',$request->data['id'])->update([
                 'is_active' =>$request->data['is_active'],
                 'status' =>$request->data['is_active'],
                 
         ]);
+        $user = User::find($request->data['id']);
+        if($request->data['is_active']==1){
+            try{
+                     Mail::to($user->email)->send(new ApprovalMailToClientMail($user));
+                      } catch (\Exception $e) {
+                    throw ValidationException::withMessages([
+                        'email' => ['Failed to send the email. Please try again later.'],
+                    ]);
+                }
+
+        }
         
         return Inertia::render('Admin/Client',[
             'message' => "Client updated successfully",

@@ -30,12 +30,10 @@ export default function BillingList ({Billing,Clients,toast1,message})  {
           preserveState: true, // Preserve component state
           preserveScroll: true, // Prevent scroll reset
           onSuccess: (res) => {
-            console.log(res)
           },
           onError: (err) => {
             if (err.response) {
               console.error('Server error:', err.response.data);
-              
             } else if (err.request) {
               console.error('No response received:', err.request);
             } else {
@@ -91,22 +89,6 @@ export default function BillingList ({Billing,Clients,toast1,message})  {
               <label htmlFor="input-name-month" className="form-label">
                 Month
               </label>
-              {/* <select id="input-name-month" className="form-select">
-                <option value="1">January</option>
-                <option value="2">February</option>
-                <option selected="selected" value="3">
-                  March
-                </option>
-                <option value="4">April</option>
-                <option value="5">May</option>
-                <option value="6">June</option>
-                <option value="7">July</option>
-                <option value="8">August</option>
-                <option value="9">September</option>
-                <option value="10">October</option>
-                <option value="11">November</option>
-                <option value="12">December</option>
-              </select> */}
               <select
                 id="input-name-month"
                 className="form-select"
@@ -127,22 +109,6 @@ export default function BillingList ({Billing,Clients,toast1,message})  {
               <label htmlFor="input-name-year" className="form-label">
                 Year
               </label>
-              {/* <select id="input-name-year" className="form-select">
-                <option value="2013">2013</option>
-                <option value="2014">2014</option>
-                <option value="2015">2015</option>
-                <option value="2016">2016</option>
-                <option value="2017">2017</option>
-                <option value="2018">2018</option>
-                <option value="2019">2019</option>
-                <option value="2020">2020</option>
-                <option value="2021">2021</option>
-                <option value="2022">2022</option>
-                <option selected="selected" value="2023">
-                  2023
-                </option>
-                <option value="2024">2024</option>
-              </select> */}
               <select
                   id="input-name-year"
                   className="form-select"
@@ -162,15 +128,6 @@ export default function BillingList ({Billing,Clients,toast1,message})  {
               <label htmlFor="input-name-Client" className="form-label">
                 Client
               </label>
-              {/* <select id="input-name-Client" className="form-select" onChange={(e)=>setClient(e.target.value)}>
-                <option selected="selected" value="--All--">
-                  All Clients
-                </option>
-                {Clients && Clients.length>0 && Clients.map((item,index)=>(
-                    <option value={item.id}>{item.company}</option>
-                ))}
-                
-              </select> */}
               <select id="input-name-Client" className="form-select" onChange={(e)=>setClient(e.target.value)}>
                 <option selected="selected" value="--All--">
                   All Clients
@@ -201,9 +158,6 @@ export default function BillingList ({Billing,Clients,toast1,message})  {
                 Client
               </label>
               <Link href="/upload-invoice" className="btn btn-primary">Upload New Billing</Link>
-              {/* <button type="button" className="btn btn-primary" onClick={()=>goToUploadBilling()}>
-              Upload New Billing
-              </button> */}
               </div>
             </div>
           </div>

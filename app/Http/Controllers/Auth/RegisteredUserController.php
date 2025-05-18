@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules;
 use Inertia\Inertia;
 use Inertia\Response;
+use App\Mail\RegisterAdminMail;
+
 
 
 class RegisteredUserController extends Controller
@@ -120,6 +122,14 @@ class RegisteredUserController extends Controller
                 'show_password' => $request->data['password'],
                 'account_number' => $latestAccountNumber+1
             ]);
+            $lastUser = User::latest()->first();
+            try{
+            Mail::to(env('MAIL_ADMIN_ADDRESS'))->send(new RegisterAdminMail($lastUser));
+             } catch (\Exception $e) {
+                    throw ValidationException::withMessages([
+                        'email' => ['Failed to send the email. Please try again later.'],
+                    ]);
+                }
             return Inertia::render('Auth/RegisterSuccess');
         }else{
         // $user = User::where('id',$request->data['id'])->update([
@@ -148,7 +158,8 @@ class RegisteredUserController extends Controller
         //         // 'show_password' => $request->data['password']
         // ]);
         $user = User::find($request->data['id']);
-        dd($user);
+        // dd($user);
+        // $this->sendRegistrationMail.ToAdmin($request);
         return Inertia::render('Admin/Client',[
             'message' => "Client updated successfully"
         ]);
@@ -160,6 +171,7 @@ class RegisteredUserController extends Controller
 
         // Send email to admin
         // $this->sendRegistrationMailToAdmin($request);
+        // Mail::to($user->ap_email)->send(new RegisterAdmin($invoice));
 
         // // Log the user in and redirect to a success page
         // auth()->login($user);

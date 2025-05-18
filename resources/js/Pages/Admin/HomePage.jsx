@@ -60,12 +60,12 @@ export default function AdminHome (props){
                       <tr className="d-flex float-left mt-3 mb-3">
                       <span role="img" aria-label="icon"> 🟡 </span>
                         <td className="submissions-container">
-                          <a href="#" 
-                          onClick={openPending}
+                          <a href="admin-client?date_from=14-05-2025&date_to=14-05-2025&is_act=0" 
+                          // onClick={openPending}
                           >Pending Registrations</a>
                          <span 
                           className="submissions-count">
-                          Pending Clients: (0) </span>
+                          Pending Clients: ({props.pending?.length}) </span>
                         </td>
                       </tr>
                       <hr/>

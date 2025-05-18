@@ -74,7 +74,7 @@ ${props.value.phone}` : "";
   }
 
   const onSubmit = (data) =>{
-    console.log(data);
+    // console.log(data);
     // return;
     router.post('/admin-submissions-updatepdf', data, {
         onSuccess: (response) => {
@@ -103,7 +103,7 @@ ${props.value.phone}` : "";
   return (
     <>
       <div className="mainWrapper">
-        {console.log(errors)}
+        {/* {console.log(errors)} */}
      
         <div className="container py-2">          
           <div className="row px-1 justify-content-center mt-2">
@@ -111,9 +111,9 @@ ${props.value.phone}` : "";
             <div className="col-xl-12 mb-4"> 
 
 
-             <div className="bg-light border rounded p-4 mb-2 row text-primary">
+             <div className="bg-light border rounded p-2 mb-0 row text-primary">
 
-                <div className="col-4 mb-1">
+                <div className="col-4 mb-0">
                     <div className="d-flex align-items-center gap-2">
                         <label htmlFor="input-name" className="form-label mb-0 text-nowrap">
                             Submitted Amount $<sup className="text-danger">*</sup>
@@ -130,7 +130,7 @@ ${props.value.phone}` : "";
                     </div>
                 </div>
 
-                <div className=" col-4 mb-2">
+                <div className=" col-4 mb-0">
                     <div className="d-flex align-items-center gap-2">
                             <label htmlFor="ap-Email" className="form-label mb-0 text-nowrap">
                                 Date<sup className="text-danger">*</sup>
@@ -147,7 +147,7 @@ ${props.value.phone}` : "";
                     </div>
                 </div>
 
-                <div className=" col-4 mb-2">
+                <div className=" col-4 mb-0">
                     <div className="d-flex align-items-center gap-2">
                             <label htmlFor="ap-Email" className="form-label mb-0 text-nowrap">
                                 Report Charge $<sup className="text-danger">*</sup>
@@ -164,7 +164,7 @@ ${props.value.phone}` : "";
                     </div>
                 </div>
 
-                <div className="col-12 mb-2">
+                <div className="col-12 mb-0">
                     <div className="d-flex justify-content-center align-items-center gap-3">
                         <label className="form-label mb-0 text-nowrap">
                         Level of Service:
@@ -194,7 +194,7 @@ ${props.value.phone}` : "";
                     </div>
                 </div>
 
-                <div className="col-12 mb-2">
+                <div className="col-12 mb-0">
                     <div className="d-flex justify-content-center align-items-center gap-3">
                         <label className="form-label mb-0 text-nowrap">
                         Type of Report:
@@ -212,7 +212,7 @@ ${props.value.phone}` : "";
                     </div>
                 </div>
 
-                <div className=" col-12 mb-2 d-flex justify-content-center">
+                <div className=" col-12 mb-0 d-flex justify-content-center">
                     <div className="col-8 d-flex align-items-center gap-2">
                             <label htmlFor="ap-Email" className="form-label mb-0 text-nowrap">
                                 Client<sup className="text-danger">*</sup>
@@ -232,7 +232,7 @@ ${props.value.phone}` : "";
              </div>
 
 
-             <div className=" p-4 mb-2 row">
+             <div className=" p-2 mb-0 row">
 
                 <div className="col-8 mb-1">
                     <div className="d-flex align-items-center gap-2">
@@ -252,7 +252,7 @@ ${props.value.phone}` : "";
                     </div>
                 </div>
 
-                <div className=" col-4 mb-2">
+                <div className=" col-4 mb-0">
                     <div className="d-flex align-items-center gap-2">
                             {/* <label htmlFor="ap-Email" className="form-label mb-0 text-nowrap">
                                 Report Charge $<sup className="text-danger">*</sup>
@@ -270,8 +270,8 @@ ${props.value.phone}` : "";
                 </div>
 
 
-                <div className="col-12 mb-2">
-                    <div className="d-flex justify-content-center mt-2 gap-2">
+                <div className="col-12 mb-0">
+                    <div className="d-flex justify-content-center mt-0 gap-2">
                         <label className="form-label mb-0 text-nowrap">
                         for the
                         </label>
@@ -302,7 +302,7 @@ ${props.value.phone}` : "";
 
              </div>
 
-             <div className="bg-light border rounded p-2 mb-4">
+             <div className="bg-light border rounded p-2 mb-0">
                 <table className="table table-bordered text-start" >
                     <thead>
                         <tr>
@@ -360,15 +360,15 @@ ${props.value.phone}` : "";
 
             <div className="col-6 mb-5">
 
-              <div className="bg-light border rounded p-4">
+              <div className="bg-light border rounded p-3">
                 <h3 className="primary-text-color d-flex justify-content-center mb-3">
                     Account Information
                 </h3>
 
-                    <div className="col-md-12 mb-2">
+                    <div className="col-md-12 mb-1">
                     <textarea
                         type="description"
-                        rows="6" 
+                        rows="4" 
                         className="form-control"
                         id="address"
                         name="address"
@@ -412,7 +412,7 @@ ${props.value.phone}` : "";
                         </div>
                     </div>
 
-                    <div className="col-12 mb-1">
+                    <div className="col-12 mb-0">
                         <div className="d-flex align-items-center gap-2">
                             <label htmlFor="input-name" className="form-label mb-0 text-nowrap">
                                 Web : 
@@ -434,9 +434,9 @@ ${props.value.phone}` : "";
             </div>
 
 
-            <div className="col-6 mb-4">
+            <div className="col-6 mb-5">
 
-                <div className="bg-light border rounded p-4">
+                <div className="bg-light border rounded p-3">
                 <h3 className="primary-text-color d-flex justify-content-center mb-2">
                     Summary
                 </h3>
@@ -459,7 +459,7 @@ ${props.value.phone}` : "";
                         </div>
                     </div>
                     
-                    <div className="col-12 mb-2">
+                    <div className="col-12 mb-1">
                     <div className="d-flex justify-content-center align-items-center gap-3">
                         <label className="form-label mb-0 text-nowrap">
                         Account Status:
@@ -540,7 +540,7 @@ ${props.value.phone}` : "";
                         <div className="d-flex align-items-center gap-2">
                             <textarea
                                 type="text"
-                                rows={4}
+                                rows={2}
                                 className="form-control"
                                 id="secPhone"
                                 name="secPhone"
@@ -1332,7 +1332,7 @@ ${props.value.phone}` : "";
                     </tbody>
                 </table>
             </div>
-            {console.log(props.value.account_status)            }
+            {/* {console.log(props.value.account_status)            } */}
             {props.ispdf === 0 &&
                 
                 <div className="d-flex justify-content-center align-items-center pt-5">

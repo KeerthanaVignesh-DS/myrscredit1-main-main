@@ -11,6 +11,7 @@ use Inertia\Inertia;
 use Inertia\Response;
 use App\Models\User;
 use Illuminate\Support\Facades\Mail;
+use App\Mail\SendPasswordToClient;
 
 
 class PasswordResetLinkController extends Controller
@@ -46,18 +47,31 @@ class PasswordResetLinkController extends Controller
         // We will send the password reset link to this user. Once we have attempted
         // to send the link, we will examine the response then see the message we
         // need to show to the user. Finally, we'll send out a proper response.
-        $status = Password::sendResetLink(
-            $request->only('email')
-        );
+        // $status = Password::sendResetLink(
+        //     $request->only('email')
+        // );
 
-        if ($status == Password::RESET_LINK_SENT) {
-            return back()->with('status', __($status));
-        }
+        // if ($status == Password::RESET_LINK_SENT) {
+        //     return back()->with('status', __($status));
+        // }
 
-        throw ValidationException::withMessages([
-            'email' => [trans($status)],
+        // throw ValidationException::withMessages([
+        //     'email' => [trans($status)],
+        // ]);
+        // return back()->with('message','email sent successfully');\
+        try{
+        Mail::to($user->email)->send(new SendPasswordToClient($user->show_password,$user->username));
+
+         } catch (\Exception $e) {
+                    throw ValidationException::withMessages([
+                        'email' => ['Failed to send the email. Please try again later.'],
+                    ]);
+                }
+        return Inertia::render('Auth/ForgotPassword', [
+            'message' => 'Your login details has been mailed to you.',
+            'toast' => 1
         ]);
-        // return back()->with('message','email sent successfully');
+        // return back()->with('message','Your login details has been mailed to you.');
     }
     public function createUser(): Response
     {

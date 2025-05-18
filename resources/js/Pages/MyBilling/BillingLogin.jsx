@@ -13,7 +13,7 @@ export default function BillingLogin({Billing}){
   const handleDownload = (filename) => {
     window.open(`/download-pdf?fname=${filename}`, "_blank");
   };
-  console.log(Billing)
+  // console.log(Billing)
     return(
       <GuestLayout>
           {/* <div className="mainWrapper">

@@ -70,7 +70,7 @@ export default function ChangePassword(props){
 
 
     const ChangePassword = async(data)=>{
-      console.log(data,"data");
+      // console.log(data,"data");
 
       let obj={
         id                : user.id,
@@ -79,11 +79,11 @@ export default function ChangePassword(props){
         security_question : securityQuestion,
         security_answer   : data.security_answer
       }
-      console.log(obj,"obj");
+      // console.log(obj,"obj");
       router.put('/password',obj,{
         onSuccess: (response) => {
           // You can store the response here
-          console.log('Submission successful:', response);
+          // console.log('Submission successful:', response);
                 toast.success('Password Changed Successfully', {
                     position: 'top-right', // Position of the toast
                     autoClose: 5000, // Duration in ms before it disappears

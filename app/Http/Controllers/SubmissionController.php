@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Log;
 
 use Illuminate\Support\Facades\Mail;
 use App\Mail\SubmissionMail;
+use Illuminate\Validation\ValidationException;
+
 
 // use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -195,13 +197,14 @@ class SubmissionController extends Controller
                 try{
 
                      Mail::to($user->email)->send(new SubmissionMail($field,$user,false));
-                Mail::to(env("MAIL_ADMIN_ADDRESS"))->send(new SubmissionMail($field,$user,true));
+                    //  dd("zaarahvignesh3003@gmail.com");
+                Mail::to("zaarahvignesh3003@gmail.com")->send(new SubmissionMail($field,$user,true));
 
 
                 } catch (\Exception $e) {
-                    throw ValidationException::withMessages([
-                        'email' => ['Failed to send the email. Please try again later.'],
-                    ]);
+                    // throw ValidationException::withMessages([
+                    //     'email' => ['Failed to send the email. Please try again later.'],
+                    // ]);
                 }
                 
             }
@@ -363,9 +366,9 @@ class SubmissionController extends Controller
                         ->subject('Your submission with Myrs was completed');
             });
         } catch (\Exception $e) {
-            throw ValidationException::withMessages([
-                'email' => ['Failed to send the email. Please try again later.'],
-            ]);
+            // throw ValidationException::withMessages([
+            //     'email' => ['Failed to send the email. Please try again later.'],
+            // ]);
         }
 
     

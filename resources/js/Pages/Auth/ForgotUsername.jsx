@@ -79,13 +79,14 @@ export default function ForgotUsername(props) {
         onSuccess: (response) => {
             // You can store the response here
             // console.log('Submission successful:', response);
-            toast.success(props.status, {
+            toast.success(response.props.message, {
                   position: 'top-right', // Position of the toast
                   autoClose: 5000, // Duration in ms before it disappears
                   hideProgressBar: false, // Show progress bar
                   closeOnClick: true, // Close on click
                   pauseOnHover: true, // Pause on hover
-              });    
+              });  
+              resetAll();    
                   },
         onError: (errors) => {
             console.log('Form submission errors:', errors);
@@ -105,11 +106,11 @@ export default function ForgotUsername(props) {
 
     return (
         <GuestLayout>
-            <Head title="Forgot Password" />        
+            <Head title="Forgot Userame" />        
          
             <div className="container py-5">
               <h2 className="primary-text-color text-center mb-2">
-                 Forgot Password
+                 Forgot Userame
               </h2>
             
               <div className="row px-2 px-md-5 justify-content-center mt-5">

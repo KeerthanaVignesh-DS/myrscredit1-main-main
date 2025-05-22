@@ -105,10 +105,6 @@ export default function SubmissionsList  ({Submissions,Clients,Total})  {
     const handleShowHistoricalpdf = async(val,type1) => {
       let date_from = dateFrom ? format(dateFrom, "dd-MM-yyyy") : null;
       let date_to = dateTo ? format(dateTo, "dd-MM-yyyy") : null;
-    //   router.get(route('showHistorical'), 
-    //   { type,histValue,status,dateFilter,client,date_from,date_to,serviceLevel}, 
-    //   { preserveState: true }
-    // );
     let type2 = type1 ? type1 : type;
     let value = val ? val : histValue; 
     try {
@@ -151,11 +147,6 @@ export default function SubmissionsList  ({Submissions,Clients,Total})  {
       } catch (error) {
         console.error("❌ Failed to generate PDF", error);
       }
-  
-      // Optional: Wait a bit for download to trigger
-      // setTimeout(() => {
-      //   navigate("/next-page");
-      // }, 1000); // 1-second delay before navigating
     };
     const beforeDownload = (data) => {
       setReport(data)
@@ -187,7 +178,32 @@ export default function SubmissionsList  ({Submissions,Clients,Total})  {
                 pagebreak: { mode: ['css', 'legacy'] }
               })
               .from(pdfRef.current)
-              .save();
+              // .save();
+              .toPdf()
+                .get('pdf')
+                .then((pdf) => {
+                  const totalPages = pdf.internal.getNumberOfPages();
+
+                  for (let i = 1; i <= totalPages; i++) {
+                    pdf.setPage(i);
+
+                    // Set low opacity
+                    pdf.setGState(new pdf.GState({ opacity: 0.1 }));
+
+                    // Set font color (optional)
+                    pdf.setTextColor(0, 0, 0);
+
+                    // Set font size
+                    pdf.setFontSize(160);
+
+                    // Draw rotated watermark text
+                    pdf.text('Myrs', 70, 180, { angle: 30 });
+
+                    // Reset opacity back to full (1)
+                    pdf.setGState(new pdf.GState({ opacity: 1 }));
+                  }
+                  pdf.save(filename);
+                });
                   }
                   setPdfShow(false);
               }, 500); // Small delay
@@ -444,11 +460,7 @@ export default function SubmissionsList  ({Submissions,Clients,Total})  {
               <label htmlFor="input-name-date-from" className="form-label">
                 Date From <sup className="text-danger">*</sup>
               </label>
-              {/* <input
-                type="text"
-                className="form-control"
-                id="input-name-date-from"
-              /> */}
+          
               <DatePicker
                 selected={dateFrom}
                 onChange={handleChangeDateFrom}
@@ -461,11 +473,7 @@ export default function SubmissionsList  ({Submissions,Clients,Total})  {
               <label htmlFor="input-name-date-to " className="form-label">
                 Date To <sup className="text-danger">*</sup>
               </label>&nbsp; &nbsp;&nbsp;
-              {/* <input
-                type="text"
-                className="form-control"
-                id="input-name-date-to"
-              /> */}
+              
               <DatePicker
                 selected={dateTo}
                 onChange={handleChangeDateTo}
@@ -509,20 +517,7 @@ export default function SubmissionsList  ({Submissions,Clients,Total})  {
               </button>
             </div>
           </div>
-          {/* <div className="row">
-            <div className="d-flex gap-2 justify-content-end">
-              <button type="button" className="btn btn-primary" onClick={()=>onSearch()}>
-                Show
-              </button>
-              <button
-                type="button"
-                
-                className="btn btn-light p-0 bg-transparent border-0"
-              >
-                <SiMicrosoftexcel className="text-danger fs-4" />
-              </button>
-            </div>
-          </div> */}
+          
         </div>
 
         <div className="mt-4 table-responsive" style={tableHeight}>
@@ -551,134 +546,7 @@ export default function SubmissionsList  ({Submissions,Clients,Total})  {
                 <th className="text-center align-middle">Delete</th>
               </tr>
             </thead>
-            {/* <tbody>
-              
-              {Submissions && Submissions.length > 0 ?( Submissions.map((data,index)=>(
-                     <tr>
-                     <td className="text-center align-middle">{index+1}</td>
-                     <td className="text-start align-middle">{data.user.company}</td>
-                     <td className="text-start align-middle">{data.name}</td>
-                     {data.myrs_product === "1" &&
-                             <td className="text-center align-middle">Summary Credit Report</td>
-                     }
-                     {data.myrs_product === "2" &&
-                             <td className="text-center align-middle">Summary Credit Report w/details</td>
-                     }
-                     {data.express_service === "1" &&
-                             <td className="text-center align-middle">Instant Response (4 Office Hours)</td>
-                     }
-                     {data.express_service === "2" &&
-                             <td className="text-center align-middle">Rapid Response (8 Office Hours)</td>
-                     }
-                     {data.express_service === "3" &&
-                             <td className="text-center align-middle">Fast Response (12 Office Hours)</td>
-                     }
-                     {data.express_service === "4" &&
-                             <td className="text-center align-middle">Quick Response (16 Office Hours)</td>
-                     }
-                     {data.express_service === "5" &&
-                             <td className="text-center align-middle">Standard Response (24+/- Office Hours)</td>
-                     }
-                     <td className="text-center align-middle">{data.order_amount}</td>
-                     <td className="text-center align-middle">{new Date(data.submitted_date).getMonth()+1}/{new Date(data.submitted_date).getDate()}/{new Date(data.submitted_date).getFullYear()}</td>
-                     {data.chk_previous14 === 0 &&
-                            <td className="text-center align-middle">NO</td>
-              
-                     }
-                     {data.chk_previous14 === 1 &&
-                            <td className="text-center align-middle">Yes</td>
-              
-                     }
-                     {data.status === 0 &&
-                            <td className="text-center align-middle">PENDING</td>
-              
-                     }
-                     {data.status === 1 &&
-                            <td className="text-center align-middle">COMPLETED</td>
-              
-                     }
-                     {data.completed_date ? (
-                            <td className="text-center align-middle">{new Date(data.completed_date).getMonth()+1}/{new Date(data.completed_date).getDate()}/{new Date(data.completed_date).getFullYear()}</td>
-                     ):(
-                      <td className="text-nowrap"></td>
-
-                     )
-                     }
-                     <td className="text-center align-middle">{data.charge_amt}</td>
-                     <td className="text-center align-middle">{data.myrs_rating}</td>
-                     {data.comments && data.comments.length>0 ? (
-                        <td className="text-center align-middle">Yes</td>
-                     ):(
-                        <td className="text-center align-middle">No</td>
-                     )
-                     }
-                     
-                     
-                     <td className="text-center align-middle">
-                       <button className="bg-transparent border-0"><FaSearch className="fs-5 text-warning" onClick={()=>handleshow(data)}/></button>
-                     </td>
-                     <td className="text-center align-middle d-flex justify-content-center">
-                       <button className="bg-transparent border-0 "><FaFileDownload  className="fs-5 text-info" onClick={()=>handleReportForm(data)}/></button>
-                     </td>
-                     <td className="text-center">
-                     {data.completed_date &&
-                        <button className="bg-transparent border-0" onClick={()=>generatePdf(data)}>
-                          <FaRegArrowAltCircleDown className="fs-5 text-success" />
-                        </button>
-                        // <a href="/download-pdf" target="_blank">Download PDF</a>
-                        // <button onClick={()=>handleDownloadAndNavigate(data)}>Download PDF & Go</button>
-                        // <ReactToPdf
-                        //   targetRef={pdfRef}
-                        //   filename="download.pdf"
-                        //   x={0}
-                        //   y={0}
-                        //   scale={1}
-                        // >
-                        //   {({ toPdf }) => (
-                        //     <button
-                        //       onClick={() => {
-                        //         beforeDownload(); // ✅ Run your function BEFORE download
-                        //         toPdf().then(() => {
-                        //           console.log("✅ PDF downloaded!");
-                        //           navigate("/nextpage"); // Optional: go to another page after download
-                        //         });
-                        //       }}
-                        //     >
-                        //       Prepare & Download PDF
-                        //     </button>
-                        //   )}
-                        // </ReactToPdf>
-                        // <ReactToPdf targetRef={pdfRef} filename="download.pdf">
-                        //   {({ toPdf }) => (
-                        //     <button onClick={toPdf}>Download PDF</button>
-                        //   )}
-                        // </ReactToPdf>
-                        // <button onClick={()=>generatePdf(data)}>Download PDF</button>
-
-
-                      }
-                      </td>
-                      <td className="text-center">
-                        <button className="bg-transparent border-0" disabled={data.completed_date}>
-                          {data.completed_date ? (
-                            <MdOutlineDeleteForever className="fs-4 " />
-
-                          ):(
-                            <MdOutlineDeleteForever className="fs-4 text-danger" />
-
-                          )}
-                        </button>
-                      </td>
-                   </tr>
-              
-                  ))
-                ):(
-                  <tr >
-                  <td colspan="17" className="text-nowrap text-center">No Submission Found</td>
-                </tr>
-                )
-                  }
-            </tbody> */}
+            
             <tbody>
                 {Submissions && Submissions.length > 0 ? (
                   [...Submissions]
@@ -686,7 +554,7 @@ export default function SubmissionsList  ({Submissions,Clients,Total})  {
                     .map((data, index) => (
                       <tr key={data.id || index}>
                         <td className="text-center align-middle">{index + 1}</td>
-                        <td className="text-start align-middle">{data.user.company}</td>
+                        <td className="text-start align-middle">{data.user?.company}</td>
                         <td className="text-start align-middle">{data.name}</td>
                         
                         <td className="text-center align-middle">
@@ -972,17 +840,7 @@ export default function SubmissionsList  ({Submissions,Clients,Total})  {
        
 
         )}
-        {/* {pdfShow && 
-          <>
-                <div ref={pdfRef} 
-                style={{  fontSize: "10px",  // Adjust this value
-                  transform: "scale(0.8)",  marginTop: "0px",  // Ensure no extra space at the top
-                  paddingTop: "0px", } }>
-                <h1 className="text-center text-primary">Myrs Credit Report</h1>
-                  {report && <ReportForm  edit={0}  value={report} historicalpdf={report?.historical_pdf} ispdf={1} handleClose={handleCloseReport}/>}
-                  </div>
-          </>
-        } */}
+        
         {pdfShow && (
   <div style={{ display: "none" }}>
     <div
@@ -997,7 +855,7 @@ export default function SubmissionsList  ({Submissions,Clients,Total})  {
       }}
     >
       {/* Watermark */}
-      <div className="watermark">Myrs</div>
+      {/* <div className="watermark">Myrs</div> */}
 
 
       <h1

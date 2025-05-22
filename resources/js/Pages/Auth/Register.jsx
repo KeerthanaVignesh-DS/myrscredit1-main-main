@@ -747,22 +747,7 @@ export default function Registration (props){
                   />
                 </div>
                 {errors.security_ans && <p className="text-danger mx-1">{errors.security_ans.message}</p>}
-                {/* {props.edit === 0 && 
-                    <div className="col-md-12 mb-2">
-                    <label htmlFor="input-Password" className="form-label">
-                      Billing Password<sup className="text-danger">*</sup>
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="b_password"
-                      name="b_password"
-                      placeholder=""
-                      autoComplete="off"
-                      {...register("b_password")}
-                    />
-                  </div>
-                } */}
+                
                 
              
               </div>

@@ -141,34 +141,24 @@ export default function RecommendationSubmission({edit,value,handleClose,toast})
 
 
     const initialValues = {
-    id              :  user.id,
-    name            :  user.name,
-    title           :  user.title,
-    company         :  user.company,
-    address1        :  user.address1,
-    address2        :  user.address2,
-    city            :  user.city, 
-    state           :  user.state,
-    zip             :  user.zip,
-    country         :  user.country,
-    apemail         :  user.ap_email,
-    submissionemail :  user.email,
-    phone           :  user.phone,
-    fax             :  user.fax,
-    copy            :  user.is_copy,
-    
-    // account_name    :  "",
-    // account_address1:  "",
-    // account_address2:  "",
-    // account_city    :  "",
-    // account_state   :  accountState,
-    // account_zip     :  "",
-    // account_country :  1,
-    // account_phone   :  "",
-    // myrsProduct     :  myrsProduct,
-    // expressService  :  expressService,
-    // orderAmount     :  "",
-    // comments        :  ""
+    id              :  edit === 0 ? value.user.id : user.id,
+    // id              :  user.id,
+    // name            :  user.name,
+    name            :  edit === 0 ? value.user.name : user.name,
+    title           :  edit === 0 ? value.user.title : user.title,
+    company         :  edit === 0 ? value.user.company : user.company,
+    address1        :  edit === 0 ? value.user.address1 : user.address1,
+    address2        :  edit === 0 ? value.user.address2 : user.address2,
+    city            :  edit === 0 ? value.user.city : user.city, 
+    state           :  edit === 0 ? value.user.state : user.state,
+    zip             :  edit === 0 ? value.user.zip : user.zip,
+    country         :  edit === 0 ? value.user.country : user.country,
+    apemail         :  edit === 0 ? value.user.ap_email : user.ap_email,
+    submissionemail :  edit === 0 ? value.user.email : user.email,
+    phone           :  edit === 0 ? value.user.phone : user.phone,
+    fax             :  edit === 0 ? value.user.fax : user.fax,
+    copy            :  edit === 0 ? value.user.is_copy : user.is_copy,
+
     }
 
     const schema = edit!==0 ? (Yup.object({
@@ -215,32 +205,6 @@ export default function RecommendationSubmission({edit,value,handleClose,toast})
           })
         ),
       }));
-    // const schema = Yup.object().shape({
-    //   // name      : Yup.string().required("Enter name"),
-    //   // title     : Yup.string(),
-    //   // company   : Yup.string().required("Enter valid Company Name"),
-    //   // address1  : Yup.string().required("Enter Address1 for Company"),
-    //   // address2  : Yup.string(),
-    //   // city      : Yup.string().required("Enter City for Company"),
-    //   // state     : Yup.string().required("Select State/Province for Company"),
-    //   // zip       : Yup.string().required("Enter Zip for Company"),
-    //   // apemail   : Yup.string().required("Enter A/P email address").email("Enter valid email address"),
-    //   // submissionemail : Yup.string().required("Enter Submission email address").email("Enter valid email address"),
-    //   // phone     : Yup.string().required("Enter Phone number for Company"),
-    //   // fax       : Yup.string(),
-    //   account_name      : Yup.string().required("Enter Account Name"),
-    //   account_address1  : Yup.string().required("Enter Address1 for Account"),
-    //   account_address2  : Yup.string(),
-    //   account_city      : Yup.string().required("Enter City for Account"),
-    //   account_state     : Yup.string().required("Select State/Province for Account"),
-    //   account_zip       : Yup.string().required("Enter Zip for Account"),
-    //   account_phone     : Yup.string().required("Enter Phone for Account"),
-    //   myrsProduct       : Yup.number().min(1,"Select Myrs Product").required("Select Myrs Product"), 
-    //   expressService    : Yup.number().min(1,"Select Express Service").required("Select Express Service"),
-    //   orderAmount       : Yup.number().min(1,"Enter Order Amount").max(10,"Enter Order Amount").required("Enter Order Amount"),
-    //   comments          : Yup.string(),    
-    // });
-
 
   const { control,register,post,watch, handleSubmit, reset, formState: {errors,isValid},getValues,setError,setValue } = useForm({
       defaultValues: { ...initialValues,
@@ -420,56 +384,7 @@ export default function RecommendationSubmission({edit,value,handleClose,toast})
       });
 
   }
-  // const addRecommendation = async (data, e) => {
-  //   let id = 0;
-  //   if (edit === 0) {
-  //     id = value.id;
-  //   }
-  
-  //   console.log("Submitting fields:", data.fields);
-  
-  //   const formData = new FormData();
-  //   formData.append('id', id);
-  
-  //   // Loop over each field (assuming `data.fields` is an array of objects)
-  //   data.fields.forEach((field, index) => {
-  //     Object.entries(field).forEach(([key, value]) => {
-  //       if (value instanceof File) {
-  //         formData.append(`fields[${index}][${key}]`, value);
-  //       } else {
-  //         formData.append(`fields[${index}][${key}]`, value ?? '');
-  //       }
-  //     });
-  //   });
-  
-  //   try {
-  //     const response = await axios.post(route('submission.store'), formData, {
-  //       headers: {
-  //         'Content-Type': 'multipart/form-data',
-  //       },
-  //     });
-  
-  //     console.log('Submission successful:', response);
-  //     toast.success('Submitted Successfully', {
-  //       position: 'top-right',
-  //       autoClose: 3000,
-  //       hideProgressBar: false,
-  //       closeOnClick: true,
-  //       pauseOnHover: true,
-  //     });
-  
-  //     setTimeout(() => {
-  //       if (user.is_admin === 1) {
-  //         router.visit('/admin-submissions');
-  //       } else {
-  //         router.visit('/my-submissions');
-  //       }
-  //     }, 3000);
-  //   } catch (err) {
-  //     console.error('Form submission error:', err);
-  //     alert('Submission failed!');
-  //   }
-  // };
+ 
   const handleUpload = async (e,i) => {
     let file = e.target.files[0];
     if (!file) return;
@@ -723,6 +638,7 @@ export default function RecommendationSubmission({edit,value,handleClose,toast})
                       placeholder=""
                       autoComplete="off"
                       {...register("apemail")}
+                      readOnly={edit === 0}
                   />
                 </div>
                 {errors.apemail && <p className="text-danger mx-1">{errors.apemail.message}</p>}

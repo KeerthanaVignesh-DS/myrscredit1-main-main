@@ -63,9 +63,9 @@ class PasswordResetLinkController extends Controller
         Mail::to($user->email)->send(new SendPasswordToClient($user->show_password,$user->username));
 
          } catch (\Exception $e) {
-                    throw ValidationException::withMessages([
-                        'email' => ['Failed to send the email. Please try again later.'],
-                    ]);
+                    // throw ValidationException::withMessages([
+                    //     'email' => ['Failed to send the email. Please try again later.'],
+                    // ]);
                 }
         return Inertia::render('Auth/ForgotPassword', [
             'message' => 'Your login details has been mailed to you.',
@@ -102,13 +102,21 @@ class PasswordResetLinkController extends Controller
         // to send the link, we will examine the response then see the message we
         // need to show to the user. Finally, we'll send out a proper response.
         // Send email with the username
-    Mail::raw("Dear user, your username is: " . $user->username, function ($message) use ($user) {
-        $message->to($user->email)
-                ->subject('Your Username Information');
-    });
-    return Inertia::render('Auth/Login', [
-        'message' => 'email sent successfully',
-    ]);
+         try{
+            Mail::raw("Dear user, your username is: " . $user->username, function ($message) use ($user) {
+                    $message->to($user->email)
+                            ->subject('Your Username Information');
+                });
+         } catch (\Exception $e) {
+                    // throw ValidationException::withMessages([
+                    //     'email' => ['Failed to send the email. Please try again later.'],
+                    // ]);
+                }
+    
+    return Inertia::render('Auth/ForgotUsername', [
+            'message' => 'Your login details has been mailed to you.',
+            'toast' => 1
+        ]);
     // return back()->withMessage('Username has been sent to your email.');
     //     // return back()->with('message','email sent successfully');
     }

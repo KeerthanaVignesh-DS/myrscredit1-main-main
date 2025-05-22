@@ -113,7 +113,7 @@ ${props.value.phone}` : "";
 
              <div className="bg-light border rounded p-2 mb-0 row text-primary">
 
-                <div className="col-4 mb-0">
+                <div className="col-4 mb-1">
                     <div className="d-flex align-items-center gap-2">
                         <label htmlFor="input-name" className="form-label mb-0 text-nowrap">
                             Submitted Amount $<sup className="text-danger">*</sup>
@@ -302,7 +302,7 @@ ${props.value.phone}` : "";
 
              </div>
 
-             <div className="bg-light border rounded p-2 mb-0">
+             <div className="bg-light border rounded p-2 mb-0" >
                 <table className="table table-bordered text-start" >
                     <thead>
                         <tr>
@@ -313,42 +313,42 @@ ${props.value.phone}` : "";
                     </thead>
                     <tbody>
                         <tr>
-                            <td className="text-primary fw-bold col-2">#10</td>
-                            <td className="text-danger fw-bold">
+                            <td className="text-primary fw-bold col-1">#10</td>
+                            <td className="text-danger ">
                                Recommended for amount as  <span className="text-primary fw-bold">Submitted</span>. 
                                 Expect payment within terms.
                             </td>
                         </tr>
                         <tr>
                             <td className="text-primary fw-bold">#10A</td>
-                            <td className="text-danger fw-bold">
-                                Recommended for amount as <span className="text-primary fw-bold">Submitted</span>, 
-                                but expect payment to be <span className="text-danger fw-bold">30-60 days beyond terms</span>.
+                            <td className="text-danger ">
+                                Recommended for amount as <span className="text-primary ">Submitted</span>, 
+                                but expect payment to be <span className="text-danger ">30-60 days beyond terms</span>.
                             </td>
                         </tr>
                         <tr>
                             <td className="text-primary fw-bold">#11 $</td>
-                            <td className="text-danger fw-bold">
-                                Recommended for amount as <span className="text-success fw-bold">Indicated</span>. 
+                            <td className="text-danger ">
+                                Recommended for amount as <span className="text-success ">Indicated</span>. 
                                 Expect payment within terms.
                             </td>
                         </tr>
                         <tr>
                             <td className="text-primary fw-bold">#11A $</td>
-                            <td className="text-danger fw-bold">
-                                Recommended for amount as <span className="text-success fw-bold">Indicated</span>, 
-                                but expect payment to be <span className="text-danger fw-bold">30-60 days beyond terms</span>.
+                            <td className="text-danger ">
+                                Recommended for amount as <span className="text-success ">Indicated</span>, 
+                                but expect payment to be <span className="text-danger ">30-60 days beyond terms</span>.
                             </td>
                         </tr>
                         <tr>
                             <td className="text-primary fw-bold">#13</td>
-                            <td className="text-danger fw-bold">
+                            <td className="text-danger ">
                                 Not recommended for any type of credit. Payment in advance only.
                             </td>
                         </tr>
                         <tr>
                             <td className="text-primary fw-bold">#14</td>
-                            <td className="text-danger fw-bold">No recommendation at this time.</td>
+                            <td className="text-danger ">No recommendation at this time.</td>
                         </tr>
                     </tbody>
                 </table>

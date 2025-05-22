@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\InvoiceMail;
 use Carbon\Carbon;
+use Illuminate\Validation\ValidationException;
+
 
 
 
@@ -257,7 +259,7 @@ class MyBillingController extends Controller
         foreach ($textPages as $index => $text) {
             preg_match('/Account #\s*(\d+)/', $text, $matches);
             $accountNumber = $matches[1] ?? "Unknown";
-    
+            // dd($accountNumber);
             preg_match('/\b(\d{1,2})\/(\d{1,2})\/(\d{4})\b/', $text, $matches);
     
             $invoiceDate = $matches[0] ?? null;

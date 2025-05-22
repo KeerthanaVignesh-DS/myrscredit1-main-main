@@ -263,16 +263,7 @@ export default function SummaryReport  ({submissions,grandTotal,clients})  {
               </tr>
             </thead>
             <tbody>
-              {/* {(submissions && submissions.length>0) 
-              ?
-              (submissions.map((submission,index)=>(
-                 <tr>
-                    <td className="text-center align-middle">{submission.completed_month_year}</td>
-                    <td className="text-start px-3"> {submission.company}</td>
-                    <td className="text-end align-middle">{submission.client_sub_total}</td>
-                </tr>
-              ))) 
-              :  */}
+              
                 {submissions?.length > 0 ? (
                 [...submissions]
                   .sort((a, b) => a.company.localeCompare(b.company)) // Sort alphabetically
@@ -291,11 +282,7 @@ export default function SummaryReport  ({submissions,grandTotal,clients})  {
                 </tr>
               )}
                
-                {/* <tr>
-                    <td className="text-center align-middle">Jan-2025</td>
-                    <td className="text-start px-3"> Zaarah INTERIORS</td>
-                    <td className="text-center align-middle">550.00</td>
-                </tr>*/}
+                
                 {(submissions && submissions.length>0) &&
                 <tr className="subtotal-row ">
                     <td style={{ backgroundColor: "#d5ed82" }}></td>
@@ -307,76 +294,11 @@ export default function SummaryReport  ({submissions,grandTotal,clients})  {
           </table>
         </div>
 
-        {/* <div className="mt-4 table-responsive" style={tableHeight}>
-          <table className="table table-bordered">
-            <thead className="table-light position-sticky top-0">
-              <tr>
-                <th className="text-center align-middle">Month</th>
-                <th className="text-center align-middle">Client</th>
-                <th className="text-center align-middle">Account Name</th>
-                <th className="text-center align-middle">Myrs Product</th>
-                <th className="text-center align-middle">Service Level</th>
-                <th className="text-center align-middle">Completed Date</th>
-                <th className="text-center align-middle">Total Charge Amt. ($)</th>
-              </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td className="text-center align-middle">Feb-2025</td>
-                    <td className="text-start px-3"> DECORATING DEN INTERIORS</td>
-                    <td className="text-center align-middle">LA Valley College</td>
-                    <td className="text-center align-middle">Summary Credit Report</td>
-                    <td className="text-center align-middle">Standard Response (24+/- Office Hours)</td>
-                    <td className="text-center align-middle">02-07-25</td>
-                    <td className="text-center align-middle">45.00</td>
-                </tr>
-                <tr>
-                    <td className="text-center align-middle">Feb-2025</td>
-                    <td className="text-start px-3"> DECORATING DEN INTERIORS</td>
-                    <td className="text-center align-middle">Hungry Buffalo</td>
-                    <td className="text-center align-middle">Summary Credit Report</td>
-                    <td className="text-center align-middle">Standard Response (24+/- Office Hours)</td>
-                    <td className="text-center align-middle">02-07-25</td>
-                    <td className="text-center align-middle">45.00</td>
-                </tr>
-                <tr className="bg-color">
-                    <td colSpan="6" className="text-end">Client Sub Total</td>
-                    <td className="text-center align-middle">$90.00</td>
-                </tr>
-                <tr>
-                <td className="text-center align-middle">Feb-2025</td>
-                    <td className="text-start px-3">Harmony Ball Company</td>
-                    <td className="text-center align-middle">Wilmington Cycles LLC DBA Sea Breeze HD</td>
-                    <td className="text-center align-middle">Summary Credit Report w/details</td>
-                    <td className="text-center align-middle">Fast Response (12 Office Hours)</td>
-                    <td className="text-center align-middle">02-08-25</td>
-                    <td className="text-center align-middle">125.00</td>
-                </tr>
-                <tr>
-                <td className="text-center align-middle">Feb-2025</td>
-                    <td className="text-start px-3">Harmony Ball Company</td>
-                    <td className="text-center align-middle">Happy Jack Shops, Inc</td>
-                    <td className="text-center align-middle">Summary Credit Report w/details</td>
-                    <td className="text-center align-middle">Fast Response (12 Office Hours)</td>
-                    <td className="text-center align-middle">02-08-25</td>
-                    <td className="text-center align-middle">125.00</td>
-                </tr>
-                <tr className="bg-color">
-                    <td colSpan="6" className="text-end">Client Sub Total</td>
-                    <td className="text-center align-middle">$250.00</td>
-                </tr>
-                <tr className="bg-color">
-                    <td colSpan="6" className="text-end">Sub Total</td>
-                    <td className="text-center align-middle">$340.00</td>
-                </tr>
-            </tbody>
-          </table>
-        </div> */}
-        <div className="d-flex justify-content-end mb-5 mt-4 text-primary">
-          {/* <h6><b>Total Report Charges: ${Math.round(grandTotal * 100) / 100}</b></h6> */}
+        
+        {/* <div className="d-flex justify-content-end mb-5 mt-4 text-primary">
           <h5><b>Total Report Charges: ${grandTotal?.toFixed(2)}</b></h5>
 
-        </div>
+        </div> */}
         </div>
       </div>
       </AdminLayout>

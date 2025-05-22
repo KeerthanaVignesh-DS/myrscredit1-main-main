@@ -65,69 +65,6 @@ export default function MySubmissions({submissions,auth,account_name,total}){
     setChild(val);
   }
   
-  // const handleDownload = () => {
-  //   const transformedData = submissions.map((row) => {
-  //     let serviceLevel = "";
-  //     if (row.express_service === "1") {
-  //       serviceLevel = "Instant Response (4 Office Hours)";
-  //     } else if (row.express_service === "2") {
-  //       serviceLevel = "Rapid Response (8 Office Hours)";
-  //     } else if (row.express_service === "3") {
-  //       serviceLevel = "Fast Response (12 Office Hours)";
-  //     } else if (row.express_service === "4") {
-  //       serviceLevel = "Quick Response (16 Office Hours)";
-  //     } else if (row.express_service === "5") {
-  //       serviceLevel = "Standard Response (24+/- Office Hours)";
-  //     } else {
-  //       serviceLevel = "";
-  //     }
-  //     return{
-  //         "Contact": row.phone,
-  //         "Submission Date": row.submitted_date,
-  //         "Account Name": row.name,
-  //         "Myrs Product": row.myrs_product === 1 ? "Summary Credit Report" : "Summary Credit Report w/details",
-  //         "Service Level": serviceLevel,
-  //         "Order Amount": row.order_amount,
-  //         "Status": row.status === 0 ? "PENDING" : "COMPLETED",
-  //         "Charge Amount": row.charge_amount,
-  //         "Account Report Completed Date": row.completed_date,
-  //         "Myrs Rating": row.myrs_rating,
-  //         "Account Is Previous14": row.is_previous,
-  //         "Account Document Name": row.document_name1,
-  //         // "Account DocumentName2": row.document_name2,
-  //     }
-      
-    
-  //   });
-  //   // Convert table data to worksheet
-  //   const worksheet = XLSX.utils.json_to_sheet(transformedData);
-  //   const range = XLSX.utils.decode_range(worksheet["!ref"]);
-  //   for (let C = range.s.c; C <= range.e.c; ++C) {
-  //     const cellAddress = XLSX.utils.encode_cell({ r: 0, c: C }); // Header row (r: 0)
-  //     if (!worksheet[cellAddress]) continue;
-  //     worksheet[cellAddress].s = {
-  //       fill: {
-  //         fgColor: { rgb: "FFFF00" }, // Yellow background
-  //       },
-  //       font: {
-  //         bold: true,
-  //         color: { rgb: "000000" }, // Black text
-  //       },
-  //       alignment: {
-  //         horizontal: "center",
-  //         vertical: "center",
-  //       },
-  //     };
-  //   }
-  //   // Create a new workbook
-  //   const workbook = XLSX.utils.book_new();
-
-  //   // Append the worksheet to the workbook
-  //   XLSX.utils.book_append_sheet(workbook, worksheet, "FormattedData");
-
-  //   // Generate a binary Excel file and download
-  //   XLSX.writeFile(workbook, "Mysubmissionlist.xlsx");
-  // };
 
   const handleDownload = async() => {
 
@@ -253,7 +190,32 @@ export default function MySubmissions({submissions,auth,account_name,total}){
                   pagebreak: { mode: ['css', 'legacy'] }
                 })
                 .from(pdfRef.current)
-                .save();
+                 .toPdf()
+                .get('pdf')
+                .then((pdf) => {
+                  const totalPages = pdf.internal.getNumberOfPages();
+
+                  for (let i = 1; i <= totalPages; i++) {
+                    pdf.setPage(i);
+
+                    // Set low opacity
+                    pdf.setGState(new pdf.GState({ opacity: 0.1 }));
+
+                    // Set font color (optional)
+                    pdf.setTextColor(0, 0, 0);
+
+                    // Set font size
+                    pdf.setFontSize(160);
+
+                    // Draw rotated watermark text
+                    pdf.text('Myrs', 70, 180, { angle: 30 });
+
+                    // Reset opacity back to full (1)
+                    pdf.setGState(new pdf.GState({ opacity: 1 }));
+                  }
+                  pdf.save(filename);
+                });
+                // .save();
                     }
                     setPdfShow(false);
                 }, 500); // Small delay
@@ -361,14 +323,7 @@ export default function MySubmissions({submissions,auth,account_name,total}){
               <h5 className="primary-text-color">OR</h5>
             </div>
             <div className="row">
-              {/* <div className="col-lg-2 mb-2">
-                <select id="inputState" className="form-select" onChange={(e)=>setMonthToDate(e.target.value)}>
-                  
-                  <option value={'1'}>Month to date</option>
-                  <option  value={'2'}>Last Month</option>
-                  <option value={'3'}>Year to date</option>
-                </select>
-              </div> */}
+              
 
               <div className="col-lg-4 mb-2">
                 <div className="d-flex flex-column flex-md-row gap-2">
@@ -478,9 +433,7 @@ export default function MySubmissions({submissions,auth,account_name,total}){
 
        )
        }
-       {/* <td className="text-nowrap text-center">
-         <button className="bg-transparent border-0"><FaFileDownload  className="fs-5 text-info"/></button>
-       </td> */}
+       
      </tr>
 
     ))
@@ -531,7 +484,7 @@ export default function MySubmissions({submissions,auth,account_name,total}){
                     }}
                   >
                     {/* Watermark */}
-                    <div className="watermark">Myrs</div>
+                    {/* <div className="watermark">Myrs</div> */}
               
               
                     <h1

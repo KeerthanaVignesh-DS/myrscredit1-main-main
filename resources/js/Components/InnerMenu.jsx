@@ -12,7 +12,7 @@ export default function InnerMenu() {
 
     return(
         <>
-            <div className="d-flex justify-content-between align-items-center flex-column flex-xl-row innerMenu  px-4 px-lg-5 pb-1 bg-light py-2">
+            <div className="d-flex justify-content-between align-items-center flex-column flex-xl-row innerMenu  px-4 px-lg-5 pb-1 bg-lightgray py-2">
                 <h3 className="mb-0">Welcome: {user.name} </h3>
               
                     <div className="d-flex justify-content-end flex-column flex-md-row align-items-center gap-1 mt-3 mt-xl-0 my-2">

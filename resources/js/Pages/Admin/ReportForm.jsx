@@ -12,36 +12,157 @@ import { FaSortAmountDown } from "react-icons/fa";
 
 export default function ReportForm (props){
   
-   const full_address = props.edit === 0 ? `${props.value.name}
-${props.value.address1}
-${props.value.city}, ${props.value.state}, ${props.value.zip}, ${props.value.country}
-${props.value.phone}` : "";
+//    const full_address = props.edit === 0 ? `${props.value.name}
+// ${props.value.address1}
+// ${props.value.city}, ${props.value.state}, ${props.value.zip}, ${props.value.country}
+// ${props.value.phone}` : "";
+    const source = props.edit === 0
+    ? (props.useReport !== "" ? props.useReport : props.value)
+    : "";
+    const full_address = source
+  ? `${source.name}
+    ${source.address1}
+    ${source.city}, ${source.state}, ${source.zip}, ${source.country}
+    ${source.phone}`
+    : "";
+//   const initialValues = {
+//     id                      : props.edit === 0 ? props.value.id : "",
+//     order_amount            : props.edit === 0 ? props.value.order_amount : "",
+//     completed_date          : props.edit === 0 ? new Date(props.value.submitted_date)?.toISOString().split('T')[0] : "",
+//     charge_amt              : props.edit === 0 ? props.value.charge_amt : "",
+//     company                 : props.edit === 0 ? props.value.user?.company : "",
+//     name                    : props.edit === 0 ? props.value.name : "",
+//     myrs_product            : props.edit === 0 ? props.value.myrs_product : "",
+//     express_service         : props.edit === 0 ? props.value.express_service : "",
+//     full_address            : full_address,
+//     secondary_phone         : props.edit === 0 ? props.value.secondary_phone : "",
+//     additional_address      : props.edit === 0 ? props.value.additional_address : "",
+//     web                     : props.edit === 0 ? props.value.web : "",
+//     myrs_rating             : props.edit === 0 ? props.value.myrs_rating : "",
+//     account_status          : props.edit === 0 ? props.value.account_status?.toString() : "",
+//     no_of_records           : props.edit === 0 ? props.value.no_of_records : "",
+//     no_of_payment_records   : props.edit === 0 ? props.value.no_of_payment_records : "",
+//     recent_inquiries1       : props.edit === 0 ? props.value.recent_inquiries1 : "",
+//     recent_inquiries2       : props.edit === 0 ? props.value.recent_inquiries2 : "", 
+//     submit_type             : props.edit === 0 ? props.value.submit_type : "",
+//     amount                  : props.edit === 0 ? props.value.amount : "", 
+//     myrs_rating1             : props.edit === 0 ? props.value.myrs_rating : "",
+//     historical_pdf          : props.historicalpdf,
+//     Account_MostCommonTermsOfSale  : props.edit === 0 ? props.value.Account_MostCommonTermsOfSale : "",
+//     Account_PaymentWithinTerms       : props.edit === 0 ? props.value.Account_PaymentWithinTerms : "",
+//     Account_PaymentsOutsideOfTerms   : props.edit === 0 ? props.value.Account_PaymentsOutsideOfTerms : "",
+//     Account_90120Payment            : props.edit === 0 ? props.value.Account_90120Payment : "",
+//     Account_120BeyondPayment        : props.edit === 0 ? props.value.Account_120BeyondPayment : "",
+//     Account_AverageDayToPay         : props.edit === 0 ? props.value.Account_AverageDayToPay : "",
+//     Account_PaymentTrend            : props.edit === 0 ? props.value.Account_PaymentTrend : "",
+//     Account_UnpaidDebts             : props.edit === 0 ? props.value.Account_UnpaidDebts : "",
+//     Account_HighCreditAverages      : props.edit === 0 ? props.value.Account_HighCreditAverages : "",
+//     Account_HighestCreditOfRecords  : props.edit === 0 ? props.value.Account_HighestCreditOfRecords : "",
+//     Account_DateOfMostRecentPaymentTransaction    : props.edit === 0 ? props.value.Account_DateOfMostRecentPaymentTransaction :  "",
+//     Account_DateOfOldestPaymentTransaction        : props.edit === 0 ? props.value.Account_DateOfOldestPaymentTransaction : "",
+//     Account_UnauthorizedDeductionsOfRecords       : props.edit === 0 ? props.value.Account_UnauthorizedDeductionsOfRecords : "",
+//     Account_CODOrPrepaidPayments                  : props.edit === 0 ? props.value.Account_CODOrPrepaidPayments : "",
+//     Account_CollectionRecords                     : props.edit === 0 ? props.value.Account_CollectionRecords : "",
+//     Account_CollectionRecordsText                 : props.edit === 0 ? props.value.Account_CollectionRecordsText : "",
+//     Account_DemandLetterRecords                   : props.edit === 0 ? props.value.Account_DemandLetterRecords : "",
+//     Account_DemandLetterRecordsText               : props.edit === 0 ? props.value.Account_DemandLetterRecordsText : "",
+//     Account_PublicRecords                         : props.edit === 0 ? props.value.Account_PublicRecords : "",
+//     Account_PublicRecordsText                     : props.edit === 0 ? props.value.Account_PublicRecordsText : "",
+//     Account_INSFRecords                           : props.edit === 0 ? props.value.Account_INSFRecords : "",
+//     Account_MyrsNegativeAgentNotes                : props.edit === 0 ? props.value.Account_MyrsNegativeAgentNotes : "",
+//     Account_MyrsNegativeAgentNotesText            : props.edit === 0 ? props.value.Account_MyrsNegativeAgentNotesText : "",
+//     Account_RegisteredSecretaryOfState            : props.edit === 0 ? props.value.Account_RegisteredSecretaryOfState : "" ,
+//     Account_SecOfStateRegistrationDate            : props.edit === 0 ? props.value.Account_SecOfStateRegistrationDate : "" ,
+//     Account_GoodStandingStatus                    : props.edit === 0 ? props.value.Account_GoodStandingStatus : "",
+//     Account_IfNoWhy                               : props.edit === 0 ? props.value.Account_IfNoWhy : "",
+//     Account_TypeOfEntity                          : props.edit === 0 ? props.value.Account_TypeOfEntity : "",
+//     Account_OwnerName                             : props.edit === 0 ? props.value.Account_OwnerName : "",
+//     Account_OfficerName                           : props.edit === 0 ? props.value.Account_OfficerName : "",
+//     Account_SingleLocation                        : props.edit === 0 ? props.value.Account_SingleLocation : "",
+//     Account_TypeOfBusiness                        : props.edit === 0 ? props.value.Account_TypeOfBusiness : "",
+//     Account_DateBusinessStarted                   : props.edit === 0 ? props.value.Account_DateBusinessStarted : "",
+//     Account_RatingRateLeft1                       : props.edit === 0 ? props.value.Account_RatingRateLeft1 : "",
+//     Account_RatingRateLeft2                       : props.edit === 0 ? props.value.Account_RatingRateLeft2 : "",
+//     Account_RatingRateLeft3                       : props.edit === 0 ? props.value.Account_RatingRateLeft3 : "",
+//     Account_RatingRateLeft4                       : props.edit === 0 ? props.value.Account_RatingRateLeft4 : "",
+//     Account_RatingRateRight1                       : props.edit === 0 ? props.value.Account_RatingRateRight1 : "",
+//     Account_RatingRateRight2                       : props.edit === 0 ? props.value.Account_RatingRateRight2 : "",
+//     Account_RatingRateRight3                       : props.edit === 0 ? props.value.Account_RatingRateRight3 : "",
+//     Account_RatingRateRight4                       : props.edit === 0 ? props.value.Account_RatingRateRight4 : "",
+//     Account_MyrsAgentNotesToClient                 : props.edit === 0 ? props.value.Account_MyrsAgentNotesToClient : "",
+//     }
 
+    const initialValues = {
+        id: props.edit === 0 ? props.value.id : "",
+        order_amount: props.edit === 0 ? props.value.order_amount : "",
+        // completed_date: source ? new Date(source.submitted_date)?.toISOString().split('T')[0] : "",
+        completed_date          : props.edit === 0 ? new Date(props.value.submitted_date)?.toISOString().split('T')[0] : "",
+        charge_amt: source?.charge_amt || "",
+        // company: source?.user?.company || "",
+        company                 : props.edit === 0 ? props.value.user?.company : "",
+        name: source?.name || "",
+        // myrs_product: source?.myrs_product || "",
+        // express_service: source?.express_service || "",
+        myrs_product            : props.edit === 0 ? props.value.myrs_product : "",
+        express_service         : props.edit === 0 ? props.value.express_service : "",
+        full_address: full_address,
+        secondary_phone: source?.secondary_phone || "",
+        additional_address: source?.additional_address || "",
+        web: source?.web || "",
+        myrs_rating: source?.myrs_rating || "",
+        account_status: source?.account_status?.toString() || "",
+        no_of_records: source?.no_of_records || "",
+        no_of_payment_records: source?.no_of_payment_records || "",
+        recent_inquiries1: source?.recent_inquiries1 || "",
+        recent_inquiries2: source?.recent_inquiries2 || "",
+        submit_type: source?.submit_type || "",
+        amount: source?.amount || "",
+        myrs_rating1: source?.myrs_rating || "",
+        historical_pdf: props.historicalpdf,
 
-  const initialValues = {
-    id                      : props.edit === 0 ? props.value.id : "",
-    order_amount            : props.edit === 0 ? props.value.order_amount : "",
-    completed_date          : props.edit === 0 ? new Date(props.value.submitted_date)?.toISOString().split('T')[0] : "",
-    charge_amt              : props.edit === 0 ? props.value.charge_amt : "",
-    company                 : props.edit === 0 ? props.value.user?.company : "",
-    name                    : props.edit === 0 ? props.value.name : "",
-    myrs_product            : props.edit === 0 ? props.value.myrs_product : "",
-    express_service         : props.edit === 0 ? props.value.express_service : "",
-    full_address            : full_address,
-    secondary_phone         : props.edit === 0 ? props.value.secondary_phone : "",
-    additional_address      : props.edit === 0 ? props.value.additional_address : "",
-    web                     : props.edit === 0 ? props.value.web : "",
-    myrs_rating             : props.edit === 0 ? props.value.myrs_rating : "",
-    account_status          : props.edit === 0 ? props.value.account_status?.toString() : "",
-    no_of_records           : props.edit === 0 ? props.value.no_of_records : "",
-    no_of_payment_records   : props.edit === 0 ? props.value.no_of_payment_records : "",
-    recent_inquiries1       : props.edit === 0 ? props.value.recent_inquiries1 : "",
-    recent_inquiries2       : props.edit === 0 ? props.value.recent_inquiries2 : "", 
-    submit_type             : props.edit === 0 ? props.value.submit_type : "",
-    amount                  : props.edit === 0 ? props.value.amount : "", 
-    myrs_rating1             : props.edit === 0 ? props.value.myrs_rating : "",
-    historical_pdf          : props.historicalpdf
-    }
+        Account_MostCommonTermsOfSale: source?.Account_MostCommonTermsOfSale || "",
+        Account_PaymentWithinTerms: source?.Account_PaymentWithinTerms || "",
+        Account_PaymentsOutsideOfTerms: source?.Account_PaymentsOutsideOfTerms || "",
+        Account_90120Payment: source?.Account_90120Payment || "",
+        Account_120BeyondPayment: source?.Account_120BeyondPayment || "",
+        Account_AverageDayToPay: source?.Account_AverageDayToPay || "",
+        Account_PaymentTrend: source?.Account_PaymentTrend || "",
+        Account_UnpaidDebts: source?.Account_UnpaidDebts || "",
+        Account_HighCreditAverages: source?.Account_HighCreditAverages || "",
+        Account_HighestCreditOfRecords: source?.Account_HighestCreditOfRecords || "",
+        Account_DateOfMostRecentPaymentTransaction: source?.Account_DateOfMostRecentPaymentTransaction || "",
+        Account_DateOfOldestPaymentTransaction: source?.Account_DateOfOldestPaymentTransaction || "",
+        Account_UnauthorizedDeductionsOfRecords: source?.Account_UnauthorizedDeductionsOfRecords || "",
+        Account_CODOrPrepaidPayments: source?.Account_CODOrPrepaidPayments || "",
+        Account_CollectionRecords: source?.Account_CollectionRecords || "",
+        Account_CollectionRecordsText: source?.Account_CollectionRecordsText || "",
+        Account_DemandLetterRecords: source?.Account_DemandLetterRecords || "",
+        Account_DemandLetterRecordsText: source?.Account_DemandLetterRecordsText || "",
+        Account_PublicRecords: source?.Account_PublicRecords || "",
+        Account_PublicRecordsText: source?.Account_PublicRecordsText || "",
+        Account_INSFRecords: source?.Account_INSFRecords || "",
+        Account_MyrsNegativeAgentNotes: source?.Account_MyrsNegativeAgentNotes || "",
+        Account_MyrsNegativeAgentNotesText: source?.Account_MyrsNegativeAgentNotesText || "",
+        Account_RegisteredSecretaryOfState: source?.Account_RegisteredSecretaryOfState || "",
+        Account_SecOfStateRegistrationDate: source?.Account_SecOfStateRegistrationDate || "",
+        Account_GoodStandingStatus: source?.Account_GoodStandingStatus || "",
+        Account_IfNoWhy: source?.Account_IfNoWhy || "",
+        Account_TypeOfEntity: source?.Account_TypeOfEntity || "",
+        Account_OwnerName: source?.Account_OwnerName || "",
+        Account_OfficerName: source?.Account_OfficerName || "",
+        Account_SingleLocation: source?.Account_SingleLocation || "",
+        Account_TypeOfBusiness: source?.Account_TypeOfBusiness || "",
+        Account_DateBusinessStarted: source?.Account_DateBusinessStarted || "",
+        Account_RatingRateLeft1: source?.Account_RatingRateLeft1 || "",
+        Account_RatingRateLeft2: source?.Account_RatingRateLeft2 || "",
+        Account_RatingRateLeft3: source?.Account_RatingRateLeft3 || "",
+        Account_RatingRateLeft4: source?.Account_RatingRateLeft4 || "",
+        Account_RatingRateRight1: source?.Account_RatingRateRight1 || "",
+        Account_RatingRateRight2: source?.Account_RatingRateRight2 || "",
+        Account_RatingRateRight3: source?.Account_RatingRateRight3 || "",
+        Account_RatingRateRight4: source?.Account_RatingRateRight4 || "",
+        Account_MyrsAgentNotesToClient: source?.Account_MyrsAgentNotesToClient || "",
+        };
 
     
     const schema = Yup.object().shape({
@@ -111,7 +232,7 @@ ${props.value.phone}` : "";
             <div className="col-xl-12 mb-4"> 
 
 
-             <div className="bg-light border rounded p-2 mb-0 row text-primary">
+             <div className="bg-lightgray border rounded p-2 mb-0 row text-primary">
 
                 <div className="col-4 mb-1">
                     <div className="d-flex align-items-center gap-2">
@@ -302,7 +423,7 @@ ${props.value.phone}` : "";
 
              </div>
 
-             <div className="bg-light border rounded p-2 mb-0" >
+             <div className="bg-lightgray border rounded p-2 mb-0" >
                 <table className="table table-bordered text-start" >
                     <thead>
                         <tr>
@@ -315,7 +436,7 @@ ${props.value.phone}` : "";
                         <tr>
                             <td className="text-primary fw-bold col-1">#10</td>
                             <td className="text-danger ">
-                               Recommended for amount as  <span className="text-primary fw-bold">Submitted</span>. 
+                               Recommended for amount as  <span className="text-primary">Submitted</span>. 
                                 Expect payment within terms.
                             </td>
                         </tr>
@@ -360,7 +481,7 @@ ${props.value.phone}` : "";
 
             <div className="col-6 mb-5">
 
-              <div className="bg-light border rounded p-3">
+              <div className="bg-lightgray border rounded p-3">
                 <h3 className="primary-text-color d-flex justify-content-center mb-3">
                     Account Information
                 </h3>
@@ -436,7 +557,7 @@ ${props.value.phone}` : "";
 
             <div className="col-6 mb-5">
 
-                <div className="bg-light border rounded p-3">
+                <div className="bg-lightgray border rounded p-3">
                 <h3 className="primary-text-color d-flex justify-content-center mb-2">
                     Summary
                 </h3>
@@ -554,11 +675,11 @@ ${props.value.phone}` : "";
                 </div>
 
             </div>
-            {props.historicalpdf === 1 &&  
+            {props.value.myrs_product === "2" &&  
                 <>
-                    <div className="col-6 mb-4">
+                    <div className="col-12 mb-4 ">
 
-                    <div className="bg-light border rounded p-4">
+                    <div className="bg-lightgray border rounded p-4 c ">
                     <h3 className="primary-text-color d-flex justify-content-center mb-3">
                         Historical Payment Information
                     </h3>
@@ -570,19 +691,19 @@ ${props.value.phone}` : "";
                             </label>
                             <div className="radio-toolbar">
                             <div className="form-check form-check-inline">
-                                <input type="radio" className="form-check-input" id="Standard" name="levelOfService" />
+                                <input type="radio" Value="1" className="form-check-input" id="Standard" name="levelOfService" {...register('Account_MostCommonTermsOfSale')}/>
                                 <label className="form-check-label" style={{ fontSize: '14px' }} htmlFor="Standard">N30</label>
                             </div>
                             <div className="form-check form-check-inline">
-                                <input type="radio" className="form-check-input" id="Quick" name="levelOfService" />
+                                <input type="radio" Value="2" className="form-check-input" id="Quick" name="levelOfService" {...register('Account_MostCommonTermsOfSale')}/>
                                 <label className="form-check-label" style={{ fontSize: '14px' }} htmlFor="Quick">Prepaid</label>
                             </div>
                             <div className="form-check form-check-inline">
-                                <input type="radio" className="form-check-input" id="Fast" name="levelOfService" />
+                                <input type="radio" Value="3" className="form-check-input" id="Fast" name="levelOfService" {...register('Account_MostCommonTermsOfSale')}/>
                                 <label className="form-check-label" style={{ fontSize: '14px' }} htmlFor="Fast">COD</label>
                             </div>
                             <div className="form-check form-check-inline">
-                                <input type="radio" className="form-check-input" id="Rapid" name="levelOfService" />
+                                <input type="radio" Value="4" className="form-check-input" id="Rapid" name="levelOfService" {...register('Account_MostCommonTermsOfSale')}/>
                                 <label className="form-check-label" style={{ fontSize: '14px' }} htmlFor="Rapid">N60</label>
                             </div>
                             </div>
@@ -590,18 +711,19 @@ ${props.value.phone}` : "";
                         </div>
 
 
-                        <div className="col-10 mb-1">
+                        <div className="col-8 mb-1">
                             <div className="d-flex align-items-center gap-2">
                                 <label htmlFor="input-name" className="form-label mb-0 text-nowrap">
                                     Payments within terms : 
                                 </label>
                                 <input
                                     type="number"
-                                    className="form-control"
+                                    className="form-control "
                                     id="secPhone"
                                     name="secPhone"
                                     placeholder=""
                                     autoComplete="off"
+                                    {...register('Account_PaymentWithinTerms')}
                                 />  
                                 <label htmlFor="input-name" className="form-label mb-0 text-nowrap">
                                     % 
@@ -610,7 +732,7 @@ ${props.value.phone}` : "";
                         </div>
 
 
-                        <div className="col-10 mb-1">
+                        <div className="col-8 mb-1">
                             <div className="d-flex align-items-center gap-2">
                                 <label htmlFor="input-name" className="form-label mb-0 text-nowrap">
                                     Payments outside of terms : 
@@ -622,6 +744,7 @@ ${props.value.phone}` : "";
                                     name="secPhone"
                                     placeholder=""
                                     autoComplete="off"
+                                    {...register('Account_PaymentsOutsideOfTerms')}
                                 />  
                                 <label htmlFor="input-name" className="form-label mb-0 text-nowrap">
                                     % 
@@ -629,7 +752,7 @@ ${props.value.phone}` : "";
                             </div>
                         </div>
 
-                        <div className="col-10 mb-1">
+                        <div className="col-8 mb-1">
                             <div className="d-flex align-items-center gap-2">
                                 <label htmlFor="input-name" className="form-label mb-0 text-nowrap">
                                     90-120 Payment : 
@@ -641,6 +764,8 @@ ${props.value.phone}` : "";
                                     name="secPhone"
                                     placeholder=""
                                     autoComplete="off"
+                                    {...register('Account_90120Payment')}
+
                                 />  
                                 <label htmlFor="input-name" className="form-label mb-0 text-nowrap">
                                     % 
@@ -648,7 +773,7 @@ ${props.value.phone}` : "";
                             </div>
                         </div>
 
-                        <div className="col-10 mb-1">
+                        <div className="col-8 mb-1">
                             <div className="d-flex align-items-center gap-2">
                                 <label htmlFor="input-name" className="form-label mb-0 text-nowrap">
                                     120 beyond Payment : 
@@ -660,6 +785,7 @@ ${props.value.phone}` : "";
                                     name="secPhone"
                                     placeholder=""
                                     autoComplete="off"
+                                    {...register('Account_120BeyondPayment')}
                                 />  
                                 <label htmlFor="input-name" className="form-label mb-0 text-nowrap">
                                     % 
@@ -668,7 +794,7 @@ ${props.value.phone}` : "";
                         </div>
 
 
-                        <div className="col-10 mb-1">
+                        <div className="col-8 mb-1">
                             <div className="d-flex align-items-center gap-2">
                                 <label htmlFor="input-name" className="form-label mb-0 text-nowrap">
                                     Average Days to Pay : 
@@ -680,6 +806,7 @@ ${props.value.phone}` : "";
                                     name="secPhone"
                                     placeholder=""
                                     autoComplete="off"
+                                    {...register('Account_AverageDayToPay')}
                                 />  
                                 <label htmlFor="input-name" className="form-label mb-0 text-nowrap">
                                     % 
@@ -695,15 +822,15 @@ ${props.value.phone}` : "";
                             </label>
                             <div className="radio-toolbar">
                             <div className="form-check form-check-inline">
-                                <input type="radio" className="form-check-input" id="Standard" name="levelOfService" />
+                                <input type="radio" Value="1" className="form-check-input" id="Standard" name="levelOfService" {...register('Account_PaymentTrend')}/>
                                 <label className="form-check-label" style={{ fontSize: '14px' }} htmlFor="Standard">Improving</label>
                             </div>
                             <div className="form-check form-check-inline">
-                                <input type="radio" className="form-check-input" id="Quick" name="levelOfService" />
+                                <input type="radio" Value="2" className="form-check-input" id="Quick" name="levelOfService" {...register('Account_PaymentTrend')}/>
                                 <label className="form-check-label" style={{ fontSize: '14px' }} htmlFor="Quick">Stable</label>
                             </div>
                             <div className="form-check form-check-inline">
-                                <input type="radio" className="form-check-input" id="Fast" name="levelOfService" />
+                                <input type="radio" Value="3" className="form-check-input" id="Fast" name="levelOfService" {...register('Account_PaymentTrend')}/>
                                 <label className="form-check-label" style={{ fontSize: '14px' }} htmlFor="Fast">Declining</label>
                             </div>
                             </div>
@@ -718,11 +845,11 @@ ${props.value.phone}` : "";
                             </label>
                             <div className="radio-toolbar">
                             <div className="form-check form-check-inline">
-                                <input type="radio" className="form-check-input" id="Standard" name="levelOfService" />
+                                <input type="radio" Value="1" className="form-check-input" id="Standard" name="levelOfService" {...register('Account_UnpaidDebts')}/>
                                 <label className="form-check-label" style={{ fontSize: '14px' }} htmlFor="Standard">Yes</label>
                             </div>
                             <div className="form-check form-check-inline">
-                                <input type="radio" className="form-check-input" id="Quick" name="levelOfService" />
+                                <input type="radio" Value="2" className="form-check-input" id="Quick" name="levelOfService" {...register('Account_UnpaidDebts')}/>
                                 <label className="form-check-label" style={{ fontSize: '14px' }} htmlFor="Quick">No</label>
                             </div>
                             </div>
@@ -730,7 +857,7 @@ ${props.value.phone}` : "";
                         </div>
                         
 
-                        <div className="col-10 mb-1">
+                        <div className="col-8 mb-1">
                             <div className="d-flex align-items-center gap-2">
                                 <label htmlFor="input-name" className="form-label mb-0 text-nowrap">
                                     High Credit Average <b> $</b> 
@@ -742,12 +869,13 @@ ${props.value.phone}` : "";
                                     name="secPhone"
                                     placeholder=""
                                     autoComplete="off"
+                                    {...register('Account_HighCreditAverages')}
                                 />    
                             </div>
                         </div>
 
 
-                        <div className="col-10 mb-1">
+                        <div className="col-8 mb-1">
                             <div className="d-flex align-items-center gap-2">
                                 <label htmlFor="input-name" className="form-label mb-0 text-nowrap">
                                     Highest Credit of Record <b> $</b> 
@@ -759,12 +887,13 @@ ${props.value.phone}` : "";
                                     name="secPhone"
                                     placeholder=""
                                     autoComplete="off"
+                                    {...register('Account_HighestCreditOfRecords')}
                                 />    
                             </div>
                         </div>
 
 
-                        <div className="col-10 mb-1">
+                        <div className="col-8 mb-1">
                             <div className="d-flex align-items-center gap-2">
                                 <label htmlFor="input-name" className="form-label mb-0 text-nowrap">
                                     Date of Most Recent Payment transaction 
@@ -776,12 +905,13 @@ ${props.value.phone}` : "";
                                     name="secPhone"
                                     placeholder=""
                                     autoComplete="off"
+                                    {...register('Account_DateOfMostRecentPaymentTransaction')}
                                 />    
                             </div>
                         </div>
 
 
-                        <div className="col-10 mb-1">
+                        <div className="col-8 mb-1">
                             <div className="d-flex align-items-center gap-2">
                                 <label htmlFor="input-name" className="form-label mb-0 text-nowrap">
                                 Date of Oldest Payment transaction
@@ -793,6 +923,7 @@ ${props.value.phone}` : "";
                                     name="secPhone"
                                     placeholder=""
                                     autoComplete="off"
+                                    {...register('Account_DateOfOldestPaymentTransaction')}
                                 />    
                             </div>
                         </div>
@@ -805,11 +936,11 @@ ${props.value.phone}` : "";
                             </label>
                             <div className="radio-toolbar">
                             <div className="form-check form-check-inline">
-                                <input type="radio" className="form-check-input" id="Standard" name="levelOfService" />
+                                <input type="radio" Value="1" className="form-check-input" id="Standard" name="levelOfService" {...register('Account_UnauthorizedDeductionsOfRecords')}/>
                                 <label className="form-check-label" style={{ fontSize: '14px' }} htmlFor="Standard">Yes</label>
                             </div>
                             <div className="form-check form-check-inline">
-                                <input type="radio" className="form-check-input" id="Quick" name="levelOfService" />
+                                <input type="radio"  Value="2" className="form-check-input" id="Quick" name="levelOfService" {...register('Account_UnauthorizedDeductionsOfRecords')}/>
                                 <label className="form-check-label" style={{ fontSize: '14px' }} htmlFor="Quick">No</label>
                             </div>
                             </div>
@@ -824,11 +955,11 @@ ${props.value.phone}` : "";
                             </label>
                             <div className="radio-toolbar">
                             <div className="form-check form-check-inline">
-                                <input type="radio" className="form-check-input" id="Standard" name="levelOfService" />
+                                <input type="radio"  Value="1" className="form-check-input" id="Standard" name="levelOfService" {...register('Account_CODOrPrepaidPayments')}/>
                                 <label className="form-check-label" style={{ fontSize: '14px' }} htmlFor="Standard">Yes</label>
                             </div>
                             <div className="form-check form-check-inline">
-                                <input type="radio" className="form-check-input" id="Quick" name="levelOfService" />
+                                <input type="radio"  Value="2" className="form-check-input" id="Quick" name="levelOfService" {...register('Account_CODOrPrepaidPayments')}/>
                                 <label className="form-check-label" style={{ fontSize: '14px' }} htmlFor="Quick">No</label>
                             </div>
                             </div>
@@ -842,9 +973,182 @@ ${props.value.phone}` : "";
 
                     </div>
 
-                    <div className="col-6 mb-4">
+                   
 
-                    <div className="bg-light border rounded p-4">
+                    <div className="col-12 mb-4 ">
+
+                    <div className="bg-lightgray border rounded p-4 row">
+                    <h3 className="primary-text-color d-flex justify-content-center mb-3">
+                        Information of Record
+                    </h3>
+
+                    <div className="col-6 mb-1 ">
+                    <div className="col-12 mb-1">
+                        
+                        <div className="d-flex justify-contentalign-items-center gap-3">
+                            <label className="form-label mb-0 text-nowrap">
+                            Collection Records :
+                            </label>
+                            <div className="radio-toolbar">
+                            <div className="form-check form-check-inline">
+                                <input type="radio" value="1" className="form-check-input" id="Standard" name="levelOfService" {...register('Account_CollectionRecords')}/>
+                                <label className="form-check-label" style={{ fontSize: '14px' }} htmlFor="Standard">Yes</label>
+                            </div>
+                            <div className="form-check form-check-inline">
+                                <input type="radio" value="2" className="form-check-input" id="Quick" name="levelOfService" {...register('Account_CollectionRecords')}/>
+                                <label className="form-check-label" style={{ fontSize: '14px' }} htmlFor="Quick">No</label>
+                            </div>
+                            </div>
+                        </div>
+                        
+                        </div>
+
+                        
+                        <div className="col-12 mb-1">
+                            <div className="d-flex align-items-center gap-2">
+                            <textarea
+                                    type="text"
+                                    rows={2}
+                                    className="form-control"
+                                    id="secPhone"
+                                    name="secPhone"
+                                    placeholder=""
+                                    autoComplete="off"
+                                    {...register('Account_CollectionRecordsText')}
+                                />  
+                            </div>
+                        </div>
+                        <div className="col-12 mb-1">
+                        <div className="d-flex justify-contentalign-items-center gap-3">
+                            <label className="form-label mb-0 text-nowrap">
+                            Demand Letter Records :
+                            </label>
+                            <div className="radio-toolbar">
+                            <div className="form-check form-check-inline">
+                                <input type="radio" value="1" className="form-check-input" id="Standard" name="levelOfService" {...register('Account_DemandLetterRecords')}/>
+                                <label className="form-check-label" style={{ fontSize: '14px' }} htmlFor="Standard">Yes</label>
+                            </div>
+                            <div className="form-check form-check-inline">
+                                <input type="radio" value="2" className="form-check-input" id="Quick" name="levelOfService" {...register('Account_DemandLetterRecords')}/>
+                                <label className="form-check-label" style={{ fontSize: '14px' }} htmlFor="Quick">No</label>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                        <div className="col-12 mb-1">
+                            <div className="d-flex align-items-center gap-2">
+                            <textarea
+                                    type="text"
+                                    rows={2}
+                                    className="form-control"
+                                    id="secPhone"
+                                    name="secPhone"
+                                    placeholder=""
+                                    autoComplete="off"
+                                    {...register('Account_DemandLetterRecordsText')}
+                                />  
+                            </div>
+                        </div>
+                        <div className="col-12 mb-1">
+                        <div className="d-flex justify-contentalign-items-center gap-3">
+                            <label className="form-label mb-0 text-nowrap">
+                            Public Records :
+                            </label>
+                            <div className="radio-toolbar">
+                            <div className="form-check form-check-inline">
+                                <input type="radio" value="1" className="form-check-input" id="Standard" name="levelOfService" {...register('Account_PublicRecords')}/>
+                                <label className="form-check-label" style={{ fontSize: '14px' }} htmlFor="Standard">Yes</label>
+                            </div>
+                            <div className="form-check form-check-inline">
+                                <input type="radio" value="2" className="form-check-input" id="Quick" name="levelOfService" {...register('Account_PublicRecords')}/>
+                                <label className="form-check-label" style={{ fontSize: '14px' }} htmlFor="Quick">No</label>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                        <div className="col-12 mb-1">
+                            <div className="d-flex align-items-center gap-2">
+                            <textarea
+                                    type="text"
+                                    rows={2}
+                                    className="form-control"
+                                    id="secPhone"
+                                    name="secPhone"
+                                    placeholder=""
+                                    autoComplete="off"
+                                    {...register('Account_PublicRecordsText')}
+                                />  
+                            </div>
+                        </div>
+                        <div className="col-12 mb-1">
+                        </div>
+                        
+                        
+                        </div>
+                        <div className="col-6 mb-1">
+                           <div className="col-12 mb-1">
+                        
+                        <div className="d-flex justify-contentalign-items-center gap-3">
+                            <label className="form-label mb-0 text-nowrap">
+                            INSF Records:
+                            </label>
+                            <div className="radio-toolbar">
+                            <div className="form-check form-check-inline">
+                                <input type="radio" value="1" className="form-check-input" id="Standard" name="levelOfService" {...register('Account_INSFRecords')}/>
+                                <label className="form-check-label" style={{ fontSize: '14px' }} htmlFor="Standard">Yes</label>
+                            </div>
+                            <div className="form-check form-check-inline">
+                                <input type="radio" value="2" className="form-check-input" id="Quick" name="levelOfService" {...register('Account_INSFRecords')}/>
+                                <label className="form-check-label" style={{ fontSize: '14px' }} htmlFor="Quick">No</label>
+                            </div>
+                            </div>
+                        </div>
+                        
+                        </div>
+                        <div className="col-12 mb-1 mt-2">
+                        
+                        <div className="d-flex justify-contentalign-items-center gap-3">
+                            <label className="form-label mb-0 text-nowrap">
+                            Myrs Negative Agent Notes :
+                            </label>
+                            <div className="radio-toolbar">
+                            <div className="form-check form-check-inline">
+                                <input type="radio" value="1" className="form-check-input" id="Standard" name="levelOfService" {...register('Account_MyrsNegativeAgentNotes')}/>
+                                <label className="form-check-label" style={{ fontSize: '14px' }} htmlFor="Standard">Yes</label>
+                            </div>
+                            <div className="form-check form-check-inline">
+                                <input type="radio" value="2" className="form-check-input" id="Quick" name="levelOfService" {...register('Account_MyrsNegativeAgentNotes')}/>
+                                <label className="form-check-label" style={{ fontSize: '14px' }} htmlFor="Quick">No</label>
+                            </div>
+                            </div>
+                        </div>
+                        
+                        </div>
+
+                        
+                        <div className="col-12 mb-1 mt-2">
+                            <div className="d-flex align-items-center gap-2">
+                            <textarea
+                                    type="text"
+                                    rows={9}
+                                    className="form-control"
+                                    id="secPhone"
+                                    name="secPhone"
+                                    placeholder=""
+                                    autoComplete="off"
+                                    {...register('Account_MyrsNegativeAgentNotesText')}
+                                />  
+                            </div>
+                        </div>
+
+                        </div>
+                    </div>
+
+                    </div>
+
+                     <div className="col-12 mb-4 ">
+
+                    <div className="bg-lightgray border rounded p-4">
                     <h3 className="primary-text-color d-flex justify-content-center mb-3">
                         Registration Information
                     </h3>
@@ -856,11 +1160,11 @@ ${props.value.phone}` : "";
                             </label>
                             <div className="radio-toolbar">
                             <div className="form-check form-check-inline">
-                                <input type="radio" className="form-check-input" id="Standard" name="levelOfService" />
+                                <input type="radio" Value="1" className="form-check-input" id="Standard" name="levelOfService" {...register('Account_RegisteredSecretaryOfState')}/>
                                 <label className="form-check-label" style={{ fontSize: '14px' }} htmlFor="Standard">Yes</label>
                             </div>
                             <div className="form-check form-check-inline">
-                                <input type="radio" className="form-check-input" id="Quick" name="levelOfService" />
+                                <input type="radio" Value="2" className="form-check-input" id="Quick" name="levelOfService" {...register('Account_RegisteredSecretaryOfState')}/>
                                 <label className="form-check-label" style={{ fontSize: '14px' }} htmlFor="Quick">No</label>
                             </div>
                             </div>
@@ -868,7 +1172,7 @@ ${props.value.phone}` : "";
                         </div>
 
 
-                        <div className="col-10 mb-2">
+                        <div className="col-8 mb-2">
                             <div className="d-flex align-items-center gap-2">
                                 <label htmlFor="input-name" className="form-label mb-0 text-nowrap">
                                 Sec. of State Registration date : 
@@ -880,6 +1184,7 @@ ${props.value.phone}` : "";
                                     name="secPhone"
                                     placeholder=""
                                     autoComplete="off"
+                                    {...register('Account_SecOfStateRegistrationDate')}
                                 />  
                             </div>
                         </div>
@@ -892,30 +1197,31 @@ ${props.value.phone}` : "";
                             </label>
                             <div className="radio-toolbar">
                             <div className="form-check form-check-inline">
-                                <input type="radio" className="form-check-input" id="Standard" name="levelOfService" />
+                                <input type="radio" value="1" className="form-check-input" id="Standard" name="levelOfService" {...register('Account_GoodStandingStatus')}/>
                                 <label className="form-check-label" style={{ fontSize: '14px' }} htmlFor="Standard">Yes</label>
                             </div>
                             <div className="form-check form-check-inline">
-                                <input type="radio" className="form-check-input" id="Quick" name="levelOfService" />
+                                <input type="radio" value="2" className="form-check-input" id="Quick" name="levelOfService" {...register('Account_GoodStandingStatus')}/>
                                 <label className="form-check-label" style={{ fontSize: '14px' }} htmlFor="Quick">No</label>
                             </div>
                             </div>
                         </div>
                         </div>
 
-                        <div className="col-12 mb-2">
+                        <div className="col-8 mb-2">
                             <div className="d-flex align-items-center gap-2">
                                 <label htmlFor="input-name" className="form-label mb-0 text-nowrap">
                                     If No, Why?
                                 </label>
                                 <textarea
                                     type="text"
-                                    rows={3}
+                                    rows={2}
                                     className="form-control"
                                     id="secPhone"
                                     name="secPhone"
                                     placeholder=""
                                     autoComplete="off"
+                                    {...register('Account_IfNoWhy')}
                                 />  
                                 
                             </div>
@@ -928,15 +1234,15 @@ ${props.value.phone}` : "";
                             </label>
                             <div className="radio-toolbar">
                             <div className="form-check form-check-inline">
-                                <input type="radio" className="form-check-input" id="Standard" name="levelOfService" />
+                                <input type="radio" value="1" className="form-check-input" id="Standard" name="levelOfService" {...register('Account_TypeOfEntity')}/>
                                 <label className="form-check-label" style={{ fontSize: '14px' }} htmlFor="Standard">Corporation</label>
                             </div>
                             <div className="form-check form-check-inline">
-                                <input type="radio" className="form-check-input" id="Quick" name="levelOfService" />
+                                <input type="radio" value="2" className="form-check-input" id="Quick" name="levelOfService" {...register('Account_TypeOfEntity')}/>
                                 <label className="form-check-label" style={{ fontSize: '14px' }} htmlFor="Quick">LLC</label>
                             </div>
                             <div className="form-check form-check-inline">
-                                <input type="radio" className="form-check-input" id="Quick" name="levelOfService" />
+                                <input type="radio" value="3" className="form-check-input" id="Quick" name="levelOfService" {...register('Account_TypeOfEntity')}/>
                                 <label className="form-check-label" style={{ fontSize: '14px' }} htmlFor="Quick">Sole Proprietorship</label>
                             </div>
                             </div>
@@ -944,7 +1250,7 @@ ${props.value.phone}` : "";
                         </div>
 
 
-                        <div className="col-10 mb-2">
+                        <div className="col-8 mb-2">
                             <div className="d-flex align-items-center gap-2">
                                 <label htmlFor="input-name" className="form-label mb-0 text-nowrap">
                                 Owner's Name : 
@@ -956,12 +1262,13 @@ ${props.value.phone}` : "";
                                     name="secPhone"
                                     placeholder=""
                                     autoComplete="off"
+                                    {...register('Account_OwnerName')}
                                 />  
                             </div>
                         </div>
 
 
-                        <div className="col-10 mb-2">
+                        <div className="col-8 mb-2">
                             <div className="d-flex align-items-center gap-2">
                                 <label htmlFor="input-name" className="form-label mb-0 text-nowrap">
                                 Officer's Name : 
@@ -973,6 +1280,7 @@ ${props.value.phone}` : "";
                                     name="secPhone"
                                     placeholder=""
                                     autoComplete="off"
+                                    {...register('Account_OfficerName')}
                                 />  
                             </div>
                         </div>
@@ -985,11 +1293,11 @@ ${props.value.phone}` : "";
                             </label>
                             <div className="radio-toolbar">
                             <div className="form-check form-check-inline">
-                                <input type="radio" className="form-check-input" id="Standard" name="levelOfService" />
+                                <input type="radio" value="1" className="form-check-input" id="Standard" name="levelOfService"  {...register('Account_SingleLocation')}/>
                                 <label className="form-check-label" style={{ fontSize: '14px' }} htmlFor="Standard">Yes</label>
                             </div>
                             <div className="form-check form-check-inline">
-                                <input type="radio" className="form-check-input" id="Quick" name="levelOfService" />
+                                <input type="radio" value="2" className="form-check-input" id="Quick" name="levelOfService" {...register('Account_SingleLocation')}/>
                                 <label className="form-check-label" style={{ fontSize: '14px' }} htmlFor="Quick">No</label>
                             </div>
                             </div>
@@ -997,7 +1305,7 @@ ${props.value.phone}` : "";
                         </div>
                         
 
-                        <div className="col-10 mb-2">
+                        <div className="col-8 mb-2">
                             <div className="d-flex align-items-center gap-2">
                                 <label htmlFor="input-name" className="form-label mb-0 text-nowrap">
                                     Type of Business :  
@@ -1009,12 +1317,13 @@ ${props.value.phone}` : "";
                                     name="secPhone"
                                     placeholder=""
                                     autoComplete="off"
+                                    {...register('Account_TypeOfBusiness')}
                                 />    
                             </div>
                         </div>
 
 
-                        <div className="col-10 mb-1">
+                        <div className="col-8 mb-1">
                             <div className="d-flex align-items-center gap-2">
                                 <label htmlFor="input-name" className="form-label mb-0 text-nowrap">
                                     Date Business started:  
@@ -1026,6 +1335,7 @@ ${props.value.phone}` : "";
                                     name="secPhone"
                                     placeholder=""
                                     autoComplete="off"
+                                    {...register('Account_DateBusinessStarted')}
                                 />    
                             </div>
                         </div>
@@ -1035,114 +1345,9 @@ ${props.value.phone}` : "";
                     </div>
 
 
-                    <div className="col-12 mb-4">
-
-                    <div className="bg-light border rounded p-4">
-                    <h3 className="primary-text-color d-flex justify-content-center mb-3">
-                        Information of Record
-                    </h3>
-
-                    <div className="col-6 mb-1">
-                        
-                        <div className="d-flex justify-contentalign-items-center gap-3">
-                            <label className="form-label mb-0 text-nowrap">
-                            Collection Records :
-                            </label>
-                            <div className="radio-toolbar">
-                            <div className="form-check form-check-inline">
-                                <input type="radio" className="form-check-input" id="Standard" name="levelOfService" />
-                                <label className="form-check-label" style={{ fontSize: '14px' }} htmlFor="Standard">Yes</label>
-                            </div>
-                            <div className="form-check form-check-inline">
-                                <input type="radio" className="form-check-input" id="Quick" name="levelOfService" />
-                                <label className="form-check-label" style={{ fontSize: '14px' }} htmlFor="Quick">No</label>
-                            </div>
-                            </div>
-                        </div>
-                        
-                        </div>
-
-                        
-                        <div className="col-6 mb-1">
-                            <div className="d-flex align-items-center gap-2">
-                            <textarea
-                                    type="text"
-                                    rows={2}
-                                    className="form-control"
-                                    id="secPhone"
-                                    name="secPhone"
-                                    placeholder=""
-                                    autoComplete="off"
-                                />  
-                            </div>
-                        </div>
-                        <div className="col-6 mb-1">
-                        <div className="d-flex justify-contentalign-items-center gap-3">
-                            <label className="form-label mb-0 text-nowrap">
-                            Demand Letter Records :
-                            </label>
-                            <div className="radio-toolbar">
-                            <div className="form-check form-check-inline">
-                                <input type="radio" className="form-check-input" id="Standard" name="levelOfService" />
-                                <label className="form-check-label" style={{ fontSize: '14px' }} htmlFor="Standard">Yes</label>
-                            </div>
-                            <div className="form-check form-check-inline">
-                                <input type="radio" className="form-check-input" id="Quick" name="levelOfService" />
-                                <label className="form-check-label" style={{ fontSize: '14px' }} htmlFor="Quick">No</label>
-                            </div>
-                            </div>
-                        </div>
-                        </div>
-                        <div className="col-6 mb-1">
-                            <div className="d-flex align-items-center gap-2">
-                            <textarea
-                                    type="text"
-                                    rows={2}
-                                    className="form-control"
-                                    id="secPhone"
-                                    name="secPhone"
-                                    placeholder=""
-                                    autoComplete="off"
-                                />  
-                            </div>
-                        </div>
-                        <div className="col-6 mb-1">
-                        <div className="d-flex justify-contentalign-items-center gap-3">
-                            <label className="form-label mb-0 text-nowrap">
-                            Public Records :
-                            </label>
-                            <div className="radio-toolbar">
-                            <div className="form-check form-check-inline">
-                                <input type="radio" className="form-check-input" id="Standard" name="levelOfService" />
-                                <label className="form-check-label" style={{ fontSize: '14px' }} htmlFor="Standard">Yes</label>
-                            </div>
-                            <div className="form-check form-check-inline">
-                                <input type="radio" className="form-check-input" id="Quick" name="levelOfService" />
-                                <label className="form-check-label" style={{ fontSize: '14px' }} htmlFor="Quick">No</label>
-                            </div>
-                            </div>
-                        </div>
-                        </div>
-                        <div className="col-6 mb-1">
-                            <div className="d-flex align-items-center gap-2">
-                            <textarea
-                                    type="text"
-                                    rows={2}
-                                    className="form-control"
-                                    id="secPhone"
-                                    name="secPhone"
-                                    placeholder=""
-                                    autoComplete="off"
-                                />  
-                            </div>
-                        </div>
-                    </div>
-
-                    </div>
-
                     <div className="col-6 mb-4">
 
-                    <div className="bg-light border rounded p-4">
+                    <div className="bg-lightgray border rounded p-4">
                     <h3 className="primary-text-color d-flex justify-content-center mb-3">
                         Myrs Rating History
                     </h3>
@@ -1163,36 +1368,40 @@ ${props.value.phone}` : "";
                                     <b>Rating Date</b> 
                                 </label>
                                 <input
-                                    type="number"
+                                    type="text"
                                     className="form-control mb-2"
                                     id="secPhone"
                                     name="secPhone"
                                     placeholder=""
                                     autoComplete="off"
+                                    {...register('Account_RatingRateLeft1')}
                                 />   
                                 <input
-                                    type="number"
+                                    type="text"
                                     className="form-control mb-2"
                                     id="secPhone"
                                     name="secPhone"
                                     placeholder=""
                                     autoComplete="off"
+                                    {...register('Account_RatingRateLeft2')}
                                 />   
                                 <input
-                                    type="number"
+                                    type="text"
                                     className="form-control mb-2"
                                     id="secPhone"
                                     name="secPhone"
                                     placeholder=""
                                     autoComplete="off"
+                                    {...register('Account_RatingRateLeft3')}
                                 />   
                                 <input
-                                    type="number"
+                                    type="text"
                                     className="form-control mb-2"
                                     id="secPhone"
                                     name="secPhone"
                                     placeholder=""
                                     autoComplete="off"
+                                    {...register('Account_RatingRateLeft4')}
                                 />   
                             </div>
                             <div className="col-6  align-items-center gap-2">
@@ -1200,36 +1409,40 @@ ${props.value.phone}` : "";
                                     <b>Rating</b> 
                                 </label>
                                 <input
-                                    type="number"
+                                    type="text"
                                     className="form-control mb-2 mx-4"
                                     id="secPhone"
                                     name="secPhone"
                                     placeholder=""
                                     autoComplete="off"
+                                    {...register('Account_RatingRateRight1')}
                                 />   
                                 <input
-                                    type="number"
+                                    type="text"
                                     className="form-control mb-2 mx-4"
                                     id="secPhone"
                                     name="secPhone"
                                     placeholder=""
                                     autoComplete="off"
+                                    {...register('Account_RatingRateRight2')}
                                 />   
                                 <input
-                                    type="number"
+                                    type="text"
                                     className="form-control mb-2 mx-4"
                                     id="secPhone"
                                     name="secPhone"
                                     placeholder=""
                                     autoComplete="off"
+                                    {...register('Account_RatingRateRight3')}
                                 />   
                                 <input
-                                    type="number"
+                                    type="text"
                                     className="form-control mb-2 mx-4"
                                     id="secPhone"
                                     name="secPhone"
                                     placeholder=""
                                     autoComplete="off"
+                                    {...register('Account_RatingRateRight4')}
                                 />   
                             </div>
                         </div>
@@ -1249,7 +1462,7 @@ ${props.value.phone}` : "";
 
                     <div className="col-6 mb-4">
 
-                    <div className="bg-light border rounded p-4">
+                    <div className="bg-lightgray border rounded p-4">
                     <h3 className="primary-text-color d-flex justify-content-center mb-3">
                         Myrs Agent Notes to Client
                     </h3>
@@ -1265,6 +1478,7 @@ ${props.value.phone}` : "";
                                     name="secPhone"
                                     placeholder=""
                                     autoComplete="off"
+                                    {...register('Account_MyrsAgentNotesToClient')}
                                 />  
                             </div>
                         </div>
@@ -1279,7 +1493,7 @@ ${props.value.phone}` : "";
 
             
 
-            <div className="bg-light border rounded p-2 mb-4">
+            <div className="bg-lightgray border rounded p-2 mb-4">
                 <table className="table table-bordered text-start" >
                     <thead>
                         <tr>
@@ -1303,7 +1517,7 @@ ${props.value.phone}` : "";
                 </table>
             </div>   
 
-              <div className="bg-light border rounded p-2 mb-2">
+              <div className="bg-lightgray border rounded p-2 mb-2">
                 <table className="table table-bordered text-start" >
                     <thead>
                         
@@ -1338,7 +1552,7 @@ ${props.value.phone}` : "";
                 <div className="d-flex justify-content-center align-items-center pt-5">
                                 
                 <>
-                {props.value.account_status !==2 &&
+                {props.value.status !==1 &&
                     <>
                         {/* <button 
                             type="submit" 

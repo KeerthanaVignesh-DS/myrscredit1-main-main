@@ -51,6 +51,7 @@ export default function SubmissionsList  ({Submissions,Clients,Total})  {
   const [histValue, setHistValue] = useState('');
   const [type,setType] = useState('name');
   const [report, setReport] = useState('');
+  const [useReport, setUseReport] = useState('');
 
   const handleChangeDateFrom = (date, event) => {
       const formattedDate = date ? format(date, "dd-MM-yyyy") : null;
@@ -98,6 +99,7 @@ export default function SubmissionsList  ({Submissions,Clients,Total})  {
       if(val === 2){
         setShowReport(true)
         setShowPopup(false);
+        setUseReport('')
       }
       
 
@@ -421,7 +423,10 @@ export default function SubmissionsList  ({Submissions,Clients,Total})  {
     };
   
     const handleUseReport = (reportval) =>{
-      
+      console.log(reportval)
+      setUseReport(reportval);
+      setShowReport(true)
+      setShowPopup(false);
     }
 
   return (
@@ -431,7 +436,7 @@ export default function SubmissionsList  ({Submissions,Clients,Total})  {
         <h2 className="primary-text-color text-center mb-5">
           Submission List
         </h2>
-        <div className="bg-light p-3">
+        <div className="bg-lightgray p-3">
           <div className="row">
             <div className="col-lg-2 mb-2">
               <label htmlFor="input-name-account" className="form-label">
@@ -522,9 +527,9 @@ export default function SubmissionsList  ({Submissions,Clients,Total})  {
 
         <div className="mt-4 table-responsive" style={tableHeight}>
           <table className="table table-bordered">
-            <thead className="table-light position-sticky top-1">
+            <thead className="table-secondary position-sticky top-1">
               <tr>
-                <th className="text-nowrap">#</th>  
+                <th className="text-center align-middle">#</th>  
                 <th className="text-center align-middle">Client</th>
                 <th className="text-center align-middle">Account Name</th>
                 <th className="text-center align-middle">Myrs Product</th>
@@ -691,7 +696,7 @@ export default function SubmissionsList  ({Submissions,Clients,Total})  {
         {showReport && (
           <SlideOver title="Myrs Credit Report" show={showReport} handleClose={handleCloseReport}>
             {report ? (
-              <ReportForm  edit={0}  value={report} historicalpdf={historicalpdf} ispdf={0} handleClose={handleCloseReport} toast={toast}/>
+              <ReportForm  edit={0}  value={report} historicalpdf={historicalpdf} ispdf={0} handleClose={handleCloseReport} toast={toast} useReport={useReport}/>
             ) : (
               <p>Loading...</p>
             )}
@@ -795,7 +800,7 @@ export default function SubmissionsList  ({Submissions,Clients,Total})  {
                       historicalSubmissions.map((hist, index) => (
                         <tr key={hist.id ?? index}>
                           <td>{index + 1}</td>
-                          <td>{hist.user.company}</td>
+                          <td>{hist.user?.company}</td>
                           <td>{hist.name}</td>
                           <td>{hist.name}, {hist.address1}</td>
                           <td>
@@ -873,6 +878,7 @@ export default function SubmissionsList  ({Submissions,Clients,Total})  {
           ispdf={1}
           handleClose={handleCloseReport}
           className="page-break"
+          useReport = {useReport}
 
         />
       )}

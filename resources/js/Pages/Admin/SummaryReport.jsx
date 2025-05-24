@@ -167,7 +167,7 @@ export default function SummaryReport  ({submissions,grandTotal,clients})  {
         <h2 className="primary-text-color text-center mb-5">
           Summary Report
         </h2>
-        <div className="bg-light p-3">
+        <div className="bg-lightgray p-3">
           <div className="row">
             
             <div className="col-lg-2 mb-2">
@@ -255,7 +255,7 @@ export default function SummaryReport  ({submissions,grandTotal,clients})  {
 
         <div className="mt-4 table-responsive" style={tableHeight} >
           <table className="table table-bordered" >
-            <thead className="table-light position-sticky top-1">
+            <thead className="table-secondary position-sticky top-1">
               <tr>
                 <th className="text-center align-middle">Month</th>
                 <th className="text-center align-middle">Client</th>

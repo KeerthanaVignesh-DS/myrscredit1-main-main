@@ -126,7 +126,7 @@ class RegisteredUserController extends Controller
             ]);
             $lastUser = User::latest()->first();
             try{
-            Mail::to('vignesh.s221193@gmail.com')->send(new RegisterAdminMail($lastUser));
+            Mail::to('centralemail@myrscredit.com')->send(new RegisterAdminMail($lastUser));
                         // Mail::to(env('MAIL_ADMIN_ADDRESS'))->send(new RegisterAdminMail($lastUser));
              } catch (\Exception $e) {
                     \Log::error('Mail send failed: ' . $e->getMessage());

@@ -91,6 +91,7 @@ class Submission extends Model
     'Account_RatingRateRight3',
     'Account_RatingRateRight4',
     'Account_MyrsAgentNotesToClient',
+    'Account_CODOrPrepaidPayments'
     ];
     public function user()
     {

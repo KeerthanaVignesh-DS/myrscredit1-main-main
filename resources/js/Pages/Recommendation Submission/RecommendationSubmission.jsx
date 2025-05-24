@@ -431,10 +431,10 @@ export default function RecommendationSubmission({edit,value,handleClose,toast})
           <form className=" px-xl-5 ">
             
             <div className="col-xl-12">
-              <div className="bg-light p-4 mb-3 row">
-                <h3 className="primary-text-color mb-3">Client Information:</h3>
-                <div className="col-6 mb-2">
-                <div className="col-md-12 mb-2">
+              <div className="bg-lightgray p-4 mb-3 row">
+                <h3 className="primary-text-color mb-2">Client Information:</h3>
+                <div className="col-6 mb-1">
+                <div className="col-md-12 mb-1">
                   <label htmlFor="input-name" className="form-label">
                     Name <sup className="text-danger">*</sup>
                   </label>
@@ -451,7 +451,7 @@ export default function RecommendationSubmission({edit,value,handleClose,toast})
                 </div>
                 {errors.name && <p className="text-danger mx-1">{errors.name.message}</p>}
 
-                <div className="col-md-12 mb-2">
+                <div className="col-md-12 mb-1">
                   <label htmlFor="input-title" className="form-label">
                     Title
                   </label>
@@ -467,7 +467,7 @@ export default function RecommendationSubmission({edit,value,handleClose,toast})
                   />
                 </div>
 
-                <div className="col-md-12 mb-2">
+                <div className="col-md-12 mb-1">
                   <label htmlFor="input-Company" className="form-label">
                     Company<sup className="text-danger">*</sup>
                   </label>
@@ -484,7 +484,7 @@ export default function RecommendationSubmission({edit,value,handleClose,toast})
                 </div>
                 {errors.company && <p className="text-danger mx-1">{errors.company.message}</p>}
 
-                <div className="col-md-12 mb-2">
+                <div className="col-md-12 mb-1">
                   <label htmlFor="input-Address1" className="form-label">
                     Address1<sup className="text-danger">*</sup>
                   </label>
@@ -501,7 +501,7 @@ export default function RecommendationSubmission({edit,value,handleClose,toast})
                 </div>
                 {errors.address1 && <p className="text-danger mx-1">{errors.address1.message}</p>}
 
-                <div className="col-md-12 mb-2">
+                <div className="col-md-12 mb-1">
                   <label htmlFor="input-Address2" className="form-label">
                     Address2
                   </label>
@@ -518,7 +518,7 @@ export default function RecommendationSubmission({edit,value,handleClose,toast})
                 </div>
 
                 <div className="row">
-                  <div className="col-lg-6 mb-2">
+                  <div className="col-lg-6 mb-1">
                     <label htmlFor="input-City" className="form-label">
                       City<sup className="text-danger">*</sup>
                     </label>
@@ -535,7 +535,7 @@ export default function RecommendationSubmission({edit,value,handleClose,toast})
                     {errors.city && <p className="text-danger mx-1">{errors.city.message}</p>}
                   </div>
 
-                  <div className="col-lg-6 mb-2">
+                  <div className="col-lg-6 mb-1">
                     <label htmlFor="inputState" className="form-label">
                       State/Province
                     </label>
@@ -571,7 +571,7 @@ export default function RecommendationSubmission({edit,value,handleClose,toast})
                     {errors.state && <p className="text-danger mx-1">{errors.state.message}</p>}
                   </div>
 
-                  <div className="col-lg-6 mb-2">
+                  <div className="col-lg-6 mb-1">
                     <label htmlFor="input-Zip" className="form-label">
                       Zip<sup className="text-danger">*</sup>
                     </label>
@@ -588,7 +588,7 @@ export default function RecommendationSubmission({edit,value,handleClose,toast})
                     {errors.zip && <p className="text-danger mx-1">{errors.zip.message}</p>}
                   </div>
 
-                  <div className="col-lg-6 mb-2">
+                  <div className="col-lg-6 mb-1">
                     <label htmlFor="inputState" className="form-label">
                       Country
                       {/* <sup className="text-danger">*</sup> */}
@@ -623,9 +623,9 @@ export default function RecommendationSubmission({edit,value,handleClose,toast})
                    </div>
                   </div>
                   </div>
-                  <div className="col-6 mb-2">
+                  <div className="col-6 mb-1">
 
-                <div className="col-md-12 mb-2">
+                <div className="col-md-12 mb-1">
                   <label htmlFor="ap-Email" className="form-label">
                     {" "}
                     A/P Email<sup className="text-danger">*</sup>
@@ -644,7 +644,7 @@ export default function RecommendationSubmission({edit,value,handleClose,toast})
                 {errors.apemail && <p className="text-danger mx-1">{errors.apemail.message}</p>}
 
                 
-                <div className="col-md-12 mb-2">
+                <div className="col-md-12 mb-1">
                   <label htmlFor="Submission-Email" className="form-label">
                     Submission Email<sup className="text-danger">*</sup>
                   </label>
@@ -661,7 +661,7 @@ export default function RecommendationSubmission({edit,value,handleClose,toast})
                 </div>
                 {errors.submissionemail && <p className="text-danger mx-1">{errors.submissionemail.message}</p>}
 
-                <div className="col-md-12 mb-2">
+                <div className="col-md-12 mb-1">
                       <div className="d-flex gap-2 align-items-center">
                         <label htmlFor="copy" className="form-label">
                           Copy
@@ -683,7 +683,7 @@ export default function RecommendationSubmission({edit,value,handleClose,toast})
                     </div>
 
                 <div className="row">
-                  <div className="col-lg-6 mb-2">
+                  <div className="col-lg-6 mb-1">
                     <label htmlFor="input-Phone" className="form-label">
                       Phone<sup className="text-danger">*</sup>
                     </label>
@@ -700,7 +700,7 @@ export default function RecommendationSubmission({edit,value,handleClose,toast})
                   {errors.phone && <p className="text-danger mx-1">{errors.phone.message}</p>}
                   </div>
 
-                  <div className="col-lg-6 mb-2">
+                  <div className="col-lg-6 mb-1">
                     <label htmlFor="input-Fax" className="form-label">
                       Fax
                       {/* <sup className="text-danger">*</sup> */}
@@ -728,7 +728,7 @@ export default function RecommendationSubmission({edit,value,handleClose,toast})
                  <div className="col-xl-12 mb-3" key={index}>
                                 {/* {console.log('fields',fields.length)} */}
 
-                 <div className="bg-light p-4 row">
+                 <div className="bg-lightgray p-4 row">
                   {fields.length > 1 && 
                       <h3 className="primary-text-color mb-3">
                         Account Submission Information {index+1}:

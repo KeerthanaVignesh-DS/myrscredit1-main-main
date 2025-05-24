@@ -137,6 +137,7 @@ class SubmissionController extends Controller
      */
     public function store(Request $request)
     {
+
         // $fields = json_decode($request->fields);
         // dd(  $request->fields[0]['myrsProduct']);
         // $validated = $request->validate([
@@ -338,8 +339,11 @@ class SubmissionController extends Controller
         ]);
     }
     public function updatepdf(Request $request){
-        // dd($request);
+        //  dd($request);
         $submission = Submission::find($request->id);
+        $submission->name = $request->name;
+        $submission->myrs_product = $request->myrs_product;
+        $submission->express_service = $request->express_service;
         $submission->charge_amt = $request->charge_amt;
         $submission->completed_date = $request->completed_date;
         $submission->secondary_phone = $request->secondary_phone;
@@ -353,9 +357,50 @@ class SubmissionController extends Controller
         $submission->submit_type = $request->submit_type;
         $submission->myrs_rating = $request->myrs_rating;
         $submission->amount = $request->amount;
-        $submission->historical_pdf = $request->historical_pdf; 
+        // $submission->historical_pdf = $request->historical_pdf; 
         $submission->status = 1;
-
+        $submission->Account_MostCommonTermsOfSale = $request->Account_MostCommonTermsOfSale;
+        $submission->Account_PaymentWithinTerms = $request->Account_PaymentWithinTerms;
+        $submission->Account_PaymentsOutsideOfTerms = $request->Account_PaymentsOutsideOfTerms;
+        $submission->Account_90120Payment = $request->Account_90120Payment;
+        $submission->Account_120BeyondPayment = $request->Account_120BeyondPayment;
+        $submission->Account_AverageDayToPay = $request->Account_AverageDayToPay;
+        $submission->Account_PaymentTrend = $request->Account_PaymentTrend;
+        $submission->Account_UnpaidDebts = $request->Account_UnpaidDebts;
+        $submission->Account_HighCreditAverages = $request->Account_HighCreditAverages;
+        $submission->Account_HighestCreditOfRecords = $request->Account_HighestCreditOfRecords;
+        $submission->Account_DateOfMostRecentPaymentTransaction = $request->Account_DateOfMostRecentPaymentTransaction;
+        $submission->Account_DateOfOldestPaymentTransaction = $request->Account_DateOfOldestPaymentTransaction;
+        $submission->Account_UnauthorizedDeductionsOfRecords = $request->Account_UnauthorizedDeductionsOfRecords;
+        $submission->Account_CollectionRecords = $request->Account_CollectionRecords;
+        $submission->Account_CollectionRecordsText = $request->Account_CollectionRecordsText;
+        $submission->Account_DemandLetterRecords = $request->Account_DemandLetterRecords;
+        $submission->Account_DemandLetterRecordsText = $request->Account_DemandLetterRecordsText;
+        $submission->Account_PublicRecords = $request->Account_PublicRecords;
+        $submission->Account_PublicRecordsText = $request->Account_PublicRecordsText;
+        $submission->Account_INSFRecords = $request->Account_INSFRecords;
+        $submission->Account_MyrsNegativeAgentNotes = $request->Account_MyrsNegativeAgentNotes;
+        $submission->Account_MyrsNegativeAgentNotesText = $request->Account_MyrsNegativeAgentNotesText;
+        $submission->Account_RegisteredSecretaryOfState = $request->Account_RegisteredSecretaryOfState;
+        $submission->Account_SecOfStateRegistrationDate = $request->Account_SecOfStateRegistrationDate;
+        $submission->Account_GoodStandingStatus = $request->Account_GoodStandingStatus;
+        $submission->Account_IfNoWhy = $request->Account_IfNoWhy;
+        $submission->Account_TypeOfEntity = $request->Account_TypeOfEntity;
+        $submission->Account_OwnerName = $request->Account_OwnerName;
+        $submission->Account_OfficerName = $request->Account_OfficerName;
+        $submission->Account_SingleLocation = $request->Account_SingleLocation;
+        $submission->Account_TypeOfBusiness = $request->Account_TypeOfBusiness;
+        $submission->Account_DateBusinessStarted = $request->Account_DateBusinessStarted;
+        $submission->Account_RatingRateLeft1 = $request->Account_RatingRateLeft1;
+        $submission->Account_RatingRateLeft2 = $request->Account_RatingRateLeft2;
+        $submission->Account_RatingRateLeft3 = $request->Account_RatingRateLeft3;
+        $submission->Account_RatingRateLeft4 = $request->Account_RatingRateLeft4;
+        $submission->Account_RatingRateRight1 = $request->Account_RatingRateRight1;
+        $submission->Account_RatingRateRight2 = $request->Account_RatingRateRight2;
+        $submission->Account_RatingRateRight3 = $request->Account_RatingRateRight3;
+        $submission->Account_RatingRateRight4 = $request->Account_RatingRateRight4;
+        $submission->Account_MyrsAgentNotesToClient = $request->Account_MyrsAgentNotesToClient;
+        $submission->Account_CODOrPrepaidPayments = $request->Account_CODOrPrepaidPayments; 
 
         $submission->save();
         $user = User::find($submission->user_id);

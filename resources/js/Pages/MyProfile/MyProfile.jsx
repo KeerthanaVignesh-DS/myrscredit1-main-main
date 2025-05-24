@@ -242,7 +242,7 @@ export default function MyProfile(){
                     <h3 className="primary-text-color mb-3">Company Information:</h3>
                     <div className="row">
                     <div className="col-md-6">
-                    <div className="col-md-12 mb-2">
+                    <div className="col-md-12 mb-1">
                       <label htmlFor="input-name" className="form-label">
                         Name <sup className="text-danger">*</sup>
                       </label>
@@ -258,7 +258,7 @@ export default function MyProfile(){
                 </div>
                 {errors.name && <p className="text-danger mx-1">{errors.name.message}</p>}
 
-                    <div className="col-md-12 mb-2">
+                    <div className="col-md-12 mb-1">
                       <label htmlFor="input-title" className="form-label">
                         Title
                       </label>
@@ -273,7 +273,7 @@ export default function MyProfile(){
                       />
                     </div>
 
-                    <div className="col-md-12 mb-2">
+                    <div className="col-md-12 mb-1">
                       <label htmlFor="input-Company" className="form-label">
                         Company<sup className="text-danger">*</sup>
                       </label>
@@ -291,7 +291,7 @@ export default function MyProfile(){
                     {errors.company && <p className="text-danger mx-1">{errors.company.message}</p>}
 
     
-                    <div className="col-md-12 mb-2">
+                    <div className="col-md-12 mb-1">
                       <label htmlFor="input-Address1" className="form-label">
                         Address1<sup className="text-danger">*</sup>
                       </label>
@@ -307,7 +307,7 @@ export default function MyProfile(){
                     </div>
                     {errors.address1 && <p className="text-danger mx-1">{errors.address1.message}</p>}
 
-                    <div className="col-md-12 mb-2">
+                    <div className="col-md-12 mb-1">
                       <label htmlFor="input-Address2" className="form-label">
                         Address2
                       </label>
@@ -323,7 +323,7 @@ export default function MyProfile(){
                     </div>
 
                     <div className="row">
-                      <div className="col-md-12 mb-2">
+                      <div className="col-md-12 mb-1">
                         <label htmlFor="input-City" className="form-label">
                           City<sup className="text-danger">*</sup>
                         </label>
@@ -339,7 +339,7 @@ export default function MyProfile(){
                         {errors.city && <p className="text-danger mx-1">{errors.city.message}</p>}
                       </div>
 
-                      <div className="col-lg-12 mb-2">
+                      <div className="col-lg-12 mb-1">
                       <label htmlFor="inputState" className="form-label">
                         State/Province
                       </label>
@@ -371,7 +371,7 @@ export default function MyProfile(){
                       {errors.state && <p className="text-danger mx-1">{errors.state.message}</p>}
                     </div>
 
-                      <div className="col-md-12 mb-2">
+                      <div className="col-md-12 mb-1">
                         <label htmlFor="input-Zip" className="form-label">
                           Zip<sup className="text-danger">*</sup>
                         </label>
@@ -387,7 +387,7 @@ export default function MyProfile(){
                         {errors.zip && <p className="text-danger mx-1">{errors.zip.message}</p>}
                       </div>
 
-                       <div className="col-lg-12 mb-2">
+                       <div className="col-lg-12 mb-1">
                         <label htmlFor="inputState" className="form-label">
                           Country
                           {/* <sup className="text-danger">*</sup> */}
@@ -421,7 +421,7 @@ export default function MyProfile(){
                       </div>
                       <div className="col-md-6">
     
-                    <div className="col-md-12 mb-2">
+                    <div className="col-md-12 mb-1">
                       <label htmlFor="ap-Email" className="form-label">
                         {" "}
                         A/P Email<sup className="text-danger">*</sup>
@@ -438,7 +438,7 @@ export default function MyProfile(){
                   </div>
                   {errors.apemail && <p className="text-danger mx-1">{errors.apemail.message}</p>}
 
-                    <div className="col-md-12 mb-2">
+                    <div className="col-md-12 mb-1">
                       <label htmlFor="Submission-Email" className="form-label">
                         Submission Email<sup className="text-danger">*</sup>
                       </label>
@@ -455,7 +455,7 @@ export default function MyProfile(){
                     {errors.submissionemail && <p className="text-danger mx-1">{errors.submissionemail.message}</p>}
 
                     <div className="row">
-                      <div className="col-md-12 mb-2">
+                      <div className="col-md-12 mb-1">
                         <label htmlFor="input-Phone" className="form-label">
                           Phone<sup className="text-danger">*</sup>
                         </label>
@@ -471,7 +471,7 @@ export default function MyProfile(){
                       {errors.phone && <p className="text-danger mx-1">{errors.phone.message}</p>}
                       </div>
 
-                      <div className="col-md-12 mb-2">
+                      <div className="col-md-12 mb-1">
                         <label htmlFor="input-Fax" className="form-label">
                           Fax
                         </label>
@@ -492,7 +492,7 @@ export default function MyProfile(){
                   </div>
                 </div>
                 
-                <div className="d-flex justify-content-center align-items-center gap-2 pt-5 mb-2">
+                <div className="d-flex justify-content-center align-items-center gap-2 pt-5 mb-3">
                      <button 
                         type="button" 
                         className="btn btn-primary text-uppercase"

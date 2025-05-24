@@ -231,7 +231,7 @@ export default function MySubmissions({submissions,auth,account_name,total}){
           <h2 className="primary-text-color text-center mb-5">
             My Submissions
           </h2>
-          <div className="bg-light p-3">
+          <div className="bg-lightgray p-3">
             <div className="row">
               <div className="col-lg-2 mb-2">
                 <label htmlFor="input-name-account" className="form-label">
@@ -340,7 +340,7 @@ export default function MySubmissions({submissions,auth,account_name,total}){
           </div>
           <div className="mt-4 table-responsive">
           <table className="table table-bordered">
-      <thead className="table-light">
+      <thead className="table-secondary position-sticky top-1">
     <tr>
       <th className="text-nowrap text-center">#</th>
       <th className="text-nowrap text-center">Account Name</th>

@@ -474,6 +474,8 @@ export default function ReportForm (props){
                     </tbody>
                 </table>
             </div>
+            
+
 
         </div>
            
@@ -975,7 +977,7 @@ export default function ReportForm (props){
 
                    
 
-                    <div className="col-12 mb-4 ">
+                    <div className="col-12 mb-5 ">
 
                     <div className="bg-lightgray border rounded p-4 row">
                     <h3 className="primary-text-color d-flex justify-content-center mb-3">
@@ -1146,14 +1148,14 @@ export default function ReportForm (props){
 
                     </div>
 
-                     <div className="col-12 mb-4 ">
+                     <div className="col-12 mb-1 ">
 
-                    <div className="bg-lightgray border rounded p-4">
-                    <h3 className="primary-text-color d-flex justify-content-center mb-3">
+                    <div className="bg-lightgray border rounded p-1">
+                    <h3 className="primary-text-color d-flex justify-content-center mb-1">
                         Registration Information
                     </h3>
 
-                        <div className="col-12 mb-2">
+                        <div className="col-12 mb-1">
                         <div className="d-flex justify-contentalign-items-center gap-3">
                             <label className="form-label mb-0 text-nowrap">
                             Registered w/ Secretary of State :
@@ -1172,7 +1174,7 @@ export default function ReportForm (props){
                         </div>
 
 
-                        <div className="col-8 mb-2">
+                        <div className="col-8 mb-1">
                             <div className="d-flex align-items-center gap-2">
                                 <label htmlFor="input-name" className="form-label mb-0 text-nowrap">
                                 Sec. of State Registration date : 
@@ -1190,7 +1192,7 @@ export default function ReportForm (props){
                         </div>
 
 
-                        <div className="col-12 mb-2">
+                        <div className="col-12 mb-1">
                         <div className="d-flex justify-contentalign-items-center gap-3">
                             <label className="form-label mb-0 text-nowrap">
                             Good Standing status with Sec. of State :
@@ -1208,14 +1210,14 @@ export default function ReportForm (props){
                         </div>
                         </div>
 
-                        <div className="col-8 mb-2">
+                        <div className="col-8 mb-1">
                             <div className="d-flex align-items-center gap-2">
                                 <label htmlFor="input-name" className="form-label mb-0 text-nowrap">
                                     If No, Why?
                                 </label>
                                 <textarea
                                     type="text"
-                                    rows={2}
+                                    rows={1}
                                     className="form-control"
                                     id="secPhone"
                                     name="secPhone"
@@ -1227,7 +1229,7 @@ export default function ReportForm (props){
                             </div>
                         </div>
 
-                        <div className="col-12 mb-2">
+                        <div className="col-12 mb-1">
                         <div className="d-flex justify-contentalign-items-center gap-3">
                             <label className="form-label mb-0 text-nowrap">
                             Type of Entity :
@@ -1250,7 +1252,7 @@ export default function ReportForm (props){
                         </div>
 
 
-                        <div className="col-8 mb-2">
+                        <div className="col-8 mb-1">
                             <div className="d-flex align-items-center gap-2">
                                 <label htmlFor="input-name" className="form-label mb-0 text-nowrap">
                                 Owner's Name : 
@@ -1268,7 +1270,7 @@ export default function ReportForm (props){
                         </div>
 
 
-                        <div className="col-8 mb-2">
+                        <div className="col-8 mb-1">
                             <div className="d-flex align-items-center gap-2">
                                 <label htmlFor="input-name" className="form-label mb-0 text-nowrap">
                                 Officer's Name : 
@@ -1286,7 +1288,7 @@ export default function ReportForm (props){
                         </div>
 
 
-                        <div className="col-12 mb-2">
+                        <div className="col-12 mb-1">
                         <div className="d-flex justify-contentalign-items-center gap-3">
                             <label className="form-label mb-0 text-nowrap">
                             Single Location :
@@ -1305,8 +1307,8 @@ export default function ReportForm (props){
                         </div>
                         
 
-                        <div className="col-8 mb-2">
-                            <div className="d-flex align-items-center gap-2">
+                        <div className="col-9 mb-1">
+                            <div className="col-9 d-flex align-items-center gap-2">
                                 <label htmlFor="input-name" className="form-label mb-0 text-nowrap">
                                     Type of Business :  
                                 </label>
@@ -1319,11 +1321,26 @@ export default function ReportForm (props){
                                     autoComplete="off"
                                     {...register('Account_TypeOfBusiness')}
                                 />    
+                                <div className="col-5 d-flex align-items-center gap-2">
+                                <label htmlFor="input-name" className="form-label mb-0 text-nowrap">
+                                    Date Business started:  
+                                </label>
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    id="secPhone"
+                                    name="secPhone"
+                                    placeholder=""
+                                    autoComplete="off"
+                                    {...register('Account_DateBusinessStarted')}
+                                />    
                             </div>
+                            </div>
+                            
                         </div>
 
 
-                        <div className="col-8 mb-1">
+                        {/* <div className="col-8 mb-1">
                             <div className="d-flex align-items-center gap-2">
                                 <label htmlFor="input-name" className="form-label mb-0 text-nowrap">
                                     Date Business started:  
@@ -1338,22 +1355,22 @@ export default function ReportForm (props){
                                     {...register('Account_DateBusinessStarted')}
                                 />    
                             </div>
-                        </div>
+                        </div> */}
 
                     </div>
 
                     </div>
 
 
-                    <div className="col-6 mb-4">
+                    <div className="col-6 mb-1">
 
-                    <div className="bg-lightgray border rounded p-4">
-                    <h3 className="primary-text-color d-flex justify-content-center mb-3">
+                    <div className="bg-lightgray border rounded p-2">
+                    <h3 className="primary-text-color d-flex justify-content-center mb-1">
                         Myrs Rating History
                     </h3>
 
                         
-                        <div className="col-12 mb-1">
+                        <div className="col-12 mb-0">
                             <div className="d-flex align-items-center gap-2">
                                 <label htmlFor="input-name" className="form-label mb-0 text-success fw-bold">
                                 <p> Whenever there is a change of the Myrs Rating, it is listed below. </p>
@@ -1362,14 +1379,14 @@ export default function ReportForm (props){
                         </div>
 
 
-                        <div className="d-flex col-10 mb-1">
+                        <div className="d-flex col-10 mb-0">
                             <div className="col-6  align-items-center gap-2">
                                 <label htmlFor="input-name" className="form-label mb-0 ">
                                     <b>Rating Date</b> 
                                 </label>
                                 <input
                                     type="text"
-                                    className="form-control mb-2"
+                                    className="form-control mb-1"
                                     id="secPhone"
                                     name="secPhone"
                                     placeholder=""
@@ -1378,7 +1395,7 @@ export default function ReportForm (props){
                                 />   
                                 <input
                                     type="text"
-                                    className="form-control mb-2"
+                                    className="form-control mb-1"
                                     id="secPhone"
                                     name="secPhone"
                                     placeholder=""
@@ -1387,7 +1404,7 @@ export default function ReportForm (props){
                                 />   
                                 <input
                                     type="text"
-                                    className="form-control mb-2"
+                                    className="form-control mb-1"
                                     id="secPhone"
                                     name="secPhone"
                                     placeholder=""
@@ -1396,7 +1413,7 @@ export default function ReportForm (props){
                                 />   
                                 <input
                                     type="text"
-                                    className="form-control mb-2"
+                                    className="form-control mb-1"
                                     id="secPhone"
                                     name="secPhone"
                                     placeholder=""
@@ -1410,7 +1427,7 @@ export default function ReportForm (props){
                                 </label>
                                 <input
                                     type="text"
-                                    className="form-control mb-2 mx-4"
+                                    className="form-control mb-1 mx-4"
                                     id="secPhone"
                                     name="secPhone"
                                     placeholder=""
@@ -1419,7 +1436,7 @@ export default function ReportForm (props){
                                 />   
                                 <input
                                     type="text"
-                                    className="form-control mb-2 mx-4"
+                                    className="form-control mb-1 mx-4"
                                     id="secPhone"
                                     name="secPhone"
                                     placeholder=""
@@ -1428,7 +1445,7 @@ export default function ReportForm (props){
                                 />   
                                 <input
                                     type="text"
-                                    className="form-control mb-2 mx-4"
+                                    className="form-control mb-1 mx-4"
                                     id="secPhone"
                                     name="secPhone"
                                     placeholder=""
@@ -1437,7 +1454,7 @@ export default function ReportForm (props){
                                 />   
                                 <input
                                     type="text"
-                                    className="form-control mb-2 mx-4"
+                                    className="form-control mb-1 mx-4"
                                     id="secPhone"
                                     name="secPhone"
                                     placeholder=""
@@ -1460,19 +1477,19 @@ export default function ReportForm (props){
 
                     </div>
 
-                    <div className="col-6 mb-4">
+                    <div className="col-6 mb-1">
 
-                    <div className="bg-lightgray border rounded p-4">
+                    <div className="bg-lightgray border rounded p-2">
                     <h3 className="primary-text-color d-flex justify-content-center mb-3">
                         Myrs Agent Notes to Client
                     </h3>
 
                         
-                        <div className="col-12 mb-5">
+                        <div className="col-12 mb-2">
                             <div className="d-flex align-items-center gap-2">
                             <textarea
                                     type="text"
-                                    rows={9}
+                                    rows={7}
                                     className="form-control"
                                     id="secPhone"
                                     name="secPhone"
@@ -1493,7 +1510,7 @@ export default function ReportForm (props){
 
             
 
-            <div className="bg-lightgray border rounded p-2 mb-4">
+            <div className="bg-lightgray border rounded p-1 mb-1">
                 <table className="table table-bordered text-start" >
                     <thead>
                         <tr>
@@ -1517,7 +1534,7 @@ export default function ReportForm (props){
                 </table>
             </div>   
 
-              <div className="bg-lightgray border rounded p-2 mb-2">
+              <div className="bg-lightgray border rounded p-1 mb-0">
                 <table className="table table-bordered text-start" >
                     <thead>
                         

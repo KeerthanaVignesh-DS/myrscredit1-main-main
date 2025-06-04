@@ -111,10 +111,12 @@ class SubmissionController extends Controller
         
 
         $account = Submission::where('user_id', $user)
-                    ->select('id', 'name')->get();
+                    ->select('id', 'name')
+                    ->get();
 
         // Get the results
-        $submissions = $query->where('user_id',$user)->get();
+        $submissions = $query->where('user_id',$user)
+                    ->with('user')->get();
         $total = $submissions->sum('charge_amt');
 
         return Inertia::render('MySubmissions/MySubmissions', [

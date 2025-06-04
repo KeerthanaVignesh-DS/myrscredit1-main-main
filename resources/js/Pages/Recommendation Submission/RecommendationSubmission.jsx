@@ -11,6 +11,7 @@ import axios from "axios";
 
 
 export default function RecommendationSubmission({edit,value,handleClose,toast}) {
+  console.log(value);
 
   const user = usePage().props.auth.user;
   const [accCount,setAccCount] = useState([
@@ -141,23 +142,23 @@ export default function RecommendationSubmission({edit,value,handleClose,toast})
 
 
     const initialValues = {
-    id              :  edit === 0 ? value.user.id : user.id,
+    id              :  edit === 0 ? value.user?.id : user.id,
     // id              :  user.id,
     // name            :  user.name,
-    name            :  edit === 0 ? value.user.name : user.name,
-    title           :  edit === 0 ? value.user.title : user.title,
-    company         :  edit === 0 ? value.user.company : user.company,
-    address1        :  edit === 0 ? value.user.address1 : user.address1,
-    address2        :  edit === 0 ? value.user.address2 : user.address2,
-    city            :  edit === 0 ? value.user.city : user.city, 
-    state           :  edit === 0 ? value.user.state : user.state,
-    zip             :  edit === 0 ? value.user.zip : user.zip,
-    country         :  edit === 0 ? value.user.country : user.country,
-    apemail         :  edit === 0 ? value.user.ap_email : user.ap_email,
-    submissionemail :  edit === 0 ? value.user.email : user.email,
-    phone           :  edit === 0 ? value.user.phone : user.phone,
-    fax             :  edit === 0 ? value.user.fax : user.fax,
-    copy            :  edit === 0 ? value.user.is_copy : user.is_copy,
+    name            :  edit === 0 ? value.user?.name : user.name,
+    title           :  edit === 0 ? value.user?.title : user.title,
+    company         :  edit === 0 ? value.user?.company : user.company,
+    address1        :  edit === 0 ? value.user?.address1 : user.address1,
+    address2        :  edit === 0 ? value.user?.address2 : user.address2,
+    city            :  edit === 0 ? value.user?.city : user.city, 
+    state           :  edit === 0 ? value.user?.state : user.state,
+    zip             :  edit === 0 ? value.user?.zip : user.zip,
+    country         :  edit === 0 ? value.user?.country : user.country,
+    apemail         :  edit === 0 ? value.user?.ap_email : user.ap_email,
+    submissionemail :  edit === 0 ? value.user?.email : user.email,
+    phone           :  edit === 0 ? value.user?.phone : user.phone,
+    fax             :  edit === 0 ? value.user?.fax : user.fax,
+    copy            :  edit === 0 ? value.user?.is_copy : user.is_copy,
 
     }
 

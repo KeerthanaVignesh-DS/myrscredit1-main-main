@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('submissions', function (Blueprint $table) {
-            $table->integer('historical_pdf')->nullable();
+            $table->integer('Account_CODOrPrepaidPayments')->nullable();
         });
     }
 

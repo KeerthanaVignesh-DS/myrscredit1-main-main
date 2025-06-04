@@ -168,6 +168,7 @@ export default function MySubmissions({submissions,auth,account_name,total}){
 
   const generatePdf = (data) => {
         setReport(data);
+        console.log(data)
         setPdfShow(true);
         // setTimeout(() => {
         //   html2pdf().from(pdfRef.current).save(filename);
@@ -502,7 +503,7 @@ export default function MySubmissions({submissions,auth,account_name,total}){
                         ispdf={1}
                         // handleClose={handleCloseReport}
                         className="page-break"
-              
+                        useReport =""
                       />
                     )}
                   </div>

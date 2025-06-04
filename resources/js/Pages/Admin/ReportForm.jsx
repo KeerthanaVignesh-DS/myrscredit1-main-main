@@ -16,6 +16,8 @@ export default function ReportForm (props){
 // ${props.value.address1}
 // ${props.value.city}, ${props.value.state}, ${props.value.zip}, ${props.value.country}
 // ${props.value.phone}` : "";
+console.log(props.useReport)
+console.log(props.value)
     const source = props.edit === 0
     ? (props.useReport !== "" ? props.useReport : props.value)
     : "";
@@ -91,6 +93,8 @@ export default function ReportForm (props){
 //     Account_RatingRateRight4                       : props.edit === 0 ? props.value.Account_RatingRateRight4 : "",
 //     Account_MyrsAgentNotesToClient                 : props.edit === 0 ? props.value.Account_MyrsAgentNotesToClient : "",
 //     }
+
+console.log(source);
 
     const initialValues = {
         id: props.edit === 0 ? props.value.id : "",

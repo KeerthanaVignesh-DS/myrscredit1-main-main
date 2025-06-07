@@ -47,14 +47,14 @@ export default function Login (props) {
           Client Login
           </h2>
           <form className="row px-5 justify-content-center flex-column-reverse flex-lg-row">
-           <div className="col-12 col-lg-6 col-xl-5 bg-light">
+           <div className="col-12 col-lg-6 col-xl-5 bg-lightgray">
               <div className="p-4 p-md-5">
                 <h3 className="primary-text-color mb-3">New Client Registration</h3>
                 <p>Please complete registration. Thank you.</p>
                 <Link href="/register"  className="btn btn-primary text-uppercase">Register</Link>
               </div>
            </div>
-           <div className="col-12 col-lg-6 col-xl-5 bg-light">
+           <div className="col-12 col-lg-6 col-xl-5 bg-lightgray">
               <div className="p-4 p-md-5">
                 <h3 className="primary-text-color mb-3">Existing Client Login </h3>
                 <div className="col-md-12 mb-2">

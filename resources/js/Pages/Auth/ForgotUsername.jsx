@@ -115,7 +115,7 @@ export default function ForgotUsername(props) {
             
               <div className="row px-2 px-md-5 justify-content-center mt-5">
                 <div className="col-12 col-md-6 col-xl-5">
-                  <div className="bg-light p-4">
+                  <div className="bg-lightgray p-4">
                    
                     <div className="col-md-12 mb-2">
                       <label htmlFor="input-Email" className="form-label">

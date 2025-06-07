@@ -156,6 +156,7 @@ export default function SubmissionsList  ({Submissions,Clients,Total})  {
       // console.log("🚀 Running before download!");
       // Example: You can do validations, API calls, loading states, etc.
     };
+    
     const generatePdf = (data) => {
       setReport(data);
       setPdfShow(true);
@@ -172,10 +173,10 @@ export default function SubmissionsList  ({Submissions,Clients,Total})  {
 
                                 html2pdf()
               .set({
-                margin: 0,
+                margin: 0.5,
                 filename: filename,
                 image: { type: "jpeg", quality: 0.98 },
-                html2canvas: { scale: 2 },
+               html2canvas: { scale: 2 },
                 jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
                 pagebreak: { mode: ['css', 'legacy'] }
               })
@@ -188,19 +189,14 @@ export default function SubmissionsList  ({Submissions,Clients,Total})  {
 
                   for (let i = 1; i <= totalPages; i++) {
                     pdf.setPage(i);
-
                     // Set low opacity
                     pdf.setGState(new pdf.GState({ opacity: 0.1 }));
-
                     // Set font color (optional)
                     pdf.setTextColor(0, 0, 0);
-
                     // Set font size
                     pdf.setFontSize(160);
-
                     // Draw rotated watermark text
                     pdf.text('Myrs', 70, 180, { angle: 30 });
-
                     // Reset opacity back to full (1)
                     pdf.setGState(new pdf.GState({ opacity: 1 }));
                   }
@@ -584,16 +580,16 @@ export default function SubmissionsList  ({Submissions,Clients,Total})  {
                             : ""}
                         </td>
 
-                        <td className="text-end align-middle">{data.order_amount}</td>
-                        <td className="text-nowrap text-center">{new Date(data.submitted_date).getMonth()+1}/{new Date(data.submitted_date).getDate()}/{new Date(data.submitted_date).getFullYear()}</td>
+                        <td className="text-center align-middle">{parseFloat(data.order_amount)}</td>
+                        <td className="text-nowrap text-center align-middle">{new Date(data.submitted_date).getMonth()+1}/{new Date(data.submitted_date).getDate()}/{new Date(data.submitted_date).getFullYear()}</td>
 
 
                          {data.chk_previous14 === 0 &&
-                                      <td className="text-nowrap text-center">NO</td>
+                                      <td className="text-nowrap text-center align-middle">NO</td>
                         
                                }
                                {data.chk_previous14 === 1 &&
-                                      <td className="text-wrap d-flex justify-content-center w-full"><span>Yes</span>
+                                      <td className="text-wrap d-flex justify-content-center w-full align-middle"><span>Yes</span>
                                       <div className="mx-2">
                                       <button
                                         onClick={() => handleDownloadPrevious(data.doc_name1)}
@@ -618,12 +614,13 @@ export default function SubmissionsList  ({Submissions,Clients,Total})  {
                             : ""}
                         </td>
 
-                        <td className="text-center align-middle">{data.charge_amt}
+                        <td className="text-center align-middle">{data.charge_amt ? parseFloat(data.charge_amt) : ""}
                         {data.completed_date && (
+                          <>&nbsp;
                             <button className="bg-transparent border-0" onClick={() => handleChargeAmount(data)}>
                               <FaSyncAlt size={20} color="green" />
-
                             </button>
+                            </>
                           )}
                         </td>
                         <td className="text-center align-middle">{data.myrs_rating}</td>
@@ -635,7 +632,7 @@ export default function SubmissionsList  ({Submissions,Clients,Total})  {
                           </button>
                         </td>
 
-                        <td className="text-center align-middle d-flex justify-content-center">
+                        <td className="text-center align-middle">
                           <button className="bg-transparent border-0" onClick={() => handleReportForm(data)}>
                             {data.completed_date ?(
                               <FaFileDownload className="fs-5 text-info"  />
@@ -647,9 +644,9 @@ export default function SubmissionsList  ({Submissions,Clients,Total})  {
                           </button>
                         </td>
 
-                        <td className="text-center">
+                        <td className="text-center align-middle">
                           {data.completed_date && (
-                            <button className="bg-transparent border-0" onClick={() => generatePdf(data)}>
+                            <button className="bg-transparent border-0 " onClick={() => generatePdf(data)}>
                               <FaRegArrowAltCircleDown className="fs-5 text-success" />
                             </button>
                           )}
@@ -675,9 +672,9 @@ export default function SubmissionsList  ({Submissions,Clients,Total})  {
         </div>
         <div className="d-flex justify-content-end mt-4">
           {Total > 0 ? (
-            <h6>Total Report Charges: ${Total?.toFixed(2)}</h6>
+            <h6>Total Report Charges: $ {Total?.toFixed(0)}</h6>
           ):(
-            <h6>Total Report Charges: $0</h6>
+            <h6>Total Report Charges: $ 0</h6>
           )}
           
         </div>
@@ -927,7 +924,7 @@ export default function SubmissionsList  ({Submissions,Clients,Total})  {
                   
                   <label className="fw-bold text-nowrap  col-md-3">Report Charge: </label>
                   {/* <input typse="text" className="form-control w-50" /> */}
-                  <input className="form-control w-25" value={chargeAmt} onChange={(e)=>setChargeAmt(e.target.value)} />
+                  <input className="form-control w-25" value={parseFloat(chargeAmt)} onChange={(e)=>setChargeAmt(e.target.value)} />
                 </div>
               </div>
 

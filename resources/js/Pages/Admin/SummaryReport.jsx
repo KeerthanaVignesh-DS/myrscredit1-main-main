@@ -271,7 +271,7 @@ export default function SummaryReport  ({submissions,grandTotal,clients})  {
                     <tr key={index}>
                       <td className="text-center align-middle">{submission.completed_month_year}</td>
                       <td className="text-start px-3">{submission.company}</td>
-                      <td className="text-end align-middle" >{submission.client_sub_total}</td>
+                      <td className="text-end align-middle" >{parseFloat(submission.client_sub_total)}</td>
                     </tr>
                   ))
               ) :
@@ -287,7 +287,7 @@ export default function SummaryReport  ({submissions,grandTotal,clients})  {
                 <tr className="subtotal-row ">
                     <td style={{ backgroundColor: "#d5ed82" }}></td>
                     <td className="text-start text-primary" style={{ backgroundColor: "#d5ed82" }}><b>Sub Total</b></td>
-                    <td className="text-end align-middle text-primary" style={{ backgroundColor: "#d5ed82" }}><b>${grandTotal?.toFixed(2)}</b></td>
+                    <td className="text-end align-middle text-primary" style={{ backgroundColor: "#d5ed82" }}><b>$ {grandTotal?.toFixed(0)}</b></td>
                 </tr> 
                }
             </tbody>

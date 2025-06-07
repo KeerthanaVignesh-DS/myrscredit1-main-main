@@ -7,7 +7,7 @@ export default function Home(){
     return(
         <GuestLayout>
         <div className="home pt-5">
-            <div className="container py-md-5">
+            <div className="container py-md-4">
              <div className="d-flex justify-content-center align-items-center text-center">
                  <div className="col-md-9">
                     <h2 className="service">

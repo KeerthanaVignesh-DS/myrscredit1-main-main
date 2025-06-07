@@ -1,23 +1,16 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Models\Submission;
 use App\Models\User;
-
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-
 use Illuminate\Support\Facades\Mail;
 use App\Mail\SubmissionMail;
 use Illuminate\Validation\ValidationException;
-
-
-// use Barryvdh\DomPDF\Facade\Pdf;
-
 
 
 

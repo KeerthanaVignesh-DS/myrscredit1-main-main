@@ -11,7 +11,7 @@ import axios from "axios";
 
 
 export default function RecommendationSubmission({edit,value,handleClose,toast}) {
-  console.log(value);
+  // console.log(value);
 
   const user = usePage().props.auth.user;
   const [accCount,setAccCount] = useState([
@@ -941,7 +941,7 @@ export default function RecommendationSubmission({edit,value,handleClose,toast})
                          Express Service Office Hours: M-F 9:00-5:00 Central Time
                        </p>
                        <label htmlFor="order-amount-sub" className="form-label">
-                          Order Amount$<sup className="text-danger">*</sup>
+                          Order Amount $<sup className="text-danger">*</sup>
                        </label>
                        <input
                          type="number"

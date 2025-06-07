@@ -12,101 +12,37 @@ import { FaSortAmountDown } from "react-icons/fa";
 
 export default function ReportForm (props){
   
-//    const full_address = props.edit === 0 ? `${props.value.name}
-// ${props.value.address1}
-// ${props.value.city}, ${props.value.state}, ${props.value.zip}, ${props.value.country}
-// ${props.value.phone}` : "";
-console.log(props.useReport)
-console.log(props.value)
+
     const source = props.edit === 0
     ? (props.useReport !== "" ? props.useReport : props.value)
     : "";
-    const full_address = source
-  ? `${source.name}
-    ${source.address1}
-    ${source.city}, ${source.state}, ${source.zip}, ${source.country}
-    ${source.phone}`
-    : "";
-//   const initialValues = {
-//     id                      : props.edit === 0 ? props.value.id : "",
-//     order_amount            : props.edit === 0 ? props.value.order_amount : "",
-//     completed_date          : props.edit === 0 ? new Date(props.value.submitted_date)?.toISOString().split('T')[0] : "",
-//     charge_amt              : props.edit === 0 ? props.value.charge_amt : "",
-//     company                 : props.edit === 0 ? props.value.user?.company : "",
-//     name                    : props.edit === 0 ? props.value.name : "",
-//     myrs_product            : props.edit === 0 ? props.value.myrs_product : "",
-//     express_service         : props.edit === 0 ? props.value.express_service : "",
-//     full_address            : full_address,
-//     secondary_phone         : props.edit === 0 ? props.value.secondary_phone : "",
-//     additional_address      : props.edit === 0 ? props.value.additional_address : "",
-//     web                     : props.edit === 0 ? props.value.web : "",
-//     myrs_rating             : props.edit === 0 ? props.value.myrs_rating : "",
-//     account_status          : props.edit === 0 ? props.value.account_status?.toString() : "",
-//     no_of_records           : props.edit === 0 ? props.value.no_of_records : "",
-//     no_of_payment_records   : props.edit === 0 ? props.value.no_of_payment_records : "",
-//     recent_inquiries1       : props.edit === 0 ? props.value.recent_inquiries1 : "",
-//     recent_inquiries2       : props.edit === 0 ? props.value.recent_inquiries2 : "", 
-//     submit_type             : props.edit === 0 ? props.value.submit_type : "",
-//     amount                  : props.edit === 0 ? props.value.amount : "", 
-//     myrs_rating1             : props.edit === 0 ? props.value.myrs_rating : "",
-//     historical_pdf          : props.historicalpdf,
-//     Account_MostCommonTermsOfSale  : props.edit === 0 ? props.value.Account_MostCommonTermsOfSale : "",
-//     Account_PaymentWithinTerms       : props.edit === 0 ? props.value.Account_PaymentWithinTerms : "",
-//     Account_PaymentsOutsideOfTerms   : props.edit === 0 ? props.value.Account_PaymentsOutsideOfTerms : "",
-//     Account_90120Payment            : props.edit === 0 ? props.value.Account_90120Payment : "",
-//     Account_120BeyondPayment        : props.edit === 0 ? props.value.Account_120BeyondPayment : "",
-//     Account_AverageDayToPay         : props.edit === 0 ? props.value.Account_AverageDayToPay : "",
-//     Account_PaymentTrend            : props.edit === 0 ? props.value.Account_PaymentTrend : "",
-//     Account_UnpaidDebts             : props.edit === 0 ? props.value.Account_UnpaidDebts : "",
-//     Account_HighCreditAverages      : props.edit === 0 ? props.value.Account_HighCreditAverages : "",
-//     Account_HighestCreditOfRecords  : props.edit === 0 ? props.value.Account_HighestCreditOfRecords : "",
-//     Account_DateOfMostRecentPaymentTransaction    : props.edit === 0 ? props.value.Account_DateOfMostRecentPaymentTransaction :  "",
-//     Account_DateOfOldestPaymentTransaction        : props.edit === 0 ? props.value.Account_DateOfOldestPaymentTransaction : "",
-//     Account_UnauthorizedDeductionsOfRecords       : props.edit === 0 ? props.value.Account_UnauthorizedDeductionsOfRecords : "",
-//     Account_CODOrPrepaidPayments                  : props.edit === 0 ? props.value.Account_CODOrPrepaidPayments : "",
-//     Account_CollectionRecords                     : props.edit === 0 ? props.value.Account_CollectionRecords : "",
-//     Account_CollectionRecordsText                 : props.edit === 0 ? props.value.Account_CollectionRecordsText : "",
-//     Account_DemandLetterRecords                   : props.edit === 0 ? props.value.Account_DemandLetterRecords : "",
-//     Account_DemandLetterRecordsText               : props.edit === 0 ? props.value.Account_DemandLetterRecordsText : "",
-//     Account_PublicRecords                         : props.edit === 0 ? props.value.Account_PublicRecords : "",
-//     Account_PublicRecordsText                     : props.edit === 0 ? props.value.Account_PublicRecordsText : "",
-//     Account_INSFRecords                           : props.edit === 0 ? props.value.Account_INSFRecords : "",
-//     Account_MyrsNegativeAgentNotes                : props.edit === 0 ? props.value.Account_MyrsNegativeAgentNotes : "",
-//     Account_MyrsNegativeAgentNotesText            : props.edit === 0 ? props.value.Account_MyrsNegativeAgentNotesText : "",
-//     Account_RegisteredSecretaryOfState            : props.edit === 0 ? props.value.Account_RegisteredSecretaryOfState : "" ,
-//     Account_SecOfStateRegistrationDate            : props.edit === 0 ? props.value.Account_SecOfStateRegistrationDate : "" ,
-//     Account_GoodStandingStatus                    : props.edit === 0 ? props.value.Account_GoodStandingStatus : "",
-//     Account_IfNoWhy                               : props.edit === 0 ? props.value.Account_IfNoWhy : "",
-//     Account_TypeOfEntity                          : props.edit === 0 ? props.value.Account_TypeOfEntity : "",
-//     Account_OwnerName                             : props.edit === 0 ? props.value.Account_OwnerName : "",
-//     Account_OfficerName                           : props.edit === 0 ? props.value.Account_OfficerName : "",
-//     Account_SingleLocation                        : props.edit === 0 ? props.value.Account_SingleLocation : "",
-//     Account_TypeOfBusiness                        : props.edit === 0 ? props.value.Account_TypeOfBusiness : "",
-//     Account_DateBusinessStarted                   : props.edit === 0 ? props.value.Account_DateBusinessStarted : "",
-//     Account_RatingRateLeft1                       : props.edit === 0 ? props.value.Account_RatingRateLeft1 : "",
-//     Account_RatingRateLeft2                       : props.edit === 0 ? props.value.Account_RatingRateLeft2 : "",
-//     Account_RatingRateLeft3                       : props.edit === 0 ? props.value.Account_RatingRateLeft3 : "",
-//     Account_RatingRateLeft4                       : props.edit === 0 ? props.value.Account_RatingRateLeft4 : "",
-//     Account_RatingRateRight1                       : props.edit === 0 ? props.value.Account_RatingRateRight1 : "",
-//     Account_RatingRateRight2                       : props.edit === 0 ? props.value.Account_RatingRateRight2 : "",
-//     Account_RatingRateRight3                       : props.edit === 0 ? props.value.Account_RatingRateRight3 : "",
-//     Account_RatingRateRight4                       : props.edit === 0 ? props.value.Account_RatingRateRight4 : "",
-//     Account_MyrsAgentNotesToClient                 : props.edit === 0 ? props.value.Account_MyrsAgentNotesToClient : "",
-//     }
 
-console.log(source);
+    const countryMap = {
+    1: "USA",
+    2: "Canada",
+    };
+
+    const full_address = source
+    ? [
+        source.name,
+        source.address1,
+        `${source.city}, ${source.state}, ${source.zip}, ${countryMap[source.country] || ""}`,
+        source.phone,
+        ]
+        .filter(Boolean)
+        .join("\n")
+    : "";
+
+
 
     const initialValues = {
         id: props.edit === 0 ? props.value.id : "",
-        order_amount: props.edit === 0 ? props.value.order_amount : "",
-        // completed_date: source ? new Date(source.submitted_date)?.toISOString().split('T')[0] : "",
+        order_amount: props.edit === 0 ? parseFloat(props.value.order_amount) : "",
         completed_date          : props.edit === 0 ? new Date(props.value.submitted_date)?.toISOString().split('T')[0] : "",
-        charge_amt: source?.charge_amt || "",
+        charge_amt: parseFloat(source?.charge_amt) || "",
         // company: source?.user?.company || "",
         company                 : props.edit === 0 ? props.value.user?.company : "",
         name: source?.name || "",
-        // myrs_product: source?.myrs_product || "",
-        // express_service: source?.express_service || "",
         myrs_product            : props.edit === 0 ? props.value.myrs_product : "",
         express_service         : props.edit === 0 ? props.value.express_service : "",
         full_address: full_address,
@@ -199,8 +135,6 @@ console.log(source);
   }
 
   const onSubmit = (data) =>{
-    // console.log(data);
-    // return;
     router.post('/admin-submissions-updatepdf', data, {
         onSuccess: (response) => {
           // You can store the response here
@@ -228,7 +162,6 @@ console.log(source);
   return (
     <>
       <div className="mainWrapper">
-        {/* {console.log(errors)} */}
      
         <div className="container py-2">          
           <div className="row px-1 justify-content-center mt-2">
@@ -379,9 +312,6 @@ console.log(source);
 
                 <div className=" col-4 mb-0">
                     <div className="d-flex align-items-center gap-2">
-                            {/* <label htmlFor="ap-Email" className="form-label mb-0 text-nowrap">
-                                Report Charge $<sup className="text-danger">*</sup>
-                            </label> */}
                             <input 
                                 type="text" 
                                 className="form-control" 
@@ -452,14 +382,14 @@ console.log(source);
                             </td>
                         </tr>
                         <tr>
-                            <td className="text-primary fw-bold">#11 $</td>
+                            <td className="text-primary fw-bold">#11$</td>
                             <td className="text-danger ">
                                 Recommended for amount as <span className="text-success ">Indicated</span>. 
                                 Expect payment within terms.
                             </td>
                         </tr>
                         <tr>
-                            <td className="text-primary fw-bold">#11A $</td>
+                            <td className="text-primary fw-bold">#11A$</td>
                             <td className="text-danger ">
                                 Recommended for amount as <span className="text-success ">Indicated</span>, 
                                 but expect payment to be <span className="text-danger ">30-60 days beyond terms</span>.
@@ -479,19 +409,16 @@ console.log(source);
                 </table>
             </div>
             
-
-
         </div>
            
 
 
             <div className="col-6 mb-5">
 
-              <div className="bg-lightgray border rounded p-3">
-                <h3 className="primary-text-color d-flex justify-content-center mb-3">
+              {/* <div className="bg-lightgray border rounded p-3">
+                <h4 className="primary-text-color d-flex justify-content-center mb-3">
                     Account Information
-                </h3>
-
+                </h4>
                     <div className="col-md-12 mb-1">
                     <textarea
                         type="description"
@@ -503,7 +430,43 @@ console.log(source);
                         autoComplete="off"
                         {...register('full_address')}
                     />
-                    </div>
+                    </div> */}
+
+
+                    <div className="bg-lightgray border rounded p-3">
+                        <h4 className="primary-text-color d-flex justify-content-center mb-3">
+                            Account Information
+                        </h4>
+                        <div className="col-md-12 mb-1">
+                            {props.ispdf === 1 ? (
+                            <div
+                                className="form-control"
+                                style={{
+                                minHeight: "100px",
+                                background: "#fff",
+                                fontSize: "14px",
+                                whiteSpace: "pre-line",
+                                border: "1px solid #ced4da",
+                                borderRadius: "0.375rem",
+                                padding: "0.375rem 0.75rem"
+                                }}
+                                dangerouslySetInnerHTML={{
+                                __html: (getValues('full_address') || '').replace(/\n/g, "<br />"),
+                                }}
+                            />
+                            ) : (
+                            <textarea
+                                type="description"
+                                rows="4"
+                                className="form-control"
+                                id="address"
+                                name="address"
+                                placeholder=""
+                                autoComplete="off"
+                                {...register('full_address')}
+                            />
+                            )}
+                        </div>
 
                     <div className="col-12 mb-1">
                         <div className="d-flex align-items-center gap-2">
@@ -522,7 +485,7 @@ console.log(source);
                         </div>
                     </div>
 
-                    <div className="col-12 mb-1">
+                    {/* <div className="col-12 mb-1">
                         <div className="d-flex align-items-center gap-2">
                             <label htmlFor="input-name" className="form-label mb-0 text-nowrap">
                                 Additional Address : 
@@ -537,7 +500,44 @@ console.log(source);
                                 {...register('additional_address')}
                             />    
                         </div>
-                    </div>
+                    </div> */}
+
+
+                    <div className="col-12 mb-1">
+                        <div className="d-flex align-items-center gap-2">
+                            <label htmlFor="addAddress" className="form-label mb-0 text-nowrap">
+                            Additional Address : 
+                            </label>
+                            {props.ispdf === 1 ? (
+                            <div
+                                className="form-control"
+                                style={{
+                                minHeight: "60px",
+                                background: "#fff",
+                                fontSize: "14px",
+                                whiteSpace: "pre-line",
+                                border: "1px solid #ced4da",
+                                borderRadius: "0.375rem",
+                                padding: "0.375rem 0.75rem",
+                                width: "100%"
+                                }}
+                                dangerouslySetInnerHTML={{
+                                __html: (getValues('additional_address') || '').replace(/\n/g, "<br />"),
+                                }}
+                            />
+                            ) : (
+                            <textarea
+                                type="text"
+                                className="form-control"
+                                id="addAddress"
+                                name="addAddress"
+                                placeholder=""
+                                autoComplete="off"
+                                {...register('additional_address')}
+                            />
+                            )}
+                        </div>
+                        </div>
 
                     <div className="col-12 mb-0">
                         <div className="d-flex align-items-center gap-2">
@@ -564,9 +564,9 @@ console.log(source);
             <div className="col-6 mb-5">
 
                 <div className="bg-lightgray border rounded p-3">
-                <h3 className="primary-text-color d-flex justify-content-center mb-2">
+                <h4 className="primary-text-color d-flex justify-content-center mb-2">
                     Summary
-                </h3>
+                </h4>
 
 
                     <div className="col-12 mb-1">
@@ -663,7 +663,7 @@ console.log(source);
                         </div>
                     </div>
 
-                    <div className="col-12 mb-0">
+                    {/* <div className="col-12 mb-0">
                         <div className="d-flex align-items-center gap-2">
                             <textarea
                                 type="text"
@@ -676,7 +676,40 @@ console.log(source);
                                 {...register('recent_inquiries2')}
                             />    
                         </div>
-                    </div>
+                    </div> */}
+                    <div className="col-12 mb-2">
+                        <div className="d-flex align-items-center gap-2">
+                            {props.ispdf === 1 ? (
+                            <div
+                                className="form-control"
+                                style={{
+                                minHeight: "48px",
+                                background: "#fff",
+                                fontSize: "14px",
+                                whiteSpace: "pre-line",
+                                border: "1px solid #ced4da",
+                                borderRadius: "0.375rem",
+                                padding: "0.375rem 0.75rem",
+                                width: "100%"
+                                }}
+                                dangerouslySetInnerHTML={{
+                                __html: (getValues('recent_inquiries2') || '').replace(/\n/g, "<br />"),
+                                }}
+                            />
+                            ) : (
+                            <textarea
+                                type="text"
+                                rows={3}
+                                className="form-control"
+                                id="secPhone"
+                                name="secPhone"
+                                placeholder=""
+                                autoComplete="off"
+                                {...register('recent_inquiries2')}
+                            />
+                            )}
+                        </div>
+                        </div>
 
                 </div>
 

@@ -362,7 +362,7 @@ export default function MySubmissions({submissions,auth,account_name,total}){
     {submissions.length > 0 && submissions.map((data,index)=>(
        <tr key={index}>
        <td className="text-nowrap">{index+1}</td>
-       <td className="text-nowrap">{data.name}</td>
+       <td className="">{data.name}</td>
        {data.myrs_product === "1" &&
                <td className="text-nowrap">Summary Credit Report</td>
        }
@@ -370,21 +370,21 @@ export default function MySubmissions({submissions,auth,account_name,total}){
                <td className="text-nowrap">Summary Credit Report w/details</td>
        }
        {data.express_service === "1" &&
-               <td className="text-nowrap">Instant Response (4 Office Hours)</td>
+               <td className="text-center align-middle">Instant Response (4 Office Hours)</td>
        }
        {data.express_service === "2" &&
-               <td className="text-nowrap">Rapid Response (8 Office Hours)</td>
+               <td className="text-center align-middle">Rapid Response (8 Office Hours)</td>
        }
        {data.express_service === "3" &&
-               <td className="text-nowrap">Fast Response (12 Office Hours)</td>
+               <td className="text-center align-middle">Fast Response (12 Office Hours)</td>
        }
        {data.express_service === "4" &&
-               <td className="text-nowrap">Quick Response (16 Office Hours)</td>
+               <td className="text-center align-middle">Quick Response (16 Office Hours)</td>
        }
        {data.express_service === "5" &&
-               <td className="text-nowrap">Standard Response (24+/- Office Hours)</td>
+               <td className="text-center align-middle">Standard Response (24+/- Office Hours)</td>
        }
-       <td className="text-nowrap text-center">{data.order_amount}</td>
+       <td className="text-nowrap text-center">{parseFloat(data.order_amount)}</td>
        <td className="text-nowrap text-center">{new Date(data.submitted_date).getMonth()+1}/{new Date(data.submitted_date).getDate()}/{new Date(data.submitted_date).getFullYear()}</td>
        {data.chk_previous14 === 0 &&
               <td className="text-nowrap text-center">NO</td>
@@ -420,7 +420,7 @@ export default function MySubmissions({submissions,auth,account_name,total}){
 
        )
        }
-       <td className="text-nowrap text-center">{data.charge_amt}</td>
+       <td className="text-nowrap text-center">{data.charge_amt ? parseFloat(data.charge_amt) : ""}</td>
        <td className="text-nowrap text-center">{data.myrs_rating}</td>
        <td className="text-nowrap text-center">
          <button className="bg-transparent border-0"><FaSearch className="fs-5 text-warning" onClick={()=>handleshow(data)}/></button>
@@ -453,9 +453,9 @@ export default function MySubmissions({submissions,auth,account_name,total}){
           </div>
           <div className="d-flex justify-content-end mt-4">
           {total > 0 ? (
-            <h6>Total Report Charges: ${total?.toFixed(2)}</h6>
+            <h6>Total Report Charges: $ {total?.toFixed(0)}</h6>
           ):(
-            <h6>Total Report Charges: $0</h6>
+            <h6>Total Report Charges: $ 0</h6>
           )}
           
           </div>

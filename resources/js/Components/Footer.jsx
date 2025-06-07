@@ -21,10 +21,10 @@ export default function Footer(){
                                     <CiPhone className="phone-icon"/>
                                     <span className="text">816-421-1919</span>
                                 </div>
-                                <div className="d-flex align-items-center gap-1">
+                                {/* <div className="d-flex align-items-center gap-1">
                                     <LiaFaxSolid className="phone-icon"/>
                                     <span className="text">816-421-4880</span>
-                                </div>
+                                </div> */}
                                 <div className="d-flex align-items-center gap-1 py-md-0 py-2">
                                      <FaRegEnvelope  className="email-icon"/>
                                       <span className="text"><a href="mailto:CentralEmail@MyrsCredit.com" className="mail">CentralEmail@MyrsCredit.com</a></span>

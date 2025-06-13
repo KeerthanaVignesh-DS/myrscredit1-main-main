@@ -194,7 +194,7 @@ class SubmissionController extends Controller
 
                      Mail::to($user->email)->send(new SubmissionMail($field,$user,false));
                     //  dd("zaarahvignesh3003@gmail.com");
-                Mail::to("zaarahvignesh3003@gmail.com")->send(new SubmissionMail($field,$user,true));
+                Mail::to("centralemail@myrscredit.com")->send(new SubmissionMail($field,$user,true));
 
 
                 } catch (\Exception $e) {

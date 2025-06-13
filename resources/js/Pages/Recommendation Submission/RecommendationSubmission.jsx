@@ -8,6 +8,7 @@ import * as Yup from "yup";
 import { toast as toast1, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
+import.meta.env.VITE_APP_URL;
 
 
 export default function RecommendationSubmission({edit,value,handleClose,toast}) {
@@ -394,7 +395,11 @@ export default function RecommendationSubmission({edit,value,handleClose,toast})
     formData.append('file', file);
 
     try {
-      const res = await axios.post('http://127.0.0.1:8000/upload', formData, {
+      // const res = await axios.post('http://127.0.0.1:8000/upload', formData, {
+        const res = await axios.post(
+      `${import.meta.env.VITE_APP_URL}/upload`, // Use env variable here
+      formData,
+ {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

@@ -777,48 +777,49 @@ export default function SubmissionsList  ({Submissions,Clients,Total})  {
             </div>
             <div className="table-responsive">
               <table className="table table-bordered">
-                <thead className="table-light">
+                <thead className="table-secondary">
                   <tr>
-                    <th>#</th>  
-                    <th>Client</th>
-                    <th>Account Name</th>
-                    <th>Account Info</th>
-                    <th>Myrs Product</th>
-                    <th>Order Amt $</th>
-                    <th>Submission Date</th>
-                    <th>Completed Date</th>
-                    <th>Myrs Rating</th>
-                    <th>Download Report to View</th>
-                    <th>Use Report</th>
+                    <th className="text-center align-middle"> # </th>  
+                    <th className="text-center align-middle"> Client </th>
+                    <th className="text-center align-middle"> Account Name </th>
+                    <th className="text-center align-middle">Account Info</th>
+                    <th className="text-center align-middle">Myrs Product</th>
+                    <th className="text-center align-middle">Order Amt $</th>
+                    <th className="text-center align-middle">Submission Date</th>
+                    <th className="text-center align-middle">Completed Date</th>
+                    <th className="text-center align-middle">Myrs Rating</th>
+                    <th className="text-center align-middle">Download Report to View</th>
+                    <th className="text-center align-middle">Use Report</th>
                   </tr>
                 </thead>
                 <tbody>
                 {historicalSubmissions && historicalSubmissions.length > 0 ? (
                       historicalSubmissions.map((hist, index) => (
                         <tr key={hist.id ?? index}>
-                          <td>{index + 1}</td>
-                          <td>{hist.user?.company}</td>
-                          <td>{hist.name}</td>
-                          <td>{hist.name}, {hist.address1}</td>
-                          <td>
+                          <td className="text-start align-middle">{index + 1}</td>
+                          <td className="text-start align-middle">{hist.user?.company}</td>
+                          <td className="text-start align-middle">{hist.name}</td>
+                          <td className="text-start align-middle">{hist.name}, {hist.address1}</td>
+                          <td className="text-start align-middle">
                             {{
                               "1": "Summary Credit Report",
                               "2": "Summary Credit Report w/details"
                             }[hist.myrs_product] || ""}
                           </td>
-                          <td>
-                            {hist.order_amount}
+                          <td className="text-center align-middle">
+                            {/* {hist.order_amount} */}
+                            {parseFloat(hist.order_amount)}
                           </td>
-                          <td >{new Date(hist.submitted_date).getMonth()+1}/{new Date(hist.submitted_date).getDate()}/{new Date(hist.submitted_date).getFullYear()}</td>
-                          <td >{new Date(hist.completed_date).getMonth()+1}/{new Date(hist.completed_date).getDate()}/{new Date(hist.completed_date).getFullYear()}</td>
+                          <td className="text-center align-middle">{new Date(hist.submitted_date).getMonth()+1}/{new Date(hist.submitted_date).getDate()}/{new Date(hist.submitted_date).getFullYear()}</td>
+                          <td className="text-center align-middle">{new Date(hist.completed_date).getMonth()+1}/{new Date(hist.completed_date).getDate()}/{new Date(hist.completed_date).getFullYear()}</td>
 
-                          <td>{hist.myrs_rating}</td>
-                          <td className="d-flex justify-content-center">
+                          <td className="text-center align-middle">{hist.myrs_rating}</td>
+                          <td className="text-center align-middle">
                             <button className="bg-transparent border-0" onClick={() => generatePdf(hist)}>
                               <FaRegArrowAltCircleDown className="fs-5 text-success" />
                             </button>
                           </td>
-                          <td>
+                          <td className="text-center align-middle">
                           <button className="bg-transparent border-0" onClick={() => handleUseReport(hist)}>
                           <FaFileAlt size={20} color="gray" title="View File" />
                             </button>

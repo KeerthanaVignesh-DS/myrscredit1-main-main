@@ -12,7 +12,7 @@ import.meta.env.VITE_APP_URL;
 
 
 export default function RecommendationSubmission({edit,value,handleClose,toast}) {
-  console.log(value);
+  // console.log(value);
 
   const user = usePage().props.auth.user;
   const [accCount,setAccCount] = useState([
@@ -28,7 +28,7 @@ export default function RecommendationSubmission({edit,value,handleClose,toast})
     account_phone   :  edit === 0 ? value.phone : "",
     myrsProduct     :  edit === 0 ? value.myrs_product:0,
     expressService  :  edit === 0 ? value.express_service:0,
-    orderAmount     :  edit === 0 ? value.order_amount : "",
+    orderAmount     :  edit === 0 ? parseFloat(value.order_amount).toString() : "",
     comments        :  edit === 0 ? value.comments:"",
     status          :  edit === 0 ? value.status:0,
     chk_previous14  :  false,
